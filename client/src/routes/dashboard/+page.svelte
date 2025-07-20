@@ -10,6 +10,7 @@
 	import { Plus } from '@lucide/svelte';
 	import { browser } from '$app/environment';
 	import { derived } from 'svelte/store';
+	import { env } from '$env/dynamic/public';
 
 	Chart.register(...registerables);
 
@@ -93,7 +94,7 @@
 		loading = true;
 		error = '';
 		try {
-			const response = await fetch('http://localhost:3000/api/vehicles', {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL}/api/vehicles`, {
 				headers: {
 					'X-User-PIN': localStorage.getItem('userPin') || ''
 				}
@@ -101,10 +102,12 @@
 			if (response.ok) {
 				vehicles = await response.json();
 			} else {
+				console.log('Failed to fetch vehicles', response);
 				const data = await response.json();
 				error = data.message || 'Failed to fetch vehicles.';
 			}
 		} catch (e) {
+			console.error('Failed to connect to the server.', e);
 			error = 'Failed to connect to the server.';
 		}
 		loading = false;
@@ -114,7 +117,7 @@
 		addVehicleError = '';
 		addVehicleSuccess = '';
 		try {
-			const response = await fetch('http://localhost:3000/api/vehicles', {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL}/api/vehicles`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -224,11 +227,14 @@
 
 	async function fetchChartData(vehicleId: number) {
 		try {
-			const response = await fetch(`http://localhost:3000/api/vehicles/${vehicleId}/fuel-logs`, {
-				headers: {
-					'X-User-PIN': localStorage.getItem('userPin') || ''
+			const response = await fetch(
+				`${env.PUBLIC_API_BASE_URL}/api/vehicles/${vehicleId}/fuel-logs`,
+				{
+					headers: {
+						'X-User-PIN': localStorage.getItem('userPin') || ''
+					}
 				}
-			});
+			);
 			if (response.ok) {
 				const data = await response.json();
 				const labels = data.map((log: any) => new Date(log.date).toLocaleDateString());

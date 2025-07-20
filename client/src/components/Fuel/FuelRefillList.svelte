@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import { env } from '$env/dynamic/public';
 
 	export let vehicleId: number | null = null;
 
@@ -24,7 +25,7 @@
 		loading = true;
 		error = '';
 		try {
-			const response = await fetch(`http://localhost:3000/api/vehicles/${vehicleId}/fuel-logs`, {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL}/api/vehicles/${vehicleId}/fuel-logs`, {
 				headers: {
 					'X-User-PIN': browser ? localStorage.getItem('userPin') || '' : ''
 				}

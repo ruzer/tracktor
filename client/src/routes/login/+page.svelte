@@ -3,6 +3,7 @@
 	import { browser } from '$app/environment';
 	import PinInput from '../../components/Auth/PinInput.svelte';
 	import ThemeToggle from '../../components/Common/ThemeToggle.svelte';
+	import { env } from '$env/dynamic/public';
 
 	let loading = $state(false);
 	let error = $state('');
@@ -23,7 +24,7 @@
 		error = '';
 
 		try {
-			const response = await fetch('http://localhost:3000/api/pin/verify', {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL}/api/pin/verify`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

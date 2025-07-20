@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import FormField from '../Common/FormField.svelte';
 	import { Calendar1, Gauge, DollarSign, Fuel, FileText } from '@lucide/svelte';
+	import { env } from '$env/dynamic/public';
 
 	const dispatch = createEventDispatcher();
 
@@ -44,7 +45,7 @@
 		}
 		loading = true;
 		try {
-			const response = await fetch(`http://localhost:3000/api/vehicles/${vehicleId}/fuel-logs`, {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL}/api/vehicles/${vehicleId}/fuel-logs`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
