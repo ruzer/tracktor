@@ -40,7 +40,7 @@ COPY --from=client-builder /usr/src/app/client/build ./public
 
 # Copy database and environment files
 COPY server/vehicles.db ./
-COPY server/.env ./
+COPY server/.env.example ./.env
 
 EXPOSE 3000
 
