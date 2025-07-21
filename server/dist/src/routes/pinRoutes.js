@@ -55,5 +55,21 @@ router.post("/pin/verify", async (req, res) => {
             .json({ message: "Error verifying PIN.", error: error.message });
     }
 });
+router.get("/pin/status", async (req, res) => {
+    try {
+        const user = await User.findByPk(1);
+        if (user) {
+            res.status(200).json({ exists: true });
+        }
+        else {
+            res.status(200).json({ exists: false });
+        }
+    }
+    catch (error) {
+        res
+            .status(500)
+            .json({ message: "Error checking PIN status.", error: error.message });
+    }
+});
 export default router;
 //# sourceMappingURL=pinRoutes.js.map

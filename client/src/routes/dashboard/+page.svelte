@@ -28,6 +28,8 @@
 		vin?: string;
 		color?: string;
 		odometer?: number;
+		insuranceStatus?: string;
+		puccStatus?: string;
 	}
 
 	let vehicles = $state<Vehicle[]>([]);
@@ -64,6 +66,7 @@
 
 	let showFuelRefillModal = $state(false);
 	let showMaintenanceLogModal = $state(false);
+	let activeTab = $state('dashboard'); // 'dashboard', 'fuel', 'maintenance', 'insurance', 'pollution'
 
 	// Dark mode chart options
 	let isDarkMode = false;
@@ -304,12 +307,14 @@
 			on:vehicleSelect={handleVehicleSelect}
 			on:editVehicle={handleEditVehicle}
 			on:deleteVehicle={handleDeleteVehicle}
-							on:refillFuel={(e) => {
-					selectedVehicleId = e.detail.vehicle.id;
-					showFuelRefillModal = true;
-				}}
-				on:addMaintenance={() => (showMaintenanceLogModal = true)}
-			/>
+			on:refillFuel={(e) => {
+				selectedVehicleId = e.detail.vehicle.id;
+				showFuelRefillModal = true;
+			}}
+			on:addMaintenance={(e) => {
+				selectedVehicleId = e.detail.vehicle.id;
+				showMaintenanceLogModal = true;
+			}}
 		/>
 	{/if}
 
@@ -332,44 +337,184 @@
 		/>
 	{/if}
 
-	<h2 class="mt-12 mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">
-		Fuel Cost & Mileage Trends
-	</h2>
 	{#if selectedVehicleId}
-		<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-			{#if fuelCostData?.datasets?.length > 0 && mileageData?.datasets?.length > 0}
-				<ChartCard
-					title="Fuel Cost Over Time"
-					chartData={fuelCostData}
-					ChartComponent={Line}
-					options={chartOptions}
-				/>
-				<ChartCard
-					title="Mileage Over Time"
-					chartData={mileageData}
-					ChartComponent={Line}
-					options={chartOptions}
-				/>
-			{:else}
-				<div class="col-span-2 py-12 text-center">
-					<p class="text-lg text-gray-500 dark:text-gray-400">
-						No fuel or mileage data available for this vehicle.
-					</p>
-				</div>
-			{/if}
-		</div>
-		<!-- Fuel Refill Form and List -->
 		<div class="mt-12">
-			<FuelRefillList vehicleId={selectedVehicleId} />
-		</div>
-		<div class="mt-12">
-			<MaintenanceLogList vehicleId={selectedVehicleId} />
-		</div>
-		<div class="mt-12">
-			<InsuranceDetails vehicleId={selectedVehicleId} />
-		</div>
-		<div class="mt-12">
-			<PollutionCertificateDetails vehicleId={selectedVehicleId} />
+			<div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+				<ul
+					class="-mb-px flex flex-wrap"
+					id="default-tab"
+					role="tablist"
+					aria-orientation="horizontal"
+				>
+					<li class="me-2" role="presentation">
+						<button
+							class="inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
+							class:text-blue-600={activeTab === 'dashboard'}
+							class:border-blue-600={activeTab === 'dashboard'}
+							class:hover:text-gray-600={activeTab !== 'dashboard'}
+							class:hover:border-gray-300={activeTab !== 'dashboard'}
+							class:dark:text-blue-500={activeTab === 'dashboard'}
+							class:dark:border-blue-500={activeTab === 'dashboard'}
+							class:dark:hover:text-gray-300={activeTab !== 'dashboard'}
+							class:border-transparent={activeTab !== 'dashboard'}
+							class:text-gray-500={activeTab !== 'dashboard'}
+							class:dark:text-gray-400={activeTab !== 'dashboard'}
+							onclick={() => (activeTab = 'dashboard')}
+							type="button"
+							role="tab"
+							aria-controls="dashboard"
+							aria-selected={activeTab === 'dashboard'}>Dashboard</button
+						>
+					</li>
+					<li class="me-2" role="presentation">
+						<button
+							class="inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
+							class:text-blue-600={activeTab === 'fuel'}
+							class:border-blue-600={activeTab === 'fuel'}
+							class:hover:text-gray-600={activeTab !== 'fuel'}
+							class:hover:border-gray-300={activeTab !== 'fuel'}
+							class:dark:text-blue-500={activeTab === 'fuel'}
+							class:dark:border-blue-500={activeTab === 'fuel'}
+							class:dark:hover:text-gray-300={activeTab !== 'fuel'}
+							class:border-transparent={activeTab !== 'fuel'}
+							class:text-gray-500={activeTab !== 'fuel'}
+							class:dark:text-gray-400={activeTab !== 'fuel'}
+							onclick={() => (activeTab = 'fuel')}
+							type="button"
+							role="tab"
+							aria-controls="fuel-logs"
+							aria-selected={activeTab === 'fuel'}>Fuel Logs</button
+						>
+					</li>
+					<li class="me-2" role="presentation">
+						<button
+							class="inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
+							class:text-blue-600={activeTab === 'maintenance'}
+							class:border-blue-600={activeTab === 'maintenance'}
+							class:hover:text-gray-600={activeTab !== 'maintenance'}
+							class:hover:border-gray-300={activeTab !== 'maintenance'}
+							class:dark:text-blue-500={activeTab === 'maintenance'}
+							class:dark:border-blue-500={activeTab === 'maintenance'}
+							class:dark:hover:text-gray-300={activeTab !== 'maintenance'}
+							class:border-transparent={activeTab !== 'maintenance'}
+							class:text-gray-500={activeTab !== 'maintenance'}
+							class:dark:text-gray-400={activeTab !== 'maintenance'}
+							onclick={() => (activeTab = 'maintenance')}
+							type="button"
+							role="tab"
+							aria-controls="maintenance-logs"
+							aria-selected={activeTab === 'maintenance'}>Maintenance</button
+						>
+					</li>
+					<li class="me-2" role="presentation">
+						<button
+							class="inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
+							class:text-blue-600={activeTab === 'insurance'}
+							class:border-blue-600={activeTab === 'insurance'}
+							class:hover:text-gray-600={activeTab !== 'insurance'}
+							class:hover:border-gray-300={activeTab !== 'insurance'}
+							class:dark:text-blue-500={activeTab === 'insurance'}
+							class:dark:border-blue-500={activeTab === 'insurance'}
+							class:dark:hover:text-gray-300={activeTab !== 'insurance'}
+							class:border-transparent={activeTab !== 'insurance'}
+							class:text-gray-500={activeTab !== 'insurance'}
+							class:dark:text-gray-400={activeTab !== 'insurance'}
+							onclick={() => (activeTab = 'insurance')}
+							type="button"
+							role="tab"
+							aria-controls="insurance-details"
+							aria-selected={activeTab === 'insurance'}>Insurance</button
+						>
+					</li>
+					<li class="me-2" role="presentation">
+						<button
+							class="inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
+							class:text-blue-600={activeTab === 'pollution'}
+							class:border-blue-600={activeTab === 'pollution'}
+							class:hover:text-gray-600={activeTab !== 'pollution'}
+							class:hover:border-gray-300={activeTab !== 'pollution'}
+							class:dark:text-blue-500={activeTab === 'pollution'}
+							class:dark:border-blue-500={activeTab === 'pollution'}
+							class:dark:hover:text-gray-300={activeTab !== 'pollution'}
+							class:border-transparent={activeTab !== 'pollution'}
+							class:text-gray-500={activeTab !== 'pollution'}
+							class:dark:text-gray-400={activeTab !== 'pollution'}
+							onclick={() => (activeTab = 'pollution')}
+							type="button"
+							role="tab"
+							aria-controls="pollution-certificate"
+							aria-selected={activeTab === 'pollution'}>Pollution Certificate</button
+						>
+					</li>
+				</ul>
+			</div>
+			<div id="default-tab-content">
+				{#if activeTab === 'dashboard'}
+					<div
+						class="rounded-lg bg-gray-50 p-4 dark:bg-gray-800"
+						role="tabpanel"
+						aria-labelledby="dashboard-tab"
+					>
+						<h2 class="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">
+							Fuel Cost & Mileage Trends
+						</h2>
+						<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+							{#if fuelCostData?.datasets?.length > 0 && mileageData?.datasets?.length > 0}
+								<ChartCard
+									title="Fuel Cost Over Time"
+									chartData={fuelCostData}
+									ChartComponent={Line}
+									options={chartOptions}
+								/>
+								<ChartCard
+									title="Mileage Over Time"
+									chartData={mileageData}
+									ChartComponent={Line}
+									options={chartOptions}
+								/>
+							{:else}
+								<div class="col-span-2 py-12 text-center">
+									<p class="text-lg text-gray-500 dark:text-gray-400">
+										No fuel or mileage data available for this vehicle.
+									</p>
+								</div>
+							{/if}
+						</div>
+					</div>
+				{:else if activeTab === 'fuel'}
+					<div
+						class="rounded-lg bg-gray-50 p-4 dark:bg-gray-800"
+						role="tabpanel"
+						aria-labelledby="fuel-logs-tab"
+					>
+						<FuelRefillList vehicleId={selectedVehicleId} />
+					</div>
+				{:else if activeTab === 'maintenance'}
+					<div
+						class="rounded-lg bg-gray-50 p-4 dark:bg-gray-800"
+						role="tabpanel"
+						aria-labelledby="maintenance-logs-tab"
+					>
+						<MaintenanceLogList vehicleId={selectedVehicleId} />
+					</div>
+				{:else if activeTab === 'insurance'}
+					<div
+						class="rounded-lg bg-gray-50 p-4 dark:bg-gray-800"
+						role="tabpanel"
+						aria-labelledby="insurance-details-tab"
+					>
+						<InsuranceDetails vehicleId={selectedVehicleId} />
+					</div>
+				{:else if activeTab === 'pollution'}
+					<div
+						class="rounded-lg bg-gray-50 p-4 dark:bg-gray-800"
+						role="tabpanel"
+						aria-labelledby="pollution-certificate-tab"
+					>
+						<PollutionCertificateDetails vehicleId={selectedVehicleId} />
+					</div>
+				{/if}
+			</div>
 		</div>
 		<FuelRefillForm
 			vehicleId={selectedVehicleId}

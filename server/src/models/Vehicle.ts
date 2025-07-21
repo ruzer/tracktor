@@ -1,5 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database.js';
+import Insurance from './Insurance.js';
+import PollutionCertificate from './PollutionCertificate.js';
 
 interface VehicleAttributes {
     id: number;
@@ -10,6 +12,8 @@ interface VehicleAttributes {
     vin?: string;
     color?: string;
     odometer?: number;
+    insurance?: Insurance;
+    pollutionCertificate?: PollutionCertificate;
 }
 
 interface VehicleCreationAttributes extends Optional<VehicleAttributes, 'id'> {}
@@ -23,6 +27,8 @@ class Vehicle extends Model<VehicleAttributes, VehicleCreationAttributes> implem
     public declare vin?: string;
     public declare color?: string;
     public declare odometer?: number;
+    public declare insurance?: Insurance;
+    public declare pollutionCertificate?: PollutionCertificate;
 }
 
 Vehicle.init({
@@ -66,5 +72,11 @@ Vehicle.init({
     timestamps: false,
     sequelize,
 });
+
+Vehicle.hasOne(Insurance, { foreignKey: 'vehicleId', as: 'insurance' });
+Insurance.belongsTo(Vehicle, { foreignKey: 'vehicleId' });
+
+Vehicle.hasOne(PollutionCertificate, { foreignKey: 'vehicleId', as: 'pollutionCertificate' });
+PollutionCertificate.belongsTo(Vehicle, { foreignKey: 'vehicleId' });
 
 export default Vehicle;

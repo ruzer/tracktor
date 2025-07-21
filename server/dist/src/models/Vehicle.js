@@ -1,5 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database.js';
+import Insurance from './Insurance.js';
+import PollutionCertificate from './PollutionCertificate.js';
 class Vehicle extends Model {
 }
 Vehicle.init({
@@ -43,5 +45,9 @@ Vehicle.init({
     timestamps: false,
     sequelize,
 });
+Vehicle.hasOne(Insurance, { foreignKey: 'vehicleId', as: 'insurance' });
+Insurance.belongsTo(Vehicle, { foreignKey: 'vehicleId' });
+Vehicle.hasOne(PollutionCertificate, { foreignKey: 'vehicleId', as: 'pollutionCertificate' });
+PollutionCertificate.belongsTo(Vehicle, { foreignKey: 'vehicleId' });
 export default Vehicle;
 //# sourceMappingURL=Vehicle.js.map

@@ -7,7 +7,10 @@
 		Gauge,
 		Pencil,
 		Trash2,
-		Fuel
+		Fuel,
+		Wrench,
+		Shield,
+		BadgeCheck
 	} from '@lucide/svelte';
 	import { createEventDispatcher } from 'svelte';
 
@@ -20,6 +23,8 @@
 		vin?: string;
 		color?: string;
 		odometer?: number;
+		insuranceStatus?: string;
+		puccStatus?: string;
 	};
 
 	const dispatch = createEventDispatcher();
@@ -65,10 +70,27 @@
 		{/if}
 		{#if vehicle.odometer}
 			<p class="flex items-center gap-2">
-				<Gauge class="h-5 w-5 text-gray-400 dark:text-gray-500" /><span class="font-semibold"
-					>Odometer:</span
-				>
+				<Gauge class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+				<span class="font-semibold">Odometer:</span>
 				{vehicle.odometer} km
+			</p>
+		{/if}
+		{#if vehicle.insuranceStatus}
+			<p class="flex items-center gap-2">
+				<Shield class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+				<span class="font-semibold">Insurance:</span>
+				<span class={vehicle.insuranceStatus === 'Active' ? 'text-green-500' : 'text-red-500'}>
+					{vehicle.insuranceStatus}
+				</span>
+			</p>
+		{/if}
+		{#if vehicle.puccStatus}
+			<p class="flex items-center gap-2">
+				<BadgeCheck class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+				<span class="font-semibold">PUCC:</span>
+				<span class={vehicle.puccStatus === 'Active' ? 'text-green-500' : 'text-red-500'}>
+					{vehicle.puccStatus}
+				</span>
 			</p>
 		{/if}
 	</div>

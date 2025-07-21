@@ -42,8 +42,45 @@ router.post("/", authenticatePin, async (req, res) => {
 
 router.get("/", authenticatePin, async (req, res) => {
   try {
-    const vehicles = await Vehicle.findAll();
-    res.status(200).json(vehicles);
+    const vehicles = await Vehicle.findAll({
+      include: [
+        { association: 'insurance' },
+        { association: 'pollutionCertificate' }
+      ]
+    });
+
+    const vehiclesWithStatus = vehicles.map(vehicle => {
+      const insurance = vehicle.insurance;
+      const pollutionCertificate = vehicle.pollutionCertificate;
+
+      let insuranceStatus = "N/A";
+      if (insurance) {
+        const endDate = new Date(insurance.endDate);
+        if (endDate > new Date()) {
+          insuranceStatus = "Active";
+        } else {
+          insuranceStatus = "Expired";
+        }
+      }
+
+      let puccStatus = "N/A";
+      if (pollutionCertificate) {
+        const expiryDate = new Date(pollutionCertificate.expiryDate);
+        if (expiryDate > new Date()) {
+          puccStatus = "Active";
+        } else {
+          puccStatus = "Expired";
+        }
+      }
+
+      return {
+        ...vehicle.toJSON(),
+        insuranceStatus,
+        puccStatus
+      };
+    });
+
+    res.status(200).json(vehiclesWithStatus);
   } catch (error: any) {
     res
       .status(500)

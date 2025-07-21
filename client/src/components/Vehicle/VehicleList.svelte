@@ -35,6 +35,7 @@
 				on:editVehicle={(e) => dispatch('editVehicle', e.detail)}
 				on:deleteVehicle={(e) => dispatch('deleteVehicle', e.detail)}
 				on:refillFuel={(e) => dispatch('refillFuel', e.detail)}
+			on:addMaintenance={(e) => dispatch('addMaintenance', e.detail)}
 			/>
 		</div>
 	{/each}
