@@ -5,7 +5,7 @@
 	import '../styles/app.css';
 	import { tick } from 'svelte';
 	import { Car, LogOut, Tractor } from '@lucide/svelte';
-	import ThemeToggle from '../components/Common/ThemeToggle.svelte';
+	import ThemeToggle from '../components/common/ThemeToggle.svelte';
 
 	let { children } = $props();
 
