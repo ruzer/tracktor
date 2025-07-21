@@ -13,6 +13,7 @@ COPY app/server/package*.json ./
 RUN npm install
 COPY app/server/ ./
 RUN npm run build
+RUN npm run seed
 
 # Stage 3: Final production image
 FROM node:20-alpine
