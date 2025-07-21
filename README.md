@@ -13,7 +13,7 @@ The system is built using a modern and efficient technology stack to ensure perf
 *   **Styling:** Tailwind CSS
 *   **Backend:** Express.js with TypeScript
 *   **Database:** SQLite
-*   **ORM:** Sequelize (Correction: The provided SRS.md mentions "Equalise ORM", but given the `server/package.json` and `server/models` directory, Sequelize is being used. I will proceed with Sequelize.)
+*   **ORM:** Sequelize
 
 ### 3. System Architecture
 

@@ -102,5 +102,13 @@
 			<!-- Fuel icon from Lucide or fallback SVG -->
 			<Fuel class="h-5 w-5 text-green-500 hover:text-green-600 dark:text-green-400" />
 		</button>
+		<button
+			type="button"
+			class="rounded-full p-2 transition-colors hover:bg-yellow-100 dark:hover:bg-yellow-700"
+			on:click={() => dispatch('addMaintenance', { vehicle })}
+			aria-label="Log maintenance"
+		>
+			<Wrench class="h-5 w-5 text-yellow-500 hover:text-yellow-600 dark:text-yellow-400" />
+		</button>
 	</div>
 </div>

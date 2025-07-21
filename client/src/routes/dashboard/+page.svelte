@@ -7,6 +7,11 @@
 	import ChartCard from '../../components/Chart/ChartCard.svelte';
 	import FuelRefillForm from '../../components/Fuel/FuelRefillForm.svelte';
 	import FuelRefillList from '../../components/Fuel/FuelRefillList.svelte';
+	import MaintenanceLogForm from '../../components/Maintenance/MaintenanceLogForm.svelte';
+	import MaintenanceLogList from '../../components/Maintenance/MaintenanceLogList.svelte';
+	import InsuranceForm from '../../components/Insurance/InsuranceForm.svelte';
+	import InsuranceDetails from '../../components/Insurance/InsuranceDetails.svelte';
+	import PollutionCertificateDetails from '../../components/PollutionCertificate/PollutionCertificateDetails.svelte';
 	import { Plus } from '@lucide/svelte';
 	import { browser } from '$app/environment';
 	import { derived } from 'svelte/store';
@@ -58,6 +63,7 @@
 	let mileageData: any = $state({});
 
 	let showFuelRefillModal = $state(false);
+	let showMaintenanceLogModal = $state(false);
 
 	// Dark mode chart options
 	let isDarkMode = false;
@@ -298,10 +304,12 @@
 			on:vehicleSelect={handleVehicleSelect}
 			on:editVehicle={handleEditVehicle}
 			on:deleteVehicle={handleDeleteVehicle}
-			on:refillFuel={(e) => {
-				selectedVehicleId = e.detail.vehicle.id;
-				showFuelRefillModal = true;
-			}}
+							on:refillFuel={(e) => {
+					selectedVehicleId = e.detail.vehicle.id;
+					showFuelRefillModal = true;
+				}}
+				on:addMaintenance={() => (showMaintenanceLogModal = true)}
+			/>
 		/>
 	{/if}
 
@@ -354,6 +362,15 @@
 		<div class="mt-12">
 			<FuelRefillList vehicleId={selectedVehicleId} />
 		</div>
+		<div class="mt-12">
+			<MaintenanceLogList vehicleId={selectedVehicleId} />
+		</div>
+		<div class="mt-12">
+			<InsuranceDetails vehicleId={selectedVehicleId} />
+		</div>
+		<div class="mt-12">
+			<PollutionCertificateDetails vehicleId={selectedVehicleId} />
+		</div>
 		<FuelRefillForm
 			vehicleId={selectedVehicleId}
 			showModal={showFuelRefillModal}
@@ -361,6 +378,14 @@
 			on:success={() => {
 				if (selectedVehicleId) fetchChartData(selectedVehicleId);
 				showFuelRefillModal = false;
+			}}
+		/>
+		<MaintenanceLogForm
+			vehicleId={selectedVehicleId}
+			showModal={showMaintenanceLogModal}
+			closeModal={() => (showMaintenanceLogModal = false)}
+			on:success={() => {
+				showMaintenanceLogModal = false;
 			}}
 		/>
 	{:else}
