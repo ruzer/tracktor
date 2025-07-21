@@ -1,46 +1,33 @@
-# Stage 1: Build Client
-FROM node:20-alpine AS client-builder
-
-WORKDIR /usr/src/app/client
-
-COPY client/package*.json ./
+# Stage 1: Build the SvelteKit frontend
+FROM node:20-alpine as frontend-builder
+WORKDIR /app/client
+COPY app/client/package*.json ./
 RUN npm install
-COPY client/ ./
-
-# Set the public API base URL during the build
-ARG PUBLIC_API_BASE_URL=/
-ENV PUBLIC_API_BASE_URL=$PUBLIC_API_BASE_URL
-
+COPY app/client/ ./
 RUN npm run build
 
-# Stage 2: Build Server
-FROM node:20-alpine AS server-builder
-
-WORKDIR /usr/src/app/server
-
-COPY server/package*.json ./
+# Stage 2: Build the Node.js backend
+FROM node:20-alpine as backend-builder
+WORKDIR /app/server
+COPY app/server/package*.json ./
 RUN npm install
-COPY server/ ./
+COPY app/server/ ./
 RUN npm run build
 
-# Stage 3: Final Production Image
+# Stage 3: Final production image
 FROM node:20-alpine
+WORKDIR /app
 
-WORKDIR /usr/src/app
+# Copy built backend from backend-builder stage
+COPY --from=backend-builder /app/server/dist ./server/dist
+COPY --from=backend-builder /app/server/node_modules ./server/node_modules
+COPY --from=backend-builder /app/server/package.json ./server/package.json
+COPY --from=backend-builder /app/server/vehicles.db ./server/vehicles.db
 
-# Install server production dependencies
-COPY --from=server-builder /usr/src/app/server/package*.json ./
-RUN npm install --omit=dev
+# Copy built frontend from frontend-builder stage
+COPY --from=frontend-builder /app/client/build ./server/client/build
 
-# Copy built server code
-COPY --from=server-builder /usr/src/app/server/dist ./dist
-
-# Copy client build output to a public directory
-COPY --from=client-builder /usr/src/app/client/build ./public
-
-# Copy database and environment files
-COPY server/vehicles.db ./
-COPY server/.env.example ./.env
+WORKDIR /app/server
 
 EXPOSE 3000
 
