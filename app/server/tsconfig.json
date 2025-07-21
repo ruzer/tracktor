@@ -11,8 +11,6 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "NodeNext",
-    "allowImportingTsExtensions": true,
-    "noEmit": true
 
   },
   "include": ["**/*.ts"],

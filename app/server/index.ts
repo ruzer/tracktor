@@ -1,15 +1,15 @@
 import express from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
-import swaggerSpec from "./swagger.ts";
+import swaggerSpec from "./swagger.js";
 
-import sequelize from "./src/config/database.ts";
-import pinRoutes from "./src/routes/pinRoutes.ts";
-import vehicleRoutes from "./src/routes/vehicleRoutes.ts";
-import fuelLogRoutes from "./src/routes/fuelLogRoutes.ts";
-import insuranceRoutes from "./src/routes/insuranceRoutes.ts";
-import maintenanceLogRoutes from "./src/routes/maintenanceLogRoutes.ts";
-import pollutionCertificateRoutes from "./src/routes/pollutionCertificateRoutes.ts";
+import sequelize from "./src/config/database.js";
+import pinRoutes from "./src/routes/pinRoutes.js";
+import vehicleRoutes from "./src/routes/vehicleRoutes.js";
+import fuelLogRoutes from "./src/routes/fuelLogRoutes.js";
+import insuranceRoutes from "./src/routes/insuranceRoutes.js";
+import maintenanceLogRoutes from "./src/routes/maintenanceLogRoutes.js";
+import pollutionCertificateRoutes from "./src/routes/pollutionCertificateRoutes.js";
 import { config } from "dotenv";
 
 config({ quiet: true });
