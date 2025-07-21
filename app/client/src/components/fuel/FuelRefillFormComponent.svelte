@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import FormField from '../Common/FormField.svelte';
+	import FormField from '../common/FormField.svelte';
 	import { Calendar1, Gauge, DollarSign, Fuel, FileText } from '@lucide/svelte';
 
 	const dispatch = createEventDispatcher();
