@@ -1,5 +1,5 @@
 # Stage 1: Build the SvelteKit frontend
-FROM node:20-alpine as frontend-builder
+FROM node:22-alpine as frontend-builder
 WORKDIR /app/client
 COPY app/client/package*.json ./
 RUN npm install
@@ -7,7 +7,7 @@ COPY app/client/ ./
 RUN npm run build
 
 # Stage 2: Build the Node.js backend
-FROM node:20-alpine as backend-builder
+FROM node:22-alpine as backend-builder
 WORKDIR /app/server
 COPY app/server/package*.json ./
 RUN npm install
@@ -16,7 +16,7 @@ RUN npm run build
 RUN npm run seed
 
 # Stage 3: Final production image
-FROM node:20-alpine
+FROM node:22-alpine
 WORKDIR /app
 
 # Copy built backend from backend-builder stage
