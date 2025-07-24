@@ -30,7 +30,7 @@
 		error = '';
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL}/api/vehicles/${vehicleId}/maintenance-logs`,
+				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/maintenance-logs`,
 				{
 					headers: {
 						'X-User-PIN': browser ? localStorage.getItem('userPin') || '' : ''

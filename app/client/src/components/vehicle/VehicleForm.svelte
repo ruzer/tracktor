@@ -8,7 +8,7 @@
 		Gauge,
 		Building2
 	} from '@lucide/svelte';
-	import FormField from '../Common/FormField.svelte';
+	import FormField from '../common/FormField.svelte';
 
 	export let vehicle;
 	export let onSubmit;

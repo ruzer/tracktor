@@ -22,7 +22,7 @@
 			// Check if PIN exists on the server
 			async function checkPinStatus() {
 				try {
-					const response = await fetch(`${env.PUBLIC_API_BASE_URL}/api/pin/status`);
+					const response = await fetch(`${env.PUBLIC_API_BASE_URL||""}/api/pin/status`);
 					if (response.ok) {
 						const data = await response.json();
 						pinExists = data.exists;
@@ -46,7 +46,7 @@
 
 		try {
 			const endpoint = pinExists ? '/api/pin/verify' : '/api/pin';
-			const response = await fetch(`${env.PUBLIC_API_BASE_URL}${endpoint}`, {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL||""}${endpoint}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

@@ -60,7 +60,7 @@
 
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL}/api/vehicles/${vehicleId}/pollution-certificate`,
+				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/pollution-certificate`,
 				{
 					method,
 					headers: {

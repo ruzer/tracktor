@@ -102,7 +102,7 @@
 		loading = true;
 		error = '';
 		try {
-			const response = await fetch(`${env.PUBLIC_API_BASE_URL}/api/vehicles`, {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL||""}/api/vehicles`, {
 				headers: {
 					'X-User-PIN': localStorage.getItem('userPin') || ''
 				}
@@ -125,7 +125,7 @@
 		addVehicleError = '';
 		addVehicleSuccess = '';
 		try {
-			const response = await fetch(`${env.PUBLIC_API_BASE_URL}/api/vehicles`, {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL||""}/api/vehicles`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -236,7 +236,7 @@
 	async function fetchChartData(vehicleId: number) {
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL}/api/vehicles/${vehicleId}/fuel-logs`,
+				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/fuel-logs`,
 				{
 					headers: {
 						'X-User-PIN': localStorage.getItem('userPin') || ''

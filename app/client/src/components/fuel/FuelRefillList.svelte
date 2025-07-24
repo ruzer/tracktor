@@ -22,7 +22,7 @@
     loading = true;
     error = '';
     try {
-      const response = await fetch(`${env.PUBLIC_API_BASE_URL}/api/vehicles/${vehicleId}/fuel-logs`, {
+      const response = await fetch(`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/fuel-logs`, {
         headers: {
           'X-User-PIN': localStorage.getItem('userPin') || ''
         }

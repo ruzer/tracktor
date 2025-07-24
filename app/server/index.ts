@@ -21,13 +21,6 @@ const HOST = process.env.HOST || "0.0.0.0";
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the SvelteKit build output
-import path from "path";
-import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, "../client/build")));
-
 // Serve Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
@@ -39,16 +32,27 @@ app.use("/api/vehicles", insuranceRoutes);
 app.use("/api/vehicles", maintenanceLogRoutes);
 app.use("/api/vehicles", pollutionCertificateRoutes);
 
+if (process.env.NODE_ENV === 'production') {
+  // @ts-ignore
+  const { handler } = await import('../client/build/handler.js');
+  app.use(handler);
+} else {
+  // In dev, redirect to SvelteKit dev server
+  app.use('/', (req, res) => {
+    res.redirect(`http://localhost:5173${req.originalUrl}`);
+  });
+}
+
 // Synchronize Sequelize models with the database
 sequelize
-    .sync()
-    .then(() => {
-        console.log("Database & tables created!");
-        // Start the server after database synchronization
-        app.listen(PORT, HOST, () => {
-            console.log(`Server running @ http://${HOST}:${PORT}`);
-        });
-    })
-    .catch((err) => {
-        console.error("Error syncing database:", err);
+  .sync()
+  .then(() => {
+    console.log("Database & tables created!");
+    // Start the server after database synchronization
+    app.listen(PORT, HOST, () => {
+      console.log(`Server running @ http://${HOST}:${PORT}`);
     });
+  })
+  .catch((err) => {
+    console.error("Error syncing database:", err);
+  });

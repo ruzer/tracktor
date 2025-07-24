@@ -44,7 +44,7 @@
 		loading = true;
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL}/api/vehicles/${vehicleId}/fuel-logs`,
+				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/fuel-logs`,
 				{
 					method: 'POST',
 					headers: {
