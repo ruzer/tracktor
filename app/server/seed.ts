@@ -1,5 +1,5 @@
 import sequelize from "./src/config/database.js";
-import User from "./src/models/User.js";
+import User from "./src/models/Auth.js";
 import Vehicle from "./src/models/Vehicle.js";
 import FuelLog from "./src/models/FuelLog.js";
 import bcrypt from "bcrypt";

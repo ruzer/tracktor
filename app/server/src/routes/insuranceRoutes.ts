@@ -4,7 +4,7 @@ import {
   getInsurance,
   updateInsurance,
   deleteInsurance,
-} from "../controllers/insuranceController.js";
+} from "../controllers/InsuranceController.js";
 import { authenticatePin } from "../middleware/auth.js";
 
 const router = Router();

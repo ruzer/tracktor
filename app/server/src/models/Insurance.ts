@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database.js";
-import Vehicle from "./Vehicle.js";
 
 interface InsuranceAttributes {
   id: number;
@@ -31,44 +30,60 @@ class Insurance
 Insurance.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUIDV4,
       autoIncrement: true,
       primaryKey: true,
     },
     vehicleId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUIDV4,
       references: {
-        model: Vehicle,
+        model: "Vehicle", // Use string reference
         key: "id",
       },
       allowNull: false,
-      unique: true, // Each vehicle can have one insurance policy
     },
     provider: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     policyNumber: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      validate: {
+        isDate: true,
+      },
     },
     endDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      validate: {
+        isDate: true
+      },
     },
     cost: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      validate: {
+        isFloat: true,
+        min: 0,
+      },
     },
   },
   {
-    sequelize,
     tableName: "insurances",
     timestamps: true,
+    underscored: true,
+    sequelize
   }
 );
 

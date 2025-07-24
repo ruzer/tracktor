@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database.js";
-import Vehicle from "./Vehicle.js";
 
 interface MaintenanceLogAttributes {
   id: number;
@@ -31,14 +30,13 @@ class MaintenanceLog
 MaintenanceLog.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUIDV4,
       primaryKey: true,
     },
     vehicleId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Vehicle,
+        model: "Vehicle", // Use string reference
         key: "id",
       },
       allowNull: false,
@@ -46,28 +44,46 @@ MaintenanceLog.init(
     date: {
       type: DataTypes.DATE,
       allowNull: false,
+      validate: {
+        isDate: true,
+      },
     },
     odometer: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      validate: {
+        isInt: true,
+        min: 0,
+      },
     },
     service: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     cost: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      validate: {
+        isFloat: true,
+        min: 0,
+      },
     },
     notes: {
       type: DataTypes.STRING,
       allowNull: true,
+      validate: {
+        notEmpty: true
+      },
     },
   },
   {
-    sequelize,
     tableName: "maintenance_logs",
     timestamps: true,
+    underscored: true,
+    sequelize,
   }
 );
 

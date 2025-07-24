@@ -1,11 +1,10 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database.js';
-import Vehicle from './Vehicle.js';
 
 interface FuelLogAttributes {
     id: number;
     vehicleId: number;
-    date: string; // DATEONLY type in Sequelize maps to string in TS
+    date: string;
     odometer: number;
     fuelAmount: number;
     cost: number;
@@ -26,25 +25,32 @@ class FuelLog extends Model<FuelLogAttributes, FuelLogCreationAttributes> implem
 
 FuelLog.init({
     id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
+        type: DataTypes.UUIDV4,
+        primaryKey: true
     },
     vehicleId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUIDV4,
         allowNull: false,
         references: {
-            model: Vehicle,
+            model: 'Vehicle',
             key: 'id',
-        },
+        }
     },
     date: {
-        type: DataTypes.DATEONLY,
+        type: DataTypes.DATE,
         allowNull: false,
+        validate: {
+            isDate: true,
+            notEmpty: true,
+        }
     },
     odometer: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+            isInt: true,
+            min: 0,
+        }
     },
     fuelAmount: {
         type: DataTypes.FLOAT,
@@ -53,19 +59,22 @@ FuelLog.init({
     cost: {
         type: DataTypes.FLOAT,
         allowNull: false,
+        validate: {
+            isFloat: true,
+            min: 0,
+        }
     },
     notes: {
         type: DataTypes.STRING,
         allowNull: true,
+        validate: {
+            len: [0, 500],
+        }
     },
 }, {
     tableName: 'fuel_logs',
-    timestamps: false,
+    timestamps: true,
+    underscored: true,
     sequelize,
 });
-
-// Associations
-Vehicle.hasMany(FuelLog, { foreignKey: 'vehicleId', onDelete: 'CASCADE' });
-FuelLog.belongsTo(Vehicle, { foreignKey: 'vehicleId' });
-
 export default FuelLog;

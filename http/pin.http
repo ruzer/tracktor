@@ -1,0 +1,21 @@
+### Add Pin
+POST http://localhost:3000/api/pin
+Content-Type: application/json
+
+{
+  "hash": "123456"
+}
+
+### Get Pin
+GET http://localhost:3000/api/pin/1
+
+### Update Pin
+PUT http://localhost:3000/api/pin/1
+Content-Type: application/json
+
+{
+  "hash": "654321"
+}
+
+### Delete Pin
+DELETE http://localhost:3000/api/pin/1

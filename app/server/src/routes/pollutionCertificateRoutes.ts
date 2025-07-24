@@ -4,7 +4,7 @@ import {
   getPollutionCertificate,
   updatePollutionCertificate,
   deletePollutionCertificate,
-} from "../controllers/pollutionCertificateController.js";
+} from "../controllers/PUCCController.js";
 import { authenticatePin } from "../middleware/auth.js";
 
 const router = Router();

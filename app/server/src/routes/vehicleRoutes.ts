@@ -5,7 +5,7 @@ import {
   getVehicleById,
   updateVehicle,
   deleteVehicle,
-} from "../controllers/vehicleController.js";
+} from "../controllers/VehicleController.js";
 import { authenticatePin } from "../middleware/auth.js";
 
 const router = Router();

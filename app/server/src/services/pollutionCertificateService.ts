@@ -1,6 +1,10 @@
-
-import PollutionCertificate from "../models/PollutionCertificate.js";
-import Vehicle from "../models/Vehicle.js";
+import { Vehicle, PollutionCertificate } from "../models/index.js";
+import {
+  PollutionCertificateNotFoundError,
+  PollutionCertificateExistsError,
+  PollutionCertificateServiceError
+} from "../exceptions/PollutionCertificateErrors.js";
+import { UniqueConstraintError } from "sequelize";
 
 export const addPollutionCertificate = async (
   vehicleId: string,
@@ -9,7 +13,7 @@ export const addPollutionCertificate = async (
   try {
     const vehicle = await Vehicle.findByPk(vehicleId);
     if (!vehicle) {
-      throw new Error("Vehicle not found.");
+      throw new PollutionCertificateNotFoundError("Vehicle not found.");
     }
 
     const pollutionCertificate = await PollutionCertificate.create({
@@ -20,13 +24,14 @@ export const addPollutionCertificate = async (
       id: pollutionCertificate.id,
       message: "Pollution certificate added successfully.",
     };
-  } catch (error: any) {
-    if (error.name === "SequelizeUniqueConstraintError") {
-      throw new Error(
-        "Pollution certificate already exists for this vehicle or certificate number is not unique."
-      );
+  } catch (error: unknown) {
+    if (error instanceof UniqueConstraintError) {
+      throw new PollutionCertificateExistsError();
     }
-    throw new Error("Error adding pollution certificate.");
+    if (error instanceof PollutionCertificateNotFoundError) {
+      throw error;
+    }
+    throw new PollutionCertificateServiceError("Error adding pollution certificate.");
   }
 };
 
@@ -36,11 +41,14 @@ export const getPollutionCertificate = async (vehicleId: string) => {
       where: { vehicleId: parseInt(vehicleId) },
     });
     if (!pollutionCertificate) {
-      throw new Error("Pollution certificate not found.");
+      throw new PollutionCertificateNotFoundError();
     }
     return pollutionCertificate;
-  } catch (error: any) {
-    throw new Error("Error fetching pollution certificate.");
+  } catch (error: unknown) {
+    if (error instanceof PollutionCertificateNotFoundError) {
+      throw error;
+    }
+    throw new PollutionCertificateServiceError("Error fetching pollution certificate.");
   }
 };
 
@@ -53,13 +61,16 @@ export const updatePollutionCertificate = async (
       where: { vehicleId: parseInt(vehicleId) },
     });
     if (!pollutionCertificate) {
-      throw new Error("Pollution certificate not found.");
+      throw new PollutionCertificateNotFoundError();
     }
 
     await pollutionCertificate.update(pollutionCertificateData);
     return { message: "Pollution certificate updated successfully." };
-  } catch (error: any) {
-    throw new Error("Error updating pollution certificate.");
+  } catch (error: unknown) {
+    if (error instanceof PollutionCertificateNotFoundError) {
+      throw error;
+    }
+    throw new PollutionCertificateServiceError("Error updating pollution certificate.");
   }
 };
 
@@ -69,10 +80,13 @@ export const deletePollutionCertificate = async (vehicleId: string) => {
       where: { vehicleId: parseInt(vehicleId) },
     });
     if (result === 0) {
-      throw new Error("Pollution certificate not found.");
+      throw new PollutionCertificateNotFoundError();
     }
     return { message: "Pollution certificate deleted successfully." };
-  } catch (error: any) {
-    throw new Error("Error deleting pollution certificate.");
+  } catch (error: unknown) {
+    if (error instanceof PollutionCertificateNotFoundError) {
+      throw error;
+    }
+    throw new PollutionCertificateServiceError("Error deleting pollution certificate.");
   }
 };
