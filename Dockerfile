@@ -15,6 +15,7 @@ COPY app/server/package*.json ./
 RUN npm install
 COPY app/server/ ./
 ENV NODE_ENV=production
+ENV DB_PATH=./vehicles.db
 RUN npm run build
 RUN npm run seed
 
