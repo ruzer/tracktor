@@ -5,13 +5,13 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 # Copy the package.json and package-lock.json files
-COPY app/docs/package.json .
+COPY app/docs/ ./
+
+# Install git (required for VitePress build)
+RUN apk add --no-cache git
 
 # Install dependencies
 RUN npm install
-
-# Copy the rest of the documentation files
-COPY app/docs/ .
 
 # Build the documentation
 RUN npm run docs:build
