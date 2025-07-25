@@ -6,12 +6,15 @@
 	import { tick } from 'svelte';
 	import { Car, LogOut, Tractor } from '@lucide/svelte';
 	import ThemeToggle from '../components/common/ThemeToggle.svelte';
+	import { onMount } from 'svelte';
+	import { env } from '$env/dynamic/public';
 
 	let { children } = $props();
 
 	let isAuthenticated = $state(false);
 	let currentPath = $derived(page.url.pathname);
 	let checkingAuth = $state(true);
+	let demoMode = $state(false);
 
 	$effect(() => {
 		if (browser) {
@@ -27,6 +30,12 @@
 		});
 	});
 
+	onMount(() => {
+		if (browser) {
+			demoMode = Boolean(env.PUBLIC_DEMO_MODE);
+		}
+	});
+
 	function logout() {
 		if (browser) {
 			localStorage.removeItem('userPin');
@@ -37,7 +46,18 @@
 </script>
 
 <!-- Dark mode toggle, scrolls with screen -->
-
+{#if demoMode}
+	<div
+		class="w-full border-b border-yellow-300 bg-yellow-100 py-2 text-center text-base font-semibold text-yellow-900 shadow-sm"
+	>
+		<span
+			>🚜 Demo Mode: This is a demo instance. Data will be reset periodically and is not saved
+			permanently. Please avoid adding any persoanl info.</span
+		>
+		<br>
+		<strong>Default PIN : 123456</strong>
+	</div>
+{/if}
 {#if checkingAuth}
 	<div class="flex min-h-screen items-center justify-center bg-gray-50">
 		<!-- You can replace this with a more sophisticated loading spinner -->
