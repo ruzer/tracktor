@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "docs:dev": "npx vitepress dev .",
+    "docs:dev": "npx vitepress dev . --host",
     "docs:build": "npx vitepress build .",
-    "docs:preview": "npx vitepress preview ."
+    "docs:preview": "npx vitepress preview . --host"
   },
   "devDependencies": {
     "vitepress": "1.6.3"
