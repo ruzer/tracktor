@@ -8,6 +8,9 @@
     "docs:build": "npx vitepress build .",
     "docs:preview": "npx vitepress preview ."
   },
+  "devDependencies": {
+    "vitepress": "1.6.3"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
