@@ -1,5 +1,5 @@
 {
     "scm.defaultViewSortKey": "path",
     "explorer.excludeGitIgnore": false,
-    "explorer.fileNesting.enabled": true
+    "explorer.fileNesting.enabled": false
 }

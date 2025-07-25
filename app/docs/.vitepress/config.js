@@ -11,14 +11,16 @@ export default {
     lastUpdated: true,
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'API', link: '/api/authentication' }
+      { text: 'Documentation', link: '/introduction' },
+      { text: 'API', link: '/api/authentication' },
+      { text: 'Demo', link: 'https://tracktor-demo.bytedge.in' },
     ],
-    sidebar: {
+  sidebar: {
       '/': [
         {
           text: 'Introduction',
           items: [
-            { text: 'What is Tracktor?', link: '#what-is-tracktor' },
+            { text: 'What is Tracktor?', link: '/introduction' },
             { text: 'Deployment', link: '/deployment' },
             { text: 'Contributing', link: '/contributing' }
           ]
