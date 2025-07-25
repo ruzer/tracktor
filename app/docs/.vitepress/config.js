@@ -1,8 +1,14 @@
 export default {
   title: 'Tracktor',
   description: 'Tracktor Documentation',
-  base: '/tracktor/',
+  base: '/',
   themeConfig: {
+    logo: {
+      light: '/logo-light.svg',
+      dark: '/logo-dark.svg'
+    },
+    siteTitle: 'Tracktor Docs',
+    lastUpdated: true,
     nav: [
       { text: 'Home', link: '/' },
       { text: 'API', link: '/api/authentication' }
