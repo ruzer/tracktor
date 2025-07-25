@@ -1,28 +1,30 @@
 import sequelize from "./src/config/database.js";
-import User from "./src/models/User.js";
-import Vehicle from "./src/models/Vehicle.js";
-import FuelLog from "./src/models/FuelLog.js";
+import {
+  Auth,
+  Vehicle,
+  FuelLog,
+  Insurance,
+  MaintenanceLog,
+  PollutionCertificate,
+} from "./src/models/index.js";
 import bcrypt from "bcrypt";
 
 const seedDatabase = async () => {
   try {
-    // This will drop the table if it already exists
     await sequelize.sync({ force: true });
     console.log("Database synchronized!");
 
-    // Create a user with a PIN
     const pin = "123456";
     const hash = await bcrypt.hash(pin, 10);
-    await User.create({ id: 1, hash });
+    await Auth.create({ id: 1, hash });
     console.log(`User created with PIN: ${pin}`);
 
-    // Create vehicles
     const vehicle1 = await Vehicle.create({
       make: "Honda",
       model: "Civic",
       year: 2022,
       licensePlate: "TS-07-JA-1997",
-      vin: "123456789",
+      vin: "1HGFC1F7XNA000001",
       color: "Black",
       odometer: 15000,
     });
@@ -32,12 +34,71 @@ const seedDatabase = async () => {
       model: "Corolla",
       year: 2021,
       licensePlate: "AP-28-DX-2000",
-      vin: "987654321",
+      vin: "1NXBU4EE4AZ000002",
       color: "White",
       odometer: 25000,
     });
 
     console.log("Vehicles created.");
+
+    await Insurance.bulkCreate([
+      {
+        vehicleId: vehicle1.id,
+        provider: "Allstate",
+        policyNumber: "123456789",
+        startDate: "2023-01-01",
+        endDate: "2024-01-01",
+        cost: 1200,
+      },
+      {
+        vehicleId: vehicle2.id,
+        provider: "Geico",
+        policyNumber: "987654321",
+        startDate: "2023-01-01",
+        endDate: "2024-01-01",
+        cost: 1500,
+      },
+    ]);
+
+    console.log("Insurance data created.");
+
+    await MaintenanceLog.bulkCreate([
+      {
+        vehicleId: vehicle1.id,
+        date: "2023-06-01",
+        odometer: 18000,
+        service: "Oil Change",
+        cost: 50,
+      },
+      {
+        vehicleId: vehicle2.id,
+        date: "2023-07-01",
+        odometer: 28000,
+        service: "Tire Rotation",
+        cost: 30,
+      },
+    ]);
+
+    console.log("Maintenance logs created.");
+
+    await PollutionCertificate.bulkCreate([
+      {
+        vehicleId: vehicle1.id,
+        certificateNumber: "PUCC12345",
+        issueDate: "2023-01-01",
+        expiryDate: "2024-01-01",
+        testingCenter: "Green Drive",
+      },
+      {
+        vehicleId: vehicle2.id,
+        certificateNumber: "PUCC54321",
+        issueDate: "2023-01-01",
+        expiryDate: "2024-01-01",
+        testingCenter: "Eco Test",
+      },
+    ]);
+
+    console.log("Pollution certificates created.");
 
     const vehicle1FuelLogs: any = [
       {
@@ -54,20 +115,6 @@ const seedDatabase = async () => {
         odometer: 16000,
         fuelAmount: 32,
         cost: 48,
-      },
-      {
-        vehicleId: vehicle1.id,
-        date: "2024-03-15",
-        odometer: 16500,
-        fuelAmount: 33,
-        cost: 52,
-      },
-      {
-        vehicleId: vehicle1.id,
-        date: "2024-04-15",
-        odometer: 17000,
-        fuelAmount: 34,
-        cost: 55,
       },
     ];
     let currentDate1 = new Date("2024-04-15");
@@ -102,20 +149,6 @@ const seedDatabase = async () => {
         cost: 55,
         notes: "Filled at Shell",
       },
-      {
-        vehicleId: vehicle2.id,
-        date: "2024-03-20",
-        odometer: 26800,
-        fuelAmount: 39,
-        cost: 58,
-      },
-      {
-        vehicleId: vehicle2.id,
-        date: "2024-04-20",
-        odometer: 27400,
-        fuelAmount: 41,
-        cost: 62,
-      },
     ];
     let currentDate2 = new Date("2024-04-20");
     let currentOdometer2 = 27400;
@@ -133,10 +166,7 @@ const seedDatabase = async () => {
       });
     }
 
-    // Create fuel logs for vehicle 1
     await FuelLog.bulkCreate(vehicle1FuelLogs);
-
-    // Create fuel logs for vehicle 2
     await FuelLog.bulkCreate(vehicle2FuelLogs);
 
     console.log("Fuel logs created.");

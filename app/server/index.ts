@@ -6,10 +6,6 @@ import swaggerSpec from "./swagger.js";
 import sequelize from "./src/config/database.js";
 import pinRoutes from "./src/routes/pinRoutes.js";
 import vehicleRoutes from "./src/routes/vehicleRoutes.js";
-import fuelLogRoutes from "./src/routes/fuelLogRoutes.js";
-import insuranceRoutes from "./src/routes/insuranceRoutes.js";
-import maintenanceLogRoutes from "./src/routes/maintenanceLogRoutes.js";
-import pollutionCertificateRoutes from "./src/routes/pollutionCertificateRoutes.js";
 import { config } from "dotenv";
 
 config({ quiet: true });
@@ -27,10 +23,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Use the route files
 app.use("/api", pinRoutes);
 app.use("/api/vehicles", vehicleRoutes);
-app.use("/api/vehicles", fuelLogRoutes);
-app.use("/api/vehicles", insuranceRoutes);
-app.use("/api/vehicles", maintenanceLogRoutes);
-app.use("/api/vehicles", pollutionCertificateRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   // @ts-ignore

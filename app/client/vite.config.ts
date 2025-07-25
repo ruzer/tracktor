@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	optimizeDeps: {
-		include: ['svelte-chartjs']
+		include: ['svelte5-chartjs']
 	},
 	build: {
 		commonjsOptions: {

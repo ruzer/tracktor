@@ -3,8 +3,8 @@ import sequelize from "../config/database.js";
 import Vehicle from "./Vehicle.js";
 
 interface InsuranceAttributes {
-  id: number;
-  vehicleId: number;
+  id: string;
+  vehicleId: string;
   provider: string;
   policyNumber: string;
   startDate: string;
@@ -19,56 +19,73 @@ class Insurance
   extends Model<InsuranceAttributes, InsuranceCreationAttributes>
   implements InsuranceAttributes
 {
-  public id!: number;
-  public vehicleId!: number;
-  public provider!: string;
-  public policyNumber!: string;
-  public startDate!: string;
-  public endDate!: string;
-  public cost!: number;
+  public declare id: string;
+  public declare vehicleId: string;
+  public declare provider: string;
+  public declare policyNumber: string;
+  public declare startDate: string;
+  public declare endDate: string;
+  public declare cost: number;
 }
 
 Insurance.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUIDV4,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
     },
     vehicleId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUIDV4,
       references: {
         model: Vehicle,
         key: "id",
       },
       allowNull: false,
-      unique: true, // Each vehicle can have one insurance policy
     },
     provider: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     policyNumber: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      validate: {
+        isDate: true,
+      },
     },
     endDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      validate: {
+        isDate: true
+      },
     },
     cost: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      validate: {
+        isFloat: true,
+        min: 0,
+      },
     },
   },
   {
-    sequelize,
     tableName: "insurances",
     timestamps: true,
+    underscored: true,
+    sequelize
   }
 );
 

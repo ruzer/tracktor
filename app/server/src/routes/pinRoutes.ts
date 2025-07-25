@@ -3,7 +3,7 @@ import {
   setPin,
   verifyPin,
   getPinStatus,
-} from "../controllers/pinController.js";
+} from "../controllers/PinController.js";
 
 const router = Router();
 

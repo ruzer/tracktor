@@ -1,10 +1,8 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database.js';
-import Insurance from './Insurance.js';
-import PollutionCertificate from './PollutionCertificate.js';
 
 interface VehicleAttributes {
-    id: number;
+    id: string;
     make: string;
     model: string;
     year: number;
@@ -12,14 +10,12 @@ interface VehicleAttributes {
     vin?: string;
     color?: string;
     odometer?: number;
-    insurance?: Insurance;
-    pollutionCertificate?: PollutionCertificate;
 }
 
 interface VehicleCreationAttributes extends Optional<VehicleAttributes, 'id'> {}
 
 class Vehicle extends Model<VehicleAttributes, VehicleCreationAttributes> implements VehicleAttributes {
-    public declare id: number;
+    public declare id: string;
     public declare make: string;
     public declare model: string;
     public declare year: number;
@@ -27,56 +23,73 @@ class Vehicle extends Model<VehicleAttributes, VehicleCreationAttributes> implem
     public declare vin?: string;
     public declare color?: string;
     public declare odometer?: number;
-    public declare insurance?: Insurance;
-    public declare pollutionCertificate?: PollutionCertificate;
 }
 
 Vehicle.init({
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUIDV4,
         primaryKey: true,
-        autoIncrement: true,
+        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
     },
     make: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+            notEmpty: true,
+        },
     },
     model: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+            notEmpty: true,
+        },
     },
     year: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+            isInt: true,
+            min: 1886, // The year the first car was invented
+            max: new Date().getFullYear() + 1
+        },
     },
     licensePlate: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        validate: {
+            notEmpty: true,
+            len: [1, 15], // Assuming a maximum length for license plates
+        },
     },
     vin: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: true,
+        validate: {
+            is: /^[A-HJ-NPR-Z0-9]{17}$/, // VIN must be 17 characters long, excluding I, O, and Q
+        },
     },
     color: {
         type: DataTypes.STRING,
         allowNull: true,
+
     },
     odometer: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        validate: {
+            isInt: true,
+            min: 0, // Odometer cannot be negative
+        }
     },
 }, {
     tableName: 'vehicles',
-    timestamps: false,
+    timestamps: true,
+    underscored: true,
     sequelize,
 });
-
-Vehicle.hasOne(Insurance, { foreignKey: 'vehicleId', as: 'insurance' });
-Insurance.belongsTo(Vehicle, { foreignKey: 'vehicleId' });
-
-Vehicle.hasOne(PollutionCertificate, { foreignKey: 'vehicleId', as: 'pollutionCertificate' });
-PollutionCertificate.belongsTo(Vehicle, { foreignKey: 'vehicleId' });
 
 export default Vehicle;

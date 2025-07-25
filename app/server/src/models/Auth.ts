@@ -1,32 +1,32 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database.js';
 
-interface UserAttributes {
+interface AuthAttributes {
     id: number;
     hash: string;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+interface AuthCreationAttributes extends Optional<AuthAttributes, 'id'> {}
 
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+class Auth extends Model<AuthAttributes, AuthCreationAttributes> implements AuthAttributes {
     public declare id: number;
     public declare hash: string;
 }
 
-User.init({
+Auth.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
     },
     hash: {
         type: DataTypes.STRING,
         allowNull: false,
     },
 }, {
-    tableName: 'users',
-    timestamps: false,
+    tableName: 'auth',
+    timestamps: true,
+    underscored: true,
     sequelize,
 });
 
-export default User;
+export default Auth;

@@ -1,11 +1,18 @@
-
 import { Request, Response } from "express";
 import * as pollutionCertificateService from "../services/pollutionCertificateService.js";
+import {
+  PollutionCertificateNotFoundError,
+  PollutionCertificateExistsError,
+  PollutionCertificateServiceError
+} from "../exceptions/PollutionCertificateErrors.js";
 
 export const addPollutionCertificate = async (req: Request, res: Response) => {
   const { vehicleId } = req.params;
   const { certificateNumber, issueDate, expiryDate, testingCenter, notes } = req.body;
 
+  if (!vehicleId) {
+    return res.status(400).json({ message: "Vehicle ID is required." });
+  }
   if (!certificateNumber || !issueDate || !expiryDate || !testingCenter) {
     return res.status(400).json({
       message: "Certificate Number, Issue Date, Expiry Date, and Testing Center are required.",
@@ -19,11 +26,14 @@ export const addPollutionCertificate = async (req: Request, res: Response) => {
     );
     res.status(201).json(result);
   } catch (error: any) {
-    if (error.message === "Vehicle not found.") {
+    if (error instanceof PollutionCertificateNotFoundError) {
       return res.status(404).json({ message: error.message });
     }
-    if (error.message === "Pollution certificate already exists for this vehicle or certificate number is not unique.") {
+    if (error instanceof PollutionCertificateExistsError) {
       return res.status(409).json({ message: error.message });
+    }
+    if (error instanceof PollutionCertificateServiceError) {
+      return res.status(500).json({ message: error.message });
     }
     res.status(500).json({ message: error.message });
   }
@@ -31,14 +41,20 @@ export const addPollutionCertificate = async (req: Request, res: Response) => {
 
 export const getPollutionCertificate = async (req: Request, res: Response) => {
   const { vehicleId } = req.params;
+  if (!vehicleId) {
+    return res.status(400).json({ message: "Vehicle ID is required." });
+  }
   try {
     const pollutionCertificate = await pollutionCertificateService.getPollutionCertificate(
       vehicleId
     );
     res.status(200).json(pollutionCertificate);
   } catch (error: any) {
-    if (error.message === "Pollution certificate not found.") {
+    if (error instanceof PollutionCertificateNotFoundError) {
       return res.status(404).json({ message: error.message });
+    }
+    if (error instanceof PollutionCertificateServiceError) {
+      return res.status(500).json({ message: error.message });
     }
     res.status(500).json({ message: error.message });
   }
@@ -48,6 +64,9 @@ export const updatePollutionCertificate = async (req: Request, res: Response) =>
   const { vehicleId } = req.params;
   const { certificateNumber, issueDate, expiryDate, testingCenter, notes } = req.body;
 
+  if (!vehicleId) {
+    return res.status(400).json({ message: "Vehicle ID is required." });
+  }
   if (!certificateNumber || !issueDate || !expiryDate || !testingCenter) {
     return res.status(400).json({
       message: "Certificate Number, Issue Date, Expiry Date, and Testing Center are required.",
@@ -61,8 +80,11 @@ export const updatePollutionCertificate = async (req: Request, res: Response) =>
     );
     res.status(200).json(result);
   } catch (error: any) {
-    if (error.message === "Pollution certificate not found.") {
+    if (error instanceof PollutionCertificateNotFoundError) {
       return res.status(404).json({ message: error.message });
+    }
+    if (error instanceof PollutionCertificateServiceError) {
+      return res.status(500).json({ message: error.message });
     }
     res.status(500).json({ message: error.message });
   }
@@ -70,14 +92,20 @@ export const updatePollutionCertificate = async (req: Request, res: Response) =>
 
 export const deletePollutionCertificate = async (req: Request, res: Response) => {
   const { vehicleId } = req.params;
+  if (!vehicleId) {
+    return res.status(400).json({ message: "Vehicle ID is required." });
+  }
   try {
     const result = await pollutionCertificateService.deletePollutionCertificate(
       vehicleId
     );
     res.status(200).json(result);
   } catch (error: any) {
-    if (error.message === "Pollution certificate not found.") {
+    if (error instanceof PollutionCertificateNotFoundError) {
       return res.status(404).json({ message: error.message });
+    }
+    if (error instanceof PollutionCertificateServiceError) {
+      return res.status(500).json({ message: error.message });
     }
     res.status(500).json({ message: error.message });
   }

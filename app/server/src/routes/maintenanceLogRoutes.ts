@@ -5,35 +5,15 @@ import {
   getMaintenanceLogById,
   updateMaintenanceLog,
   deleteMaintenanceLog,
-} from "../controllers/maintenanceLogController.js";
+} from "../controllers/MaintenanceLogController.js";
 import { authenticatePin } from "../middleware/auth.js";
 
-const router = Router();
+const router = Router({ mergeParams: true });
 
-router.post(
-  "/:vehicleId/maintenance-logs",
-  authenticatePin,
-  addMaintenanceLog
-);
-router.get(
-  "/:vehicleId/maintenance-logs",
-  authenticatePin,
-  getMaintenanceLogs
-);
-router.get(
-  "/maintenance-logs/:id",
-  authenticatePin,
-  getMaintenanceLogById
-);
-router.put(
-  "/maintenance-logs/:id",
-  authenticatePin,
-  updateMaintenanceLog
-);
-router.delete(
-  "/maintenance-logs/:id",
-  authenticatePin,
-  deleteMaintenanceLog
-);
+router.post("/", authenticatePin, addMaintenanceLog);
+router.get("/", authenticatePin, getMaintenanceLogs);
+router.get("/:id", authenticatePin, getMaintenanceLogById);
+router.put("/:id", authenticatePin, updateMaintenanceLog);
+router.delete("/:id", authenticatePin, deleteMaintenanceLog);
 
 export default router;
