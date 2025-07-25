@@ -1,15 +1,17 @@
-
-import Vehicle from "../models/Vehicle.js";
+import { VehicleExistsError, VehicleServiceError, VehicleNotFoundError } from "../exceptions/VehicleErrors.js";
+import { Vehicle } from "../models/index.js";
+import { UniqueConstraintError } from "sequelize";
 
 export const addVehicle = async (vehicleData: any) => {
   try {
     const vehicle = await Vehicle.create(vehicleData);
     return { id: vehicle.id, message: "Vehicle added successfully." };
-  } catch (error: any) {
-    if (error.name === "SequelizeUniqueConstraintError") {
-      throw new Error("Vehicle with this license plate or VIN already exists.");
+  } catch (error: unknown) {
+    console.error("Error adding vehicle: ", error);
+    if (error instanceof UniqueConstraintError) {
+      throw new VehicleExistsError();
     }
-    throw new Error("Error adding vehicle.");
+    throw new VehicleServiceError("Error adding vehicle.");
   }
 };
 
@@ -23,27 +25,19 @@ export const getAllVehicles = async () => {
     });
 
     return vehicles.map(vehicle => {
-      const insurance = vehicle.insurance;
-      const pollutionCertificate = vehicle.pollutionCertificate;
+      const insurance = (vehicle as any).insurance;
+      const pollutionCertificate = (vehicle as any).pollutionCertificate;
 
       let insuranceStatus = "N/A";
       if (insurance) {
         const endDate = new Date(insurance.endDate);
-        if (endDate > new Date()) {
-          insuranceStatus = "Active";
-        } else {
-          insuranceStatus = "Expired";
-        }
+        insuranceStatus = endDate > new Date() ? "Active" : "Expired";
       }
 
       let puccStatus = "N/A";
       if (pollutionCertificate) {
         const expiryDate = new Date(pollutionCertificate.expiryDate);
-        if (expiryDate > new Date()) {
-          puccStatus = "Active";
-        } else {
-          puccStatus = "Expired";
-        }
+        puccStatus = expiryDate > new Date() ? "Active" : "Expired";
       }
 
       return {
@@ -52,8 +46,9 @@ export const getAllVehicles = async () => {
         puccStatus
       };
     });
-  } catch (error: any) {
-    throw new Error("Error fetching vehicles.");
+  } catch (error: unknown) {
+    console.error("Error fetching vehicles: ", error);
+    throw new VehicleServiceError("Error fetching vehicles.");
   }
 };
 
@@ -61,11 +56,15 @@ export const getVehicleById = async (id: string) => {
   try {
     const vehicle = await Vehicle.findByPk(id);
     if (!vehicle) {
-      throw new Error("Vehicle not found.");
+      throw new VehicleNotFoundError();
     }
     return vehicle;
-  } catch (error: any) {
-    throw new Error("Error fetching vehicle.");
+  } catch (error: unknown) {
+    console.error(`Error fetching vehicle(${id}):`, error);
+    if (error instanceof VehicleNotFoundError) {
+      throw error;
+    }
+    throw new VehicleServiceError("Error fetching vehicle.");
   }
 };
 
@@ -73,16 +72,20 @@ export const updateVehicle = async (id: string, vehicleData: any) => {
   try {
     const vehicle = await Vehicle.findByPk(id);
     if (!vehicle) {
-      throw new Error("Vehicle not found.");
+      throw new VehicleNotFoundError();
     }
 
     await vehicle.update(vehicleData);
     return { message: "Vehicle updated successfully." };
-  } catch (error: any) {
-    if (error.name === "SequelizeUniqueConstraintError") {
-      throw new Error("Vehicle with this license plate or VIN already exists.");
+  } catch (error: unknown) {
+    console.error(`Error updating vehicle(${id}):`, error);
+    if (error instanceof UniqueConstraintError) {
+      throw new VehicleExistsError();
     }
-    throw new Error("Error updating vehicle.");
+    if (error instanceof VehicleNotFoundError) {
+      throw error;
+    }
+    throw new VehicleServiceError("Error updating vehicle.");
   }
 };
 
@@ -92,10 +95,14 @@ export const deleteVehicle = async (id: string) => {
       where: { id: id },
     });
     if (result === 0) {
-      throw new Error("Vehicle not found.");
+      throw new VehicleNotFoundError();
     }
     return { message: "Vehicle deleted successfully." };
-  } catch (error: any) {
-    throw new Error("Error deleting vehicle.");
+  } catch (error: unknown) {
+    console.error(`Error deleting vehicle(${id}):`, error);
+    if (error instanceof VehicleNotFoundError) {
+      throw error;
+    }
+    throw new VehicleServiceError("Error deleting vehicle.");
   }
 };

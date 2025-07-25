@@ -4,14 +4,14 @@ import {
   getInsurance,
   updateInsurance,
   deleteInsurance,
-} from "../controllers/insuranceController.js";
+} from "../controllers/InsuranceController.js";
 import { authenticatePin } from "../middleware/auth.js";
 
-const router = Router();
+const router = Router({ mergeParams: true });
 
-router.post("/:vehicleId/insurance", authenticatePin, addInsurance);
-router.get("/:vehicleId/insurance", authenticatePin, getInsurance);
-router.put("/:vehicleId/insurance", authenticatePin, updateInsurance);
-router.delete("/:vehicleId/insurance", authenticatePin, deleteInsurance);
+router.post("/", authenticatePin, addInsurance);
+router.get("/", authenticatePin, getInsurance);
+router.put("/", authenticatePin, updateInsurance);
+router.delete("/", authenticatePin, deleteInsurance);
 
 export default router;

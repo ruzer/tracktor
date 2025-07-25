@@ -5,15 +5,15 @@ import {
   getFuelLogById,
   updateFuelLog,
   deleteFuelLog,
-} from "../controllers/fuelLogController.js";
+} from "../controllers/FuelLogController.js";
 import { authenticatePin } from "../middleware/auth.js";
 
-const router = Router();
+const router = Router({ mergeParams: true });
 
-router.post("/:vehicleId/fuel-logs", authenticatePin, addFuelLog);
-router.get("/:vehicleId/fuel-logs", authenticatePin, getFuelLogs);
-router.get("/fuel-logs/:id", authenticatePin, getFuelLogById);
-router.put("/fuel-logs/:id", authenticatePin, updateFuelLog);
-router.delete("/fuel-logs/:id", authenticatePin, deleteFuelLog);
+router.post("/", authenticatePin, addFuelLog);
+router.get("/", authenticatePin, getFuelLogs);
+router.get("/:id", authenticatePin, getFuelLogById);
+router.put("/:id", authenticatePin, updateFuelLog);
+router.delete("/:id", authenticatePin, deleteFuelLog);
 
 export default router;
