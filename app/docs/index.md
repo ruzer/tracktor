@@ -5,8 +5,8 @@ hero:
   text: Effortless Vehicle Management
   tagline: Track, organize, and optimize your vehicle lifecycle with a modern open-source platform.
   image:
-    light: public/hero-tracktor-light.png
-    dark: public/hero-tracktor-dark.png
+    light: /hero-tracktor-light.png
+    dark: /hero-tracktor-dark.png
     alt: Tracktor Logo
   actions:
     - theme: brand
