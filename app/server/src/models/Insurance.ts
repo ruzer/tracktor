@@ -4,7 +4,7 @@ import Vehicle from "./Vehicle.js";
 
 interface InsuranceAttributes {
   id: string;
-  vehicleId: number;
+  vehicleId: string;
   provider: string;
   policyNumber: string;
   startDate: string;
@@ -20,7 +20,7 @@ class Insurance
   implements InsuranceAttributes
 {
   public declare id: string;
-  public declare vehicleId: number;
+  public declare vehicleId: string;
   public declare provider: string;
   public declare policyNumber: string;
   public declare startDate: string;

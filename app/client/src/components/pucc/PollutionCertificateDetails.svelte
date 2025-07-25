@@ -30,7 +30,7 @@
 		error = '';
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/pollution-certificate`,
+				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/pucc`,
 				{
 					headers: {
 						'X-User-PIN': browser ? localStorage.getItem('userPin') || '' : ''
@@ -56,7 +56,7 @@
 		}
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/pollution-certificate`,
+				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/pucc`,
 				{
 					method: 'DELETE',
 					headers: {

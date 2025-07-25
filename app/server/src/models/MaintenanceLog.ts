@@ -4,7 +4,7 @@ import Vehicle from "./Vehicle.js";
 
 interface MaintenanceLogAttributes {
   id: string;
-  vehicleId: number;
+  vehicleId: string;
   date: string;
   odometer: number;
   service: string;
@@ -20,7 +20,7 @@ class MaintenanceLog
   implements MaintenanceLogAttributes
 {
   public declare id: string;
-  public declare vehicleId: number;
+  public declare vehicleId: string;
   public declare date: string;
   public declare odometer: number;
   public declare service: string;

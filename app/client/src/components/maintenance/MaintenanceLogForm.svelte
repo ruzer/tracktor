@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from 'svelte';
 	import MaintenanceLogFormComponent from './MaintenanceLogFormComponent.svelte';
+	import { env } from '$env/dynamic/public';
 
 	export let vehicleId: number | null = null;
 	export let showModal: boolean = false;
@@ -43,13 +44,13 @@
 		}
 
 		const method = initialData && initialData.id ? 'PUT' : 'POST';
-		const url =
+		const urlPath =
 			initialData && initialData.id
 				? `/api/maintenance-logs/${initialData.id}`
 				: `/api/vehicles/${vehicleId}/maintenance-logs`;
 
 		try {
-			const response = await fetch(url, {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL||""}${urlPath}`, {
 				method: method,
 				headers: {
 					'Content-Type': 'application/json',

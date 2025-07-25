@@ -4,7 +4,7 @@ import Vehicle from "./Vehicle.js";
 
 interface PollutionCertificateAttributes {
   id: string;
-  vehicleId: number;
+  vehicleId: string;
   certificateNumber: string;
   issueDate: string;
   expiryDate: string;
@@ -20,7 +20,7 @@ class PollutionCertificate
   implements PollutionCertificateAttributes
 {
   public declare id: string;
-  public declare vehicleId: number;
+  public declare vehicleId: string;
   public declare certificateNumber: string;
   public declare issueDate: string;
   public declare expiryDate: string;
@@ -37,7 +37,7 @@ PollutionCertificate.init(
       allowNull: false,
     },
     vehicleId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUIDV4,
       references: {
         model: Vehicle, // Use string reference
         key: "id",
