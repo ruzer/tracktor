@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: './vehicles.db',
+    storage:  `${process.env.DB_PATH}`, // Use environment variable for database path
     logging: false, // Set to true to see SQL queries in console
 });
 

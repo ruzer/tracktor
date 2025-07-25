@@ -26,7 +26,7 @@ WORKDIR /app
 COPY --from=backend-builder /app/server/dist ./server/dist
 COPY --from=backend-builder /app/server/node_modules ./server/node_modules
 COPY --from=backend-builder /app/server/package.json ./server/package.json
-COPY --from=backend-builder /app/server/vehicles.db ./server/vehicles.db
+COPY --from=backend-builder /app/server/vehicles.db /data/vehicles.db
 
 # Copy built frontend from frontend-builder stage
 COPY --from=frontend-builder /app/client/build ./server/client/build
@@ -37,4 +37,5 @@ EXPOSE 3000
 
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV DB_PATH=/data/vehicles.db
 CMD ["node", "dist/index.js"]
