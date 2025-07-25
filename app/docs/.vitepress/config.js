@@ -1,7 +1,7 @@
 export default {
   title: 'Tracktor',
   description: 'Tracktor Documentation',
-  base: '/tracktor/',
+  base: '/',
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
