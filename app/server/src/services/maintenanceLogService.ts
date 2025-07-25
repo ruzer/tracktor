@@ -16,13 +16,14 @@ export const addMaintenanceLog = async (
 
     const maintenanceLog = await MaintenanceLog.create({
       ...maintenanceLogData,
-      vehicleId: parseInt(vehicleId),
+      vehicleId: vehicleId,
     });
     return {
       id: maintenanceLog.id,
       message: "Maintenance log added successfully.",
     };
   } catch (error: unknown) {
+    console.error("Error adding maintenance log: ", error);
     if (error instanceof MaintenanceLogNotFoundError) {
       throw error;
     }
@@ -33,7 +34,7 @@ export const addMaintenanceLog = async (
 export const getMaintenanceLogs = async (vehicleId: string) => {
   try {
     const maintenanceLogs = await MaintenanceLog.findAll({
-      where: { vehicleId: parseInt(vehicleId) },
+      where: { vehicleId: vehicleId },
       order: [
         ["date", "ASC"],
         ["odometer", "ASC"],
@@ -41,6 +42,7 @@ export const getMaintenanceLogs = async (vehicleId: string) => {
     });
     return maintenanceLogs;
   } catch (error: unknown) {
+    console.error("Error fetching maintenance logs: ", error);
     throw new MaintenanceLogServiceError("Error fetching maintenance logs.");
   }
 };
@@ -53,6 +55,7 @@ export const getMaintenanceLogById = async (id: string) => {
     }
     return maintenanceLog;
   } catch (error: unknown) {
+    console.error("Error fetching maintenance log: ", error);
     if (error instanceof MaintenanceLogNotFoundError) {
       throw error;
     }
@@ -73,6 +76,7 @@ export const updateMaintenanceLog = async (
     await maintenanceLog.update(maintenanceLogData);
     return { message: "Maintenance log updated successfully." };
   } catch (error: unknown) {
+    console.error("Error updating maintenance log: ", error);
     if (error instanceof MaintenanceLogNotFoundError) {
       throw error;
     }
@@ -90,6 +94,7 @@ export const deleteMaintenanceLog = async (id: string) => {
     }
     return { message: "Maintenance log deleted successfully." };
   } catch (error: unknown) {
+    console.error("Error deleting maintenance log: ", error);
     if (error instanceof MaintenanceLogNotFoundError) {
       throw error;
     }

@@ -1,24 +1,28 @@
 ### Add Vehicle
 POST http://localhost:3000/api/vehicles
 Content-Type: application/json
+X-User-PIN: 123456
 
 {
   "vehicleType": "Car",
   "make": "Toyota",
   "model": "Corolla",
   "year": 2022,
-  "licensePlate": "ABC123"
+  "licensePlate": "ABC1234"
 }
 
 ### Get All Vehicles
 GET http://localhost:3000/api/vehicles
+X-User-PIN: 123456
 
 ### Get Vehicle By ID
-GET http://localhost:3000/api/vehicles/1
+GET http://localhost:3000/api/vehicles/e9e62e3f-e88a-42c8-b4b1-335e27f9ecca
+X-User-PIN: 123456
 
 ### Update Vehicle
-PUT http://localhost:3000/api/vehicles/1
+PUT http://localhost:3000/api/vehicles/e9e62e3f-e88a-42c8-b4b1-335e27f9ecca
 Content-Type: application/json
+X-User-PIN: 123456
 
 {
   "make": "Toyota",
@@ -28,4 +32,5 @@ Content-Type: application/json
 }
 
 ### Delete Vehicle
-DELETE http://localhost:3000/api/vehicles/1
+DELETE http://localhost:3000/api/vehicles/e9e62e3f-e88a-42c8-b4b1-335e27f9ecca
+X-User-PIN: 123456

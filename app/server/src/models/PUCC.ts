@@ -1,8 +1,9 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database.js";
+import Vehicle from "./Vehicle.js";
 
 interface PollutionCertificateAttributes {
-  id: number;
+  id: string;
   vehicleId: number;
   certificateNumber: string;
   issueDate: string;
@@ -18,13 +19,13 @@ class PollutionCertificate
   extends Model<PollutionCertificateAttributes, PollutionCertificateCreationAttributes>
   implements PollutionCertificateAttributes
 {
-  public id!: number;
-  public vehicleId!: number;
-  public certificateNumber!: string;
-  public issueDate!: string;
-  public expiryDate!: string;
-  public testingCenter!: string;
-  public notes?: string;
+  public declare id: string;
+  public declare vehicleId: number;
+  public declare certificateNumber: string;
+  public declare issueDate: string;
+  public declare expiryDate: string;
+  public declare testingCenter: string;
+  public declare notes: string;
 }
 
 PollutionCertificate.init(
@@ -32,11 +33,13 @@ PollutionCertificate.init(
     id: {
       type: DataTypes.UUIDV4,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
     },
     vehicleId: {
       type: DataTypes.INTEGER,
       references: {
-        model: "Vehicle", // Use string reference
+        model: Vehicle, // Use string reference
         key: "id",
       },
       allowNull: false

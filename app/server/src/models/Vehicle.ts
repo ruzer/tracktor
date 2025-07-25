@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database.js';
 
 interface VehicleAttributes {
-    id: number;
+    id: string;
     make: string;
     model: string;
     year: number;
@@ -15,7 +15,7 @@ interface VehicleAttributes {
 interface VehicleCreationAttributes extends Optional<VehicleAttributes, 'id'> {}
 
 class Vehicle extends Model<VehicleAttributes, VehicleCreationAttributes> implements VehicleAttributes {
-    public declare id: number;
+    public declare id: string;
     public declare make: string;
     public declare model: string;
     public declare year: number;
@@ -29,6 +29,8 @@ Vehicle.init({
     id: {
         type: DataTypes.UUIDV4,
         primaryKey: true,
+        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
     },
     make: {
         type: DataTypes.STRING,

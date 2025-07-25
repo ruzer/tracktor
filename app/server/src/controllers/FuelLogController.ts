@@ -14,6 +14,7 @@ export const addFuelLog = async (req: Request, res: Response) => {
       .json({ message: "Date, Odometer, Fuel Amount, and Cost are required." });
   }
   if (!vehicleId) {
+    console.log("Vehicle ID is missing in request parameters.", JSON.stringify(req.path));
     return res
       .status(400)
       .json({ message: "Vehicle ID is required." });

@@ -11,7 +11,7 @@ export const addInsurance = async (vehicleId: string, insuranceData: any) => {
 
     const insurance = await Insurance.create({
       ...insuranceData,
-      vehicleId: parseInt(vehicleId),
+      vehicleId: vehicleId,
     });
     return {
       id: insurance.id,
@@ -31,7 +31,7 @@ export const addInsurance = async (vehicleId: string, insuranceData: any) => {
 export const getInsurance = async (vehicleId: string) => {
   try {
     const insurance = await Insurance.findOne({
-      where: { vehicleId: parseInt(vehicleId) },
+      where: { vehicleId: vehicleId },
     });
     if (!insurance) {
       throw new InsuranceNotFoundError();
@@ -48,7 +48,7 @@ export const getInsurance = async (vehicleId: string) => {
 export const updateInsurance = async (vehicleId: string, insuranceData: any) => {
   try {
     const insurance = await Insurance.findOne({
-      where: { vehicleId: parseInt(vehicleId) },
+      where: { vehicleId: vehicleId },
     });
     if (!insurance) {
       throw new InsuranceNotFoundError();
@@ -67,7 +67,7 @@ export const updateInsurance = async (vehicleId: string, insuranceData: any) => 
 export const deleteInsurance = async (vehicleId: string) => {
   try {
     const result = await Insurance.destroy({
-      where: { vehicleId: parseInt(vehicleId) },
+      where: { vehicleId: vehicleId },
     });
     if (result === 0) {
       throw new InsuranceNotFoundError();

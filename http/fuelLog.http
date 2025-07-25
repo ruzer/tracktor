@@ -1,6 +1,7 @@
 ### Add Fuel Log
-POST http://localhost:3000/api/vehicles/1/fuel-logs
+POST http://localhost:3000/api/vehicles/9190e3cd-39f7-44cf-a02c-e1acfa9a8126/fuel-logs
 Content-Type: application/json
+X-User-Pin: 123456
 
 {
   "date": "2025-07-24",
@@ -11,14 +12,17 @@ Content-Type: application/json
 }
 
 ### Get All Fuel Logs for Vehicle
-GET http://localhost:3000/api/vehicles/1/fuel-logs
+GET http://localhost:3000/api/vehicles/9190e3cd-39f7-44cf-a02c-e1acfa9a8126/fuel-logs
+X-User-Pin: 123456
 
 ### Get Fuel Log By ID
-GET http://localhost:3000/api/fuel-logs/1
+GET http://localhost:3000/api/vehicles/9190e3cd-39f7-44cf-a02c-e1acfa9a8126/fuel-logs/4eb56e04-a132-4045-a665-542194a660b1
+X-User-Pin: 123456
 
 ### Update Fuel Log
-PUT http://localhost:3000/api/fuel-logs/1
+PUT http://localhost:3000/api/vehicles/9190e3cd-39f7-44cf-a02c-e1acfa9a8126/fuel-logs/4eb56e04-a132-4045-a665-542194a660b1
 Content-Type: application/json
+X-User-Pin: 123456
 
 {
   "date": "2025-07-25",
@@ -29,4 +33,5 @@ Content-Type: application/json
 }
 
 ### Delete Fuel Log
-DELETE http://localhost:3000/api/fuel-logs/1
+DELETE http://localhost:3000/api/vehicles/9190e3cd-39f7-44cf-a02c-e1acfa9a8126/fuel-logs/4eb56e04-a132-4045-a665-542194a660b1
+X-User-Pin: 123456

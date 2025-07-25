@@ -1,8 +1,9 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database.js";
+import Vehicle from "./Vehicle.js";
 
 interface MaintenanceLogAttributes {
-  id: number;
+  id: string;
   vehicleId: number;
   date: string;
   odometer: number;
@@ -18,13 +19,13 @@ class MaintenanceLog
   extends Model<MaintenanceLogAttributes, MaintenanceLogCreationAttributes>
   implements MaintenanceLogAttributes
 {
-  public id!: number;
-  public vehicleId!: number;
-  public date!: string;
-  public odometer!: number;
-  public service!: string;
-  public cost!: number;
-  public notes?: string;
+  public declare id: string;
+  public declare vehicleId: number;
+  public declare date: string;
+  public declare odometer: number;
+  public declare service: string;
+  public declare cost: number;
+  public declare notes: string;
 }
 
 MaintenanceLog.init(
@@ -32,11 +33,13 @@ MaintenanceLog.init(
     id: {
       type: DataTypes.UUIDV4,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
     },
     vehicleId: {
       type: DataTypes.INTEGER,
       references: {
-        model: "Vehicle", // Use string reference
+        model: Vehicle, 
         key: "id",
       },
       allowNull: false,

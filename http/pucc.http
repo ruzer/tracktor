@@ -1,6 +1,7 @@
 ### Add Pollution Certificate
-POST http://localhost:3000/api/vehicles/1/pucc
+POST http://localhost:3000/api/vehicles/634c19aa-f2ac-4ae1-b163-7c97ab62ef4e/pucc
 Content-Type: application/json
+X-User-Pin: 123456
 
 {
   "certificateNumber": "PUCC123456",
@@ -11,11 +12,13 @@ Content-Type: application/json
 }
 
 ### Get Pollution Certificate for Vehicle
-GET http://localhost:3000/api/vehicles/1/pucc
+GET http://localhost:3000/api/vehicles/634c19aa-f2ac-4ae1-b163-7c97ab62ef4e/pucc
+X-User-Pin: 123456
 
 ### Update Pollution Certificate
-PUT http://localhost:3000/api/vehicles/1/pucc
+PUT http://localhost:3000/api/vehicles/634c19aa-f2ac-4ae1-b163-7c97ab62ef4e/pucc
 Content-Type: application/json
+X-User-Pin: 123456
 
 {
   "certificateNumber": "PUCC654321",
@@ -26,4 +29,5 @@ Content-Type: application/json
 }
 
 ### Delete Pollution Certificate
-DELETE http://localhost:3000/api/vehicles/1/pucc
+DELETE http://localhost:3000/api/vehicles/634c19aa-f2ac-4ae1-b163-7c97ab62ef4e/pucc
+X-User-Pin: 123456

@@ -11,7 +11,7 @@ export const addFuelLog = async (vehicleId: string, fuelLogData: any) => {
 
     const fuelLog = await FuelLog.create({
       ...fuelLogData,
-      vehicleId: parseInt(vehicleId),
+      vehicleId: vehicleId,
     });
     return { id: fuelLog.id, message: "Fuel log added successfully." };
   } catch (error: any) {
@@ -26,7 +26,7 @@ export const addFuelLog = async (vehicleId: string, fuelLogData: any) => {
 export const getFuelLogs = async (vehicleId: string) => {
   try {
     const fuelLogs = await FuelLog.findAll({
-      where: { vehicleId: parseInt(vehicleId) },
+      where: { vehicleId: vehicleId },
       order: [
         ["date", "ASC"],
         ["odometer", "ASC"],

@@ -1,9 +1,10 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database.js';
+import Vehicle from './Vehicle.js';
 
 interface FuelLogAttributes {
-    id: number;
-    vehicleId: number;
+    id: string;
+    vehicleId: string;
     date: string;
     odometer: number;
     fuelAmount: number;
@@ -14,8 +15,8 @@ interface FuelLogAttributes {
 interface FuelLogCreationAttributes extends Optional<FuelLogAttributes, 'id'> {}
 
 class FuelLog extends Model<FuelLogAttributes, FuelLogCreationAttributes> implements FuelLogAttributes {
-    public declare id: number;
-    public declare vehicleId: number;
+    public declare id: string;
+    public declare vehicleId: string;
     public declare date: string;
     public declare odometer: number;
     public declare fuelAmount: number;
@@ -26,13 +27,15 @@ class FuelLog extends Model<FuelLogAttributes, FuelLogCreationAttributes> implem
 FuelLog.init({
     id: {
         type: DataTypes.UUIDV4,
-        primaryKey: true
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
     },
     vehicleId: {
         type: DataTypes.UUIDV4,
         allowNull: false,
         references: {
-            model: 'Vehicle',
+            model: Vehicle,
             key: 'id',
         }
     },

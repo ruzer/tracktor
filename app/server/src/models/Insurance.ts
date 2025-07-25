@@ -1,8 +1,9 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database.js";
+import Vehicle from "./Vehicle.js";
 
 interface InsuranceAttributes {
-  id: number;
+  id: string;
   vehicleId: number;
   provider: string;
   policyNumber: string;
@@ -18,26 +19,27 @@ class Insurance
   extends Model<InsuranceAttributes, InsuranceCreationAttributes>
   implements InsuranceAttributes
 {
-  public id!: number;
-  public vehicleId!: number;
-  public provider!: string;
-  public policyNumber!: string;
-  public startDate!: string;
-  public endDate!: string;
-  public cost!: number;
+  public declare id: string;
+  public declare vehicleId: number;
+  public declare provider: string;
+  public declare policyNumber: string;
+  public declare startDate: string;
+  public declare endDate: string;
+  public declare cost: number;
 }
 
 Insurance.init(
   {
     id: {
       type: DataTypes.UUIDV4,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
     },
     vehicleId: {
       type: DataTypes.UUIDV4,
       references: {
-        model: "Vehicle", // Use string reference
+        model: Vehicle,
         key: "id",
       },
       allowNull: false,

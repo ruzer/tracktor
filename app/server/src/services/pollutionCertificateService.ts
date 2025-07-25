@@ -18,7 +18,7 @@ export const addPollutionCertificate = async (
 
     const pollutionCertificate = await PollutionCertificate.create({
       ...pollutionCertificateData,
-      vehicleId: parseInt(vehicleId),
+      vehicleId: vehicleId,
     });
     return {
       id: pollutionCertificate.id,
@@ -38,7 +38,7 @@ export const addPollutionCertificate = async (
 export const getPollutionCertificate = async (vehicleId: string) => {
   try {
     const pollutionCertificate = await PollutionCertificate.findOne({
-      where: { vehicleId: parseInt(vehicleId) },
+      where: { vehicleId: vehicleId },
     });
     if (!pollutionCertificate) {
       throw new PollutionCertificateNotFoundError();
@@ -58,7 +58,7 @@ export const updatePollutionCertificate = async (
 ) => {
   try {
     const pollutionCertificate = await PollutionCertificate.findOne({
-      where: { vehicleId: parseInt(vehicleId) },
+      where: { vehicleId: vehicleId },
     });
     if (!pollutionCertificate) {
       throw new PollutionCertificateNotFoundError();
@@ -77,7 +77,7 @@ export const updatePollutionCertificate = async (
 export const deletePollutionCertificate = async (vehicleId: string) => {
   try {
     const result = await PollutionCertificate.destroy({
-      where: { vehicleId: parseInt(vehicleId) },
+      where: { vehicleId: vehicleId },
     });
     if (result === 0) {
       throw new PollutionCertificateNotFoundError();

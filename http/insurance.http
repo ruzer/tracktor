@@ -1,6 +1,7 @@
 ### Add Insurance
-POST http://localhost:3000/api/vehicles/1/insurance
+POST http://localhost:3000/api/vehicles/634c19aa-f2ac-4ae1-b163-7c97ab62ef4e/insurance
 Content-Type: application/json
+X-User-Pin: 123456
 
 {
   "provider": "ABC Insurance",
@@ -11,11 +12,13 @@ Content-Type: application/json
 }
 
 ### Get Insurance for Vehicle
-GET http://localhost:3000/api/vehicles/1/insurance
+GET http://localhost:3000/api/vehicles/634c19aa-f2ac-4ae1-b163-7c97ab62ef4e/insurance
+X-User-Pin: 123456
 
 ### Update Insurance
-PUT http://localhost:3000/api/vehicles/1/insurance
+PUT http://localhost:3000/api/vehicles/634c19aa-f2ac-4ae1-b163-7c97ab62ef4e/insurance
 Content-Type: application/json
+X-User-Pin: 123456
 
 {
   "provider": "XYZ Insurance",
@@ -26,4 +29,5 @@ Content-Type: application/json
 }
 
 ### Delete Insurance
-DELETE http://localhost:3000/api/vehicles/1/insurance
+DELETE http://localhost:3000/api/vehicles/634c19aa-f2ac-4ae1-b163-7c97ab62ef4e/insurance
+X-User-Pin: 123456
