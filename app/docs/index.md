@@ -3,7 +3,7 @@ layout: home
 hero:
   name: Tracktor
   text: Effortless Vehicle Management
-  tagline: Track, organize, and optimize your vehicle lifecycle with a modern open-source platform.
+  tagline: Track and organize your vehicles with a modern open-source platform.
   image:
     light: /hero-tracktor-light.png
     dark: /hero-tracktor-dark.png
@@ -15,6 +15,10 @@ hero:
     - theme: alt
       text: 📖 Read Documentation
       link: /introduction
+    - theme: alt
+      text:  👨🏽‍💻 Source Code
+      link: https://github.com/javedh-dev/tracktor
+
 features:
   - icon: 🚘 
     title: Vehicle Management
