@@ -1,6 +1,17 @@
 # Introduction
 
-Tracktor is a comprehensive web application designed to simplify the management of your vehicle's lifecycle. Whether you have a single car or a small fleet, Tracktor provides the tools you need to stay organized and keep your vehicles in optimal condition.
+Tracktor is a comprehensive web application designed to simplify the management of your vehicle from many aspects. Whether you have a single car or a small fleet, **Tracktor** provides the tools you need to stay organized and keep a track of your vehicle metrices over the time.
+
+## Technical Overview
+
+Tracktor is built on a modern technology stack for performance, scalability, and maintainability:
+
+* **Frontend:** Svelte 5 for a reactive, component-based UI
+* **Styling:** Tailwind CSS for responsive, mobile-friendly design
+* **Backend:** Express.js with TypeScript for a robust, type-safe RESTful API
+* **Database:** SQLite, managed via Sequelize ORM for efficient data operations
+
+The system follows a client-server architecture, with a clear separation between frontend, backend, and database layers. All sensitive operations are protected by secure PIN-based authentication and server-side validation.
 
 ## What is Tracktor?
 
@@ -10,6 +21,23 @@ At its core, Tracktor is a centralized dashboard for all your vehicle-related in
 * **Fuel Consumption:** Log every refuel and let Tracktor automatically calculate your vehicle's fuel efficiency over time. This helps you monitor performance and identify potential issues early.
 * **Maintenance History:** Keep a detailed log of all maintenance activities, from simple oil changes to major repairs. A complete service history can significantly increase a vehicle's resale value.
 * **Important Documents:** Never miss a renewal date again. Tracktor helps you manage critical documents like insurance policies and pollution certificates, with upcoming features for renewal reminders.
+
+## Key Features
+
+* **User Management:** Secure registration and PIN-based authentication, with hashed credentials and profile management.
+* **Vehicle Management:** Add and manage multiple vehicles with detailed profiles, including unique identifiers and odometer tracking.
+* **Fuel Tracking:** Log fuel refills, track expenses, and automatically calculate mileage and efficiency.
+* **Maintenance Tracking:** Record service history, schedule upcoming maintenance, and receive reminders (future enhancement).
+* **Insurance & Pollution Certificate Management:** Store policy details, upload documents, and get renewal/expiration alerts (future enhancement).
+
+## Non-Functional Strengths
+
+Tracktor is designed for:
+
+* **Performance:** Fast UI rendering, efficient database queries, and minimal resource consumption.
+* **Security:** PIN-based authentication, secure file handling, and input validation.
+* **Usability:** Responsive design, intuitive navigation, and mobile-friendly interface.
+* **Scalability & Maintainability:** Modular code structure and type-safe API endpoints.
 
 ## How Tracktor Can Help You
 

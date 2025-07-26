@@ -14,6 +14,7 @@ export default {
       { text: 'Documentation', link: '/introduction' },
       { text: 'API', link: '/api/authentication' },
       { text: 'Demo', link: 'https://tracktor-demo.bytedge.in' },
+      { text: 'GitHub', link: 'https://github.com/javedh-dev/tracktor' }
     ],
   sidebar: {
       '/': [
