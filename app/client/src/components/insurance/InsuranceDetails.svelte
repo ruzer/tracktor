@@ -99,7 +99,7 @@
 	});
 </script>
 
-<div class="mt-8">
+<div class="mt-8 text-gray-600 dark:text-gray-300">
 	<h3 class="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Insurance Details</h3>
 	{#if loading}
 		<div class="text-gray-500 dark:text-gray-400">Loading insurance details...</div>

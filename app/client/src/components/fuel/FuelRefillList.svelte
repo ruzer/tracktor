@@ -50,7 +50,7 @@
   }
 </script>
 
-<div class="container mx-auto p-4">
+<div class="container mx-auto p-4 text-gray-600 dark:text-gray-300">
   <h2 class="text-2xl font-bold mb-4">Fuel Refill History</h2>
 
   {#if loading}
