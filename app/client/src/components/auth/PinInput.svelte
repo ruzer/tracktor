@@ -34,12 +34,15 @@
 
 <div class="flex justify-center space-x-2">
 	{#each pin as _, i}
-		<input
+								<input
 			bind:this={inputs[i]}
-			type="password"
+			type="tel"
+			inputmode="numeric"
+			pattern="[0-9]*"
 			maxlength="1"
 			class="h-10 w-10 rounded-md border-2 border-gray-300 bg-white text-center text-xl text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:h-12 sm:w-12 sm:text-2xl
 				dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-400"
+			style="-webkit-text-security: disc;"
 			on:input={(e) => handleInput(e, i)}
 			on:keydown={(e) => handleKeydown(e, i)}
 			aria-label={`PIN digit ${i + 1}`}
