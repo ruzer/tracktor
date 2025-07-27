@@ -30,6 +30,36 @@ At its core, Tracktor is a centralized dashboard for all your vehicle-related in
 * **Maintenance Tracking:** Record service history, schedule upcoming maintenance, and receive reminders (future enhancement).
 * **Insurance & Pollution Certificate Management:** Store policy details, upload documents, and get renewal/expiration alerts (future enhancement).
 
+## Screenshots
+
+### Login Page
+
+<img src="/screenshots/login.png" alt="Login Page" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+
+### Dashboard
+
+<img src="/screenshots/dashboard.png" alt="Dashboard" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+
+### Charts
+
+<img src="/screenshots/charts.png" alt="Charts" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+
+### Fuel Log
+
+<img src="/screenshots/fuel.png" alt="Fuel Log" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+
+### Maintenance Log
+
+<img src="/screenshots/maintenance.png" alt="Maintenance Log" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+
+### Insurance Details
+
+<img src="/screenshots/insurance.png" alt="Insurance Details" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+
+### PUCC Details
+
+<img src="/screenshots/pucc.png" alt="PUCC Details" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+
 ## Non-Functional Strengths
 
 Tracktor is designed for:
