@@ -6,6 +6,10 @@
 
 Tracktor is an open-source web application for comprehensive vehicle management. Easily track fuel consumption, maintenance, insurance, and regulatory documents for all your vehicles in one place.
 
+<p align="center">
+  <img src="app/docs/public/screenshots/dashboard.png" alt="Dashboard" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+</p>
+
 ## Features
 
 - **Vehicle Management:** Add, edit, and manage multiple vehicles.
@@ -14,6 +18,33 @@ Tracktor is an open-source web application for comprehensive vehicle management.
 - **Document Tracking:** Track insurance, pollution certificates, and other important documents.
 - **Dashboard:** Visualize key metrics and upcoming renewals.
 - **User Authentication:** Secure access to your data.
+
+## Screenshots
+
+<p align="center">
+  <h3>Login Page</h3><br>
+  <img src="app/docs/public/screenshots/login.png" alt="Login Page" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+</p>
+<p align="center">
+  <h3>Charts</h3><br>
+  <img src="app/docs/public/screenshots/charts.png" alt="Charts" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+</p>
+<p align="center">
+  <h3>Fuel Log</h3><br>
+  <img src="app/docs/public/screenshots/fuel.png" alt="Fuel Log" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+</p>
+<p align="center">
+  <h3>Maintenance Log</h3><br>
+  <img src="app/docs/public/screenshots/maintenance.png" alt="Maintenance Log" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+</p>
+<p align="center">
+  <h3>Insurance Details</h3><br>
+  <img src="app/docs/public/screenshots/insurance.png" alt="Insurance Details" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+</p>
+<p align="center">
+  <h3>PUCC Details</h3><br>
+  <img src="app/docs/public/screenshots/pucc.png" alt="PUCC Details" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+</p>
 
 ## Tech Stack
 
