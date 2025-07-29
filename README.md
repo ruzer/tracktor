@@ -1,68 +1,84 @@
-<div style="display: flex; gap: 20px; vertical-align: middle;">
-<img src="app/docs/public/logo-dark.svg#gh-dark-mode-only" style="height:40px"/>
-<img src="app/docs/public/logo-light.svg#gh-light-mode-only" style="height:40px"/>
-<h1>Tracktor</h1>
+
+<div align="center" style="margin-bottom: 20px;">
+  <img src="app/docs/public/logo-dark.svg#gh-dark-mode-only" style="height:60px; margin-right: 10px; vertical-align: middle;"/>
+  <img src="app/docs/public/logo-light.svg#gh-light-mode-only" style="height:60px; margin-right: 10px; vertical-align: middle;"/>
+  <h1 style="display:inline; font-size: 2.5rem; vertical-align: middle;">Tracktor</h1>
 </div>
 
-Tracktor is an open-source web application for comprehensive vehicle management. Easily track fuel consumption, maintenance, insurance, and regulatory documents for all your vehicles in one place.
+
+<p align="center" style="font-size: 1.2rem;">
+  <b>Tracktor</b> is an open-source web application for <b>comprehensive vehicle management</b>.<br>
+  Easily track <span style="color:#4ade80;">⛽ fuel</span> consumption, <span style="color:#fbbf24;">🛠️ maintenance</span>, <span style="color:#60a5fa;">🛡️ insurance</span>, and <span style="color:#a78bfa;">📄 regulatory documents</span> for all your vehicles in one place.
+</p>
 
 <p align="center">
   <img src="app/docs/public/screenshots/dashboard.png" alt="Dashboard" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 </p>
 
-## Features
 
-- **Vehicle Management:** Add, edit, and manage multiple vehicles.
-- **Fuel Tracking:** Log fuel refills and monitor fuel efficiency over time.
-- **Maintenance Log:** Record and view maintenance history for each vehicle.
-- **Document Tracking:** Track insurance, pollution certificates, and other important documents.
-- **Dashboard:** Visualize key metrics and upcoming renewals.
-- **User Authentication:** Secure access to your data.
+## ✨ Features
 
-## Screenshots
+
+- 🚗 **Vehicle Management:** Add, edit, and manage multiple vehicles.
+- ⛽ **Fuel Tracking:** Log fuel refills and monitor fuel efficiency over time.
+- 🛠️ **Maintenance Log:** Record and view maintenance history for each vehicle.
+- 📄 **Document Tracking:** Track insurance, pollution certificates, and other important documents.
+- 📊 **Dashboard:** Visualize key metrics and upcoming renewals.
+- 🔒 **User Authentication:** Secure access to your data.
+
+
+## 🖼️ Screenshots
+
 
 <p align="center">
-  <h3>Login Page</h3><br>
+  <h3>🔐 Login Page</h3><br>
   <img src="app/docs/public/screenshots/login.png" alt="Login Page" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 </p>
 <p align="center">
-  <h3>Charts</h3><br>
+  <h3>📈 Charts</h3><br>
   <img src="app/docs/public/screenshots/charts.png" alt="Charts" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 </p>
 <p align="center">
-  <h3>Fuel Log</h3><br>
+  <h3>⛽ Fuel Log</h3><br>
   <img src="app/docs/public/screenshots/fuel.png" alt="Fuel Log" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 </p>
 <p align="center">
-  <h3>Maintenance Log</h3><br>
+  <h3>🛠️ Maintenance Log</h3><br>
   <img src="app/docs/public/screenshots/maintenance.png" alt="Maintenance Log" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 </p>
 <p align="center">
-  <h3>Insurance Details</h3><br>
+  <h3>🛡️ Insurance Details</h3><br>
   <img src="app/docs/public/screenshots/insurance.png" alt="Insurance Details" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 </p>
 <p align="center">
-  <h3>PUCC Details</h3><br>
+  <h3>📄 PUCC Details</h3><br>
   <img src="app/docs/public/screenshots/pucc.png" alt="PUCC Details" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 </p>
 
-## Tech Stack
 
-- **Frontend:** SvelteKit, Tailwind CSS
-- **Backend:** Node.js, Express.js
-- **Database:** SQLite
-- **Documentation:** VitePress
-- **Containerization:** Docker & Docker Compose
+## 🛠️ Tech Stack
 
-## Getting Started
 
-### Prerequisites
+- 🎨 **Frontend:** SvelteKit, Tailwind CSS
+- 🖥️ **Backend:** Node.js, Express.js
+- 🗄️ **Database:** SQLite
+- 📚 **Documentation:** VitePress
+- 🐳 **Containerization:** Docker & Docker Compose
 
-- Node.js (v18 or higher)
-- npm
-- Docker & Docker Compose (for containerized setup)
 
-### Installation (Development)
+## 🚀 Getting Started
+
+
+### 📦 Prerequisites
+
+
+- 🟢 Node.js (v18 or higher)
+- 📦 npm
+- 🐳 Docker & Docker Compose (for containerized setup)
+
+
+### 🛠️ Installation (Development)
+
 
 1. **Clone the repository:**
    ```bash
@@ -80,20 +96,26 @@ Tracktor is an open-source web application for comprehensive vehicle management.
 4. **Open your browser:**
    Navigate to `http://localhost:5173` for the frontend.
 
-### Running with Docker Compose
+
+### 🐳 Running with Docker Compose
+
 
 1. **Build and start all services:**
    ```bash
    docker-compose up --build
    ```
 2. **Access the app:**
-   - Main App: `http://localhost:3000`
-   - Docs: `http://localhost:5173`
+   - 🚜 Main App: `http://localhost:3000`
+   - 📚 Docs: `http://localhost:5173`
 
-## Contributing
 
-Contributions are welcome! Please read the [contributing guidelines](app/docs/contributing.md) before submitting a pull request.
+## 🤝 Contributing
 
-## License
+
+Contributions are welcome! Please read the [contributing guidelines](app/docs/contributing.md) before submitting a pull request. 🙏
+
+
+## 📄 License
+
 
 This project is licensed under the ISC License. See the [LICENSE](LICENSE) file for details.
