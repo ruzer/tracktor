@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tracktor-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - db
+    restart: unless-stopped
+    volumes:
+      - ./app:/app
+  db:
+    image: "nouchka/sqlite3:latest"
+    container_name: tracktor-db
+    volumes:
+      - ./server/vehicles.db:/data/vehicles.db
+    restart: unless-stopped
+  docs:
+    build:
+      context: ./app/docs
+      dockerfile: ../../Dockerfile.docs
+    container_name: tracktor-docs
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+    volumes:
+      - ./app/docs:/docs
