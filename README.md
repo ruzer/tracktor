@@ -1,7 +1,8 @@
-# Tracktor
-
-![Tracktor Logo](app/docs/public/logo-dark.svg#gh-dark-mode-only)
-![Tracktor Logo](app/docs/public/logo-light.svg#gh-light-mode-only)
+<div style="display: flex; gap: 20px; vertical-align: middle;">
+<img src="app/docs/public/logo-dark.svg#gh-dark-mode-only" style="height:40px"/>
+<img src="app/docs/public/logo-light.svg#gh-light-mode-only" style="height:40px"/>
+<h1>Tracktor</h1>
+</div>
 
 Tracktor is an open-source web application for comprehensive vehicle management. Easily track fuel consumption, maintenance, insurance, and regulatory documents for all your vehicles in one place.
 
