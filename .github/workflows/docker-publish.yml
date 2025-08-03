@@ -1,9 +1,11 @@
 name: Docker Publish
 
-on: 
+on:
   push:
     branches:
       - main
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+" # Matches tags like 1.2.3
 
 jobs:
   build_and_publish:
@@ -27,17 +29,31 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set image tags
+        id: meta
+        run: |
+          if [[ "${GITHUB_REF}" =~ ^refs/tags/([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+            MAJOR_MINOR="${VERSION%.*}"
+            echo "APP_TAGS=ghcr.io/${{ github.repository }}:${VERSION},ghcr.io/${{ github.repository }}:latest,ghcr.io/${{ github.repository }}:${MAJOR_MINOR}" >> $GITHUB_ENV
+            echo "DOC_TAGS=ghcr.io/${{ github.repository }}-docs:${VERSION},ghcr.io/${{ github.repository }}-docs:latest,ghcr.io/${{ github.repository }}-docs:${MAJOR_MINOR}" >> $GITHUB_ENV
+          else
+            SHA="${GITHUB_SHA::8}"
+            echo "APP_TAGS=ghcr.io/${{ github.repository }}:${SHA}" >> $GITHUB_ENV
+            echo "DOC_TAGS=ghcr.io/${{ github.repository }}-docs:${SHA}" >> $GITHUB_ENV
+          fi
+
       - name: Build and push app
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ghcr.io/${{github.repository}}:latest
-      
+          tags: ${{ env.APP_TAGS }}
+
       - name: Build and push docs
         uses: docker/build-push-action@v4
         with:
           context: .
           file: Dockerfile.docs
           push: true
-          tags: ghcr.io/${{github.repository}}-docs:latest
+          tags: ${{ env.DOC_TAGS }}
