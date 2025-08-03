@@ -6,6 +6,7 @@ import {
   Insurance,
   MaintenanceLog,
   PollutionCertificate,
+  Config,
 } from "./src/models/index.js";
 import bcrypt from "bcrypt";
 
@@ -14,10 +15,31 @@ const seedDatabase = async () => {
     await sequelize.sync({ force: true });
     console.log("Database synchronized!");
 
+    console.log("Populating dummy data...");
     const pin = "123456";
     const hash = await bcrypt.hash(pin, 10);
     await Auth.create({ id: 1, hash });
     console.log(`User created with PIN: ${pin}`);
+
+    const configData = [
+      {
+        key: "dateFormat",
+        value: "DD/MM/YYYY",
+        description: "Format for displaying dates",
+      },
+      {
+        key: "currency",
+        value: "INR",
+        description: "Default currency for financial transactions",
+      },
+      {
+        key: "language",
+        value: "en",
+        description: "Default language for the application",
+      },
+    ];
+    await Config.bulkCreate(configData);
+    console.log("Configuration data created.");
 
     const vehicle1 = await Vehicle.create({
       make: "Honda",

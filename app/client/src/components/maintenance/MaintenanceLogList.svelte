@@ -3,6 +3,11 @@
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
 	import MaintenanceLogForm from './MaintenanceLogForm.svelte';
+  import { config } from '../../lib/states/config';
+  import dayjs from 'dayjs';
+
+  $: formatDate = (date: string) => dayjs(date).format($config.dateFormat);
+  $: formatCurrency = (amount: number) => `${$config.currency} ${amount.toLocaleString()}`
 
 	export let vehicleId: number | null = null;
 
@@ -134,11 +139,11 @@
 					{#each maintenanceLogs as log (log.id)}
 						<tr class="border-t border-gray-200 dark:border-gray-700">
 							<td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100"
-								>{new Date(log.date).toLocaleDateString()}</td
+								>{formatDate(log.date)}</td
 							>
 							<td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">{log.odometer}</td>
 							<td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">{log.service}</td>
-							<td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">{log.cost}</td>
+							<td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">{formatCurrency(log.cost)}</td>
 							<td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">{log.notes || '-'}</td>
 							<td class="px-4 py-2 text-sm">
 								<button

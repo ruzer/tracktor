@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+  import { config } from '../../lib/states/config';
+
+  $: formatCurrency = (amount: number) => `${$config.currency} ${amount.toLocaleString()}`
 
 	const dispatch = createEventDispatcher();
 
@@ -57,7 +60,7 @@
 		</div>
 		<div class="md:col-span-2">
 			<label for="cost" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-				>Cost</label
+				>Cost (in {$config.currency})</label
 			>
 			<input
 				type="number"

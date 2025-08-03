@@ -6,6 +6,7 @@ import swaggerSpec from "./swagger.js";
 import sequelize from "./src/config/database.js";
 import pinRoutes from "./src/routes/pinRoutes.js";
 import vehicleRoutes from "./src/routes/vehicleRoutes.js";
+import configRoutes from "./src/routes/configRoutes.js";
 import { config } from "dotenv";
 
 config({ quiet: true });
@@ -23,6 +24,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Use the route files
 app.use("/api", pinRoutes);
 app.use("/api/vehicles", vehicleRoutes);
+app.use("/api/config", configRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   // @ts-ignore
