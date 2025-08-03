@@ -4,6 +4,10 @@
 	import { env } from '$env/dynamic/public';
 	import { FileText, Calendar, MapPin, Pencil, Trash2 } from '@lucide/svelte';
 	import PollutionCertificateForm from './PollutionCertificateForm.svelte';
+  import { config } from '../../lib/states/config';
+  import dayjs from 'dayjs';
+
+  $: formatDate = (date: string) => dayjs(date).format($config.dateFormat);
 
 	export let vehicleId: number | null = null;
 
@@ -137,12 +141,12 @@
 				<div class="flex items-center gap-2">
 					<Calendar class="h-5 w-5 text-gray-400 dark:text-gray-500" />
 					<span class="font-semibold">Issue Date:</span>
-					<span>{new Date(pollutionCertificate.issueDate).toLocaleDateString()}</span>
+					<span>{formatDate(pollutionCertificate.issueDate)}</span>
 				</div>
 				<div class="flex items-center gap-2">
 					<Calendar class="h-5 w-5 text-gray-400 dark:text-gray-500" />
 					<span class="font-semibold">Expiry Date:</span>
-					<span>{new Date(pollutionCertificate.expiryDate).toLocaleDateString()}</span>
+					<span>{formatDate(pollutionCertificate.expiryDate)}</span>
 				</div>
 				<div class="flex items-center gap-2">
 					<MapPin class="h-5 w-5 text-gray-400 dark:text-gray-500" />

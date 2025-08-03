@@ -15,6 +15,8 @@
 	import PollutionCertificateDetails from '../../components/pucc/PollutionCertificateDetails.svelte';
 	import AddVehicleForm from '../../components/vehicle/AddVehicleForm.svelte';
 	import VehicleList from '../../components/vehicle/VehicleList.svelte';
+	import { config } from '../../lib/states/config';
+	import dayjs from 'dayjs';
 
 	Chart.register(...registerables);
 
@@ -246,7 +248,7 @@
 			);
 			if (response.ok) {
 				const data = await response.json();
-				const labels = data.map((log: any) => new Date(log.date).toLocaleDateString());
+				const labels = data.map((log: any) => dayjs(log.date).format($config.dateFormat));
 				const costData = data.map((log: any) => log.cost);
 				const mileageDataPoints = data.map((log: any) => log.mileage);
 

@@ -2,6 +2,9 @@
 	import { createEventDispatcher } from 'svelte';
 	import FormField from '../common/FormField.svelte';
 	import { Calendar1, Gauge, DollarSign, Fuel, FileText } from '@lucide/svelte';
+  import { config } from '../../lib/states/config';
+
+  $: formatCurrency = (amount: number) => `${$config.currency} ${amount.toLocaleString()}`
 
 	const dispatch = createEventDispatcher();
 
@@ -48,7 +51,7 @@
 	<FormField
 		id="cost"
 		type="number"
-		placeholder="Cost"
+		placeholder={`Cost (in ${$config.currency})`}
 		bind:value={refill.cost}
 		icon={DollarSign}
 		required={true}

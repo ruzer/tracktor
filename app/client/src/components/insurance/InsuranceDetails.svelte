@@ -4,6 +4,11 @@
 	import { env } from '$env/dynamic/public';
 	import { Shield, Calendar, Hash, DollarSign, Pencil, Trash2 } from '@lucide/svelte';
 	import InsuranceForm from './InsuranceForm.svelte';
+	import { config } from '../../lib/states/config';
+	import dayjs from 'dayjs';
+
+	$: formatDate = (date: string) => dayjs(date).format($config.dateFormat);
+	$: formatCurrency = (amount: number) => `${$config.currency} ${amount.toLocaleString()}`;
 
 	export let vehicleId: number | null = null;
 
@@ -140,17 +145,17 @@
 				<div class="flex items-center gap-2">
 					<DollarSign class="h-5 w-5 text-gray-400 dark:text-gray-500" />
 					<span class="font-semibold">Cost:</span>
-					<span>${insurance.cost}</span>
+					<span>{formatCurrency(insurance.cost)}</span>
 				</div>
 				<div class="flex items-center gap-2">
 					<Calendar class="h-5 w-5 text-gray-400 dark:text-gray-500" />
 					<span class="font-semibold">Start Date:</span>
-					<span>{new Date(insurance.startDate).toLocaleDateString()}</span>
+					<span>{formatDate(insurance.startDate)}</span>
 				</div>
 				<div class="flex items-center gap-2">
 					<Calendar class="h-5 w-5 text-gray-400 dark:text-gray-500" />
 					<span class="font-semibold">End Date:</span>
-					<span>{new Date(insurance.endDate).toLocaleDateString()}</span>
+					<span>{formatDate(insurance.endDate)}</span>
 				</div>
 			</div>
 		</div>

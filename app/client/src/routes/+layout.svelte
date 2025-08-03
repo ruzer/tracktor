@@ -4,7 +4,7 @@
 	import { browser } from '$app/environment';
 	import '../styles/app.css';
 	import { tick } from 'svelte';
-	import { Car, LogOut, Tractor } from '@lucide/svelte';
+	import { Car, LogOut, Tractor, Settings } from '@lucide/svelte';
 	import ThemeToggle from '../components/common/ThemeToggle.svelte';
 	import { onMount } from 'svelte';
 	import { env } from '$env/dynamic/public';
@@ -76,6 +76,9 @@
 				</a>
 				<div class="flex items-center justify-center gap-4 align-middle">
 					<ThemeToggle />
+					<a href="/config" class="flex items-center gap-1 text-gray-600 transition-colors duration-300 hover:text-blue-500 dark:text-gray-300">
+						<Settings class="h-5 w-5" />
+					</a>
 					<div class="flex items-center gap-2">
 						<button
 							onclick={logout}
