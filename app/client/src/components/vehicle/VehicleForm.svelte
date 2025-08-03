@@ -9,18 +9,92 @@
 		Building2
 	} from '@lucide/svelte';
 	import FormField from '../common/FormField.svelte';
+	import type { NewVehicle, Vehicle } from '$lib/models/vehicle';
+	import { env } from '$env/dynamic/public';
+	import { onMount } from 'svelte';
+	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
+	import { simulateNetworkDelay } from '$lib/utils/dev';
 
-	export let vehicle;
-	export let onSubmit;
-	export let error = '';
-	export let success = '';
-	export let editMode = false;
+	const vehicle: NewVehicle = $state({
+		make: '',
+		model: '',
+		year: null,
+		licensePlate: '',
+		vin: '',
+		color: '',
+		odometer: null
+	});
+
+	let { vehicleToEdit = null, editMode = false, modalVisibility = $bindable(), loading } = $props();
+
+	let status = $state<{
+		message: string | null;
+		type: 'ERROR' | 'SUCCESS' | null;
+	}>({
+		message: null,
+		type: null
+	});
+
+	$effect(() => {
+		if (vehicleToEdit) {
+			Object.assign(vehicle, vehicleToEdit);
+		}
+	});
+
+	async function persistVehicle() {
+		if (!vehicle.make || !vehicle.model || !vehicle.year || !vehicle.licensePlate) {
+			status.message = 'Please fill in all required fields.';
+			status.type = 'ERROR';
+			return;
+		}
+		try {
+			if (loading) return; // Prevent multiple submissions
+			loading = true;
+			status.message = null;
+			status.type = null;
+			await simulateNetworkDelay(2000); // Simulate network delay for development
+			const response = await fetch(
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${editMode ? vehicleToEdit.id : ''}`,
+				{
+					method: editMode ? 'PUT' : 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-User-PIN': localStorage.getItem('userPin') || ''
+					},
+					body: JSON.stringify(vehicle)
+				}
+			);
+
+			if (response.ok) {
+				status.message = 'Vehicle added successfully!';
+				status.type = 'SUCCESS';
+				Object.assign(vehicle, {
+					make: '',
+					model: '',
+					year: null,
+					licensePlate: '',
+					vin: '',
+					color: '',
+					odometer: null
+				});
+				modalVisibility = false;
+			} else {
+				const data = await response.json();
+				status.message = data.message || 'Failed to add vehicle.';
+				status.type = 'ERROR';
+			}
+		} catch (e) {
+			status.message = 'Failed to connect to the server.';
+			status.type = 'ERROR';
+		}
+		loading = false;
+	}
 </script>
 
 <form
-	on:submit={(e) => {
-		onSubmit();
-		e.preventDefault();
+	onsubmit={(e) => {
+		persistVehicle();
+		// e.preventDefault();
 	}}
 	class="space-y-6"
 >
@@ -84,20 +158,20 @@
 		icon={Gauge}
 		ariaLabel="Odometer (Optional)"
 	/>
-	<div class="flex justify-center">
-		<button
-			type="submit"
-			class="flex cursor-pointer gap-2 rounded-lg border-2 bg-blue-600 px-3 py-1 text-lg font-semibold text-blue-600 shadow-md dark:text-blue-200"
-		>
-			{editMode ? 'Save Changes' : 'Add Vehicle'}
-		</button>
-	</div>
+	<FormSubmitButton text={editMode ? 'Save Vehicle' : 'Add Vehicle'} {loading} />
+
+	{#if editMode}
+		<input type="hidden" name="id" value={vehicleToEdit?.id || ''} />
+	{/if}
 </form>
-{#if error}
-	<p class="mt-4 text-center text-sm text-red-500 dark:text-red-400">{error}</p>
-{/if}
-{#if success}
-	<p class="mt-4 text-center text-sm text-green-500 dark:text-green-400">
-		{editMode ? 'Vehicle updated successfully!' : success}
+{#if status.message}
+	<p
+		class={`mt-4 text-center text-sm ${status.type === 'ERROR' ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'}`}
+	>
+		{#if status.type === 'ERROR'}
+			<span class="font-semibold">Error:</span> {status.message}
+		{:else}
+			{status.message}
+		{/if}
 	</p>
 {/if}

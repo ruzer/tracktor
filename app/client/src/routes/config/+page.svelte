@@ -5,9 +5,10 @@
 	let saveSuccess = false;
 
 	const dateFormatOptions = [
-		{ value: 'DD/MM/YYYY', label: 'DD/MM/YYYY (e.g., 25/12/2024)' },
-		{ value: 'MM/DD/YYYY', label: 'MM/DD/YYYY (e.g., 12/25/2024)' },
-		{ value: 'YYYY-MM-DD', label: 'YYYY-MM-DD (e.g., 2024-12-25)' }
+		{ value: 'DD/MM/YYYY', label: 'DD/MM/YYYY (e.g., 31/12/2000)' },
+		{ value: 'MM/DD/YYYY', label: 'MM/DD/YYYY (e.g., 12/25/2000)' },
+		{ value: 'YYYY-MM-DD', label: 'YYYY-MM-DD (e.g., 2000-12-31)' },
+		{ value: 'DD MMM, YYYY', label: 'DD MMM, YYYY (e.g., 31 Dec, 2000)' }
 	];
 
 	const currencyOptions = [
@@ -15,6 +16,11 @@
 		{ value: 'USD', label: 'USD ($)' },
 		{ value: 'EUR', label: 'EUR (€)' },
 		{ value: 'GBP', label: 'GBP (£)' }
+	];
+
+	const uomOptions = [
+		{ value: 'metric', label: 'Metric' },
+		{ value: 'Imperial', label: 'Imperial' }
 	];
 
 	config.subscribe((value) => {
@@ -34,9 +40,7 @@
 			<h1 class="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
 				Application Settings
 			</h1>
-			<p class="mt-3 text-lg text-gray-600 dark:text-gray-400">
-				Customize your app experience.
-			</p>
+			<p class="mt-3 text-lg text-gray-600 dark:text-gray-400">Customize your app experience.</p>
 		</header>
 
 		<div class="space-y-6">
@@ -56,7 +60,7 @@
 						<select
 							id={item.key}
 							bind:value={item.value}
-							class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:text-sm"
+							class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
 						>
 							{#each dateFormatOptions as option}
 								<option value={option.value}>{option.label}</option>
@@ -66,9 +70,19 @@
 						<select
 							id={item.key}
 							bind:value={item.value}
-							class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:text-sm"
+							class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
 						>
 							{#each currencyOptions as option}
+								<option value={option.value}>{option.label}</option>
+							{/each}
+						</select>
+					{:else if item.key === 'unitOfMeasure'}
+						<select
+							id={item.key}
+							bind:value={item.value}
+							class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+						>
+							{#each uomOptions as option}
 								<option value={option.value}>{option.label}</option>
 							{/each}
 						</select>
@@ -77,7 +91,7 @@
 							type="text"
 							id={item.key}
 							bind:value={item.value}
-							class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 sm:text-sm"
+							class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
 						/>
 					{/if}
 				</div>

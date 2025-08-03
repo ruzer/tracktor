@@ -1,19 +1,9 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
 	import MaintenanceLogFormComponent from './MaintenanceLogFormComponent.svelte';
 	import { env } from '$env/dynamic/public';
+	import ModalContainer from '../../components/common/ModalContainer.svelte';
 
-	export let vehicleId: number | null = null;
-	export let showModal: boolean = false;
-	export let closeModal: () => void;
-	export let initialData: {
-		id?: number;
-		date: string;
-		odometer: number;
-		service: string;
-		cost: number;
-		notes?: string;
-	} | null = null;
+	const { vehicleId, showModal, closeModal, initialData, onSuccess } = $props();
 
 	let log = {
 		date: '',
@@ -26,11 +16,17 @@
 	let error = '';
 	let success = '';
 
-	const dispatch = createEventDispatcher();
-
-	onMount(() => {
+	$effect(() => {
 		if (initialData) {
 			log = { ...initialData };
+		} else {
+			log = {
+				date: '',
+				odometer: null,
+				service: '',
+				cost: null,
+				notes: ''
+			};
 		}
 	});
 
@@ -50,7 +46,7 @@
 				: `/api/vehicles/${vehicleId}/maintenance-logs`;
 
 		try {
-			const response = await fetch(`${env.PUBLIC_API_BASE_URL||""}${urlPath}`, {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}${urlPath}`, {
 				method: method,
 				headers: {
 					'Content-Type': 'application/json',
@@ -61,7 +57,7 @@
 
 			if (response.ok) {
 				success = `Maintenance log ${method === 'POST' ? 'added' : 'updated'} successfully!`;
-				dispatch('success');
+				onSuccess();
 				closeModal();
 			} else {
 				const data = await response.json();
@@ -75,20 +71,17 @@
 </script>
 
 {#if showModal}
-	<div class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-		<div class="w-full max-w-lg rounded-lg bg-white p-8 shadow-2xl dark:bg-gray-800">
-			<h2 class="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">
-				{initialData ? 'Edit Maintenance Log' : 'Add Maintenance Log'}
-			</h2>
-
-			<MaintenanceLogFormComponent
-				bind:log
-				onSubmit={handleSubmit}
-				bind:error
-				bind:success
-				editMode={!!initialData}
-				on:close={closeModal}
-			/>
-		</div>
-	</div>
+	<ModalContainer
+		onclose={closeModal}
+		title={initialData ? 'Edit Maintenance Log' : 'Add Maintenance Log'}
+	>
+		<MaintenanceLogFormComponent
+			bind:log
+			onSubmit={handleSubmit}
+			bind:error
+			bind:success
+			editMode={!!initialData}
+			on:close={closeModal}
+		/>
+	</ModalContainer>
 {/if}

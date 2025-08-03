@@ -19,7 +19,7 @@
 
 <button
 	type="button"
-	class="ml-auto flex items-center gap-2 rounded-full bg-gray-200 p-2 shadow transition-colors dark:bg-gray-700"
+	class="ml-auto flex items-center gap-2 rounded-full bg-gray-200 p-0.5 shadow transition-colors focus:bg-blue-600 dark:bg-gray-700"
 	onclick={toggleDarkMode}
 	aria-label="Toggle dark mode"
 >
@@ -27,20 +27,17 @@
 	<div class="relative flex items-center">
 		<!-- Switch background -->
 		<span
-			class="inline-block h-6 w-12 rounded-full transition-colors duration-300"
-			class:!bg-blue-500={darkMode}
-			class:!bg-gray-400={!darkMode}
-			style="background-color: {darkMode ? '#facc15' : '#d1d5db'}"
+			class="inline-block h-5 w-10 rounded-full bg-gray-400 transition-colors duration-300 dark:bg-gray-800"
 		></span>
 		<!-- Switch knob -->
 		<span
-			class="absolute top-0 left-0 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow transition-transform duration-300"
-			style="transform: translateX({darkMode ? '24px' : '0px'});"
+			class="absolute top-0 left-0 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow transition-transform duration-300 dark:bg-black"
+			style="transform: translateX({darkMode ? '20px' : '0px'});"
 		>
 			{#if darkMode}
-				<Moon class="h-4 w-4 text-yellow-600" />
+				<Moon class="h-3 w-3 text-white" />
 			{:else}
-				<Sun class="h-4 w-4 text-yellow-500" />
+				<Sun class="h-3 w-3 text-black" />
 			{/if}
 		</span>
 	</div>

@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
-	import PinInput from '../../components/auth/PinInput.svelte';
-	import ThemeToggle from '../../components/common/ThemeToggle.svelte';
+	import PinInput from '$components/auth/PinInput.svelte';
+	import ThemeToggle from '$components/common/ThemeToggle.svelte';
 	import { env } from '$env/dynamic/public';
+	import { Tractor } from '@lucide/svelte';
+	import { DoubleBounce, Jumper, Shadow } from 'svelte-loading-spinners';
+	import { simulateNetworkDelay } from '$lib/utils/dev';
 
 	let loading = $state(false);
 	let error = $state('');
@@ -22,7 +25,7 @@
 			// Check if PIN exists on the server
 			async function checkPinStatus() {
 				try {
-					const response = await fetch(`${env.PUBLIC_API_BASE_URL||""}/api/pin/status`);
+					const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}/api/pin/status`);
 					if (response.ok) {
 						const data = await response.json();
 						pinExists = data.exists;
@@ -39,14 +42,13 @@
 		}
 	});
 
-	async function handlePinComplete(event: CustomEvent<string>) {
-		const pin = event.detail;
+	async function handlePinComplete(pin: string) {
 		loading = true;
 		error = '';
-
+		await simulateNetworkDelay(1000); // Simulate network delay for development
 		try {
 			const endpoint = pinExists ? '/api/pin/verify' : '/api/pin';
-			const response = await fetch(`${env.PUBLIC_API_BASE_URL||""}${endpoint}`, {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}${endpoint}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -76,12 +78,18 @@
 <div
 	class="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4 transition-colors dark:bg-gray-900"
 >
+	<div class="absolute top-4 right-4">
+		<ThemeToggle />
+	</div>
 	<div
 		class="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700"
 	>
 		<div class="mb-6">
-			<ThemeToggle />
-			<h1 class="text-center text-3xl font-bold text-gray-800 dark:text-gray-100">Welcome Back</h1>
+			<h1
+				class="flex items-center justify-center gap-5 text-center text-3xl font-bold text-gray-800 dark:text-gray-100"
+			>
+				<Tractor class="h-10 w-10"></Tractor> Welcome
+			</h1>
 		</div>
 
 		{#if checkingPinStatus}
@@ -97,11 +105,15 @@
 		{/if}
 
 		{#if !checkingPinStatus}
-			<PinInput on:complete={handlePinComplete} />
+			<PinInput complete={(pin: string) => handlePinComplete(pin)} />
 		{/if}
 
 		{#if loading}
-			<p class="mt-4 text-center font-semibold text-blue-600 dark:text-blue-400">Verifying...</p>
+			<p
+				class="mt-4 flex items-center justify-center text-center font-semibold text-blue-600 dark:text-blue-400"
+			>
+				<Jumper size="40" color="#155dfc" unit="px" duration="2s" />
+			</p>
 		{/if}
 		{#if error}
 			<p

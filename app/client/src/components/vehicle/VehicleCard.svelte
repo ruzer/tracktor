@@ -12,22 +12,9 @@
 		Shield,
 		BadgeCheck
 	} from '@lucide/svelte';
-	import { createEventDispatcher } from 'svelte';
+	import { formatDistance } from '$lib/utils/formatting';
 
-	export let vehicle: {
-		id: number;
-		make: string;
-		model: string;
-		year: number;
-		licensePlate: string;
-		vin?: string;
-		color?: string;
-		odometer?: number;
-		insuranceStatus?: string;
-		puccStatus?: string;
-	};
-
-	const dispatch = createEventDispatcher();
+	const { vehicle, onEditVehicle, onDeleteVehicle, onRefillFuel, onAddMaintenance } = $props();
 </script>
 
 <div
@@ -52,29 +39,24 @@
 			>
 			{vehicle.licensePlate}
 		</p>
-		{#if vehicle.vin}
-			<p class="flex items-center gap-2">
-				<Fingerprint class="h-5 w-5 text-gray-400 dark:text-gray-500" /><span class="font-semibold"
-					>VIN:</span
-				>
-				{vehicle.vin}
-			</p>
-		{/if}
-		{#if vehicle.color}
-			<p class="flex items-center gap-2">
-				<Paintbrush class="h-5 w-5 text-gray-400 dark:text-gray-500" /><span class="font-semibold"
-					>Color:</span
-				>
-				{vehicle.color}
-			</p>
-		{/if}
-		{#if vehicle.odometer}
-			<p class="flex items-center gap-2">
-				<Gauge class="h-5 w-5 text-gray-400 dark:text-gray-500" />
-				<span class="font-semibold">Odometer:</span>
-				{vehicle.odometer} km
-			</p>
-		{/if}
+		<p class="flex items-center gap-2">
+			<Fingerprint class="h-5 w-5 text-gray-400 dark:text-gray-500" /><span class="font-semibold"
+				>VIN:</span
+			>
+			{vehicle.vin ? vehicle.vin : '-'}
+		</p>
+
+		<p class="flex items-center gap-2">
+			<Paintbrush class="h-5 w-5 text-gray-400 dark:text-gray-500" /><span class="font-semibold"
+				>Color:</span
+			>
+			{vehicle.color ? vehicle.color : '-'}
+		</p>
+		<p class="flex items-center gap-2">
+			<Gauge class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+			<span class="font-semibold">Odometer:</span>
+			{vehicle.odometer ? formatDistance(vehicle.odometer) : '-'}
+		</p>
 		{#if vehicle.insuranceStatus}
 			<p class="flex items-center gap-2">
 				<Shield class="h-5 w-5 text-gray-400 dark:text-gray-500" />
@@ -98,7 +80,7 @@
 		<button
 			type="button"
 			class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-			on:click={() => dispatch('editVehicle', { vehicle })}
+			onclick={() => onEditVehicle(vehicle)}
 			aria-label="Edit vehicle"
 		>
 			<Pencil
@@ -108,7 +90,7 @@
 		<button
 			type="button"
 			class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-			on:click={() => dispatch('deleteVehicle', { vehicle })}
+			onclick={() => onDeleteVehicle(vehicle)}
 			aria-label="Delete vehicle"
 		>
 			<Trash2
@@ -118,7 +100,7 @@
 		<button
 			type="button"
 			class="rounded-full p-2 transition-colors hover:bg-green-100 dark:hover:bg-green-700"
-			on:click={() => dispatch('refillFuel', { vehicle })}
+			onclick={() => onRefillFuel(vehicle)}
 			aria-label="Log fuel refill"
 		>
 			<!-- Fuel icon from Lucide or fallback SVG -->
@@ -127,7 +109,7 @@
 		<button
 			type="button"
 			class="rounded-full p-2 transition-colors hover:bg-yellow-100 dark:hover:bg-yellow-700"
-			on:click={() => dispatch('addMaintenance', { vehicle })}
+			onclick={onAddMaintenance(vehicle)}
 			aria-label="Log maintenance"
 		>
 			<Wrench class="h-5 w-5 text-yellow-500 hover:text-yellow-600 dark:text-yellow-400" />

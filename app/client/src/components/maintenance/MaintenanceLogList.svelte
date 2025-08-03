@@ -3,13 +3,8 @@
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
 	import MaintenanceLogForm from './MaintenanceLogForm.svelte';
-  import { config } from '../../lib/states/config';
-  import dayjs from 'dayjs';
 
-  $: formatDate = (date: string) => dayjs(date).format($config.dateFormat);
-  $: formatCurrency = (amount: number) => `${$config.currency} ${amount.toLocaleString()}`
-
-	export let vehicleId: number | null = null;
+	export let vehicleId: string | null = null;
 
 	interface MaintenanceLogEntry {
 		id: number;
@@ -35,7 +30,7 @@
 		error = '';
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/maintenance-logs`,
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/maintenance-logs`,
 				{
 					headers: {
 						'X-User-PIN': browser ? localStorage.getItem('userPin') || '' : ''
@@ -143,7 +138,9 @@
 							>
 							<td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">{log.odometer}</td>
 							<td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">{log.service}</td>
-							<td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">{formatCurrency(log.cost)}</td>
+							<td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100"
+								>{formatCurrency(log.cost)}</td
+							>
 							<td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">{log.notes || '-'}</td>
 							<td class="px-4 py-2 text-sm">
 								<button
