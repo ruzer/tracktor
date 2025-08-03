@@ -1,4 +1,8 @@
 
+> ⚠️ **WARNING:**
+> Tracktor is under very active development. There may be frequent breaking changes, and it is **not stable for production use**.
+> *Please keep regular backups of your data!*
+
 <div align="center" style="margin-bottom: 20px;">
   <img src="app/docs/public/logo-dark.svg#gh-dark-mode-only" style="height:60px; margin-right: 10px; vertical-align: middle;"/>
   <img src="app/docs/public/logo-light.svg#gh-light-mode-only" style="height:60px; margin-right: 10px; vertical-align: middle;"/>
