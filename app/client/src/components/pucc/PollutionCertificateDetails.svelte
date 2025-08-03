@@ -4,12 +4,8 @@
 	import { env } from '$env/dynamic/public';
 	import { FileText, Calendar, MapPin, Pencil, Trash2 } from '@lucide/svelte';
 	import PollutionCertificateForm from './PollutionCertificateForm.svelte';
-  import { config } from '../../lib/states/config';
-  import dayjs from 'dayjs';
 
-  $: formatDate = (date: string) => dayjs(date).format($config.dateFormat);
-
-	export let vehicleId: number | null = null;
+	export let vehicleId: string | null = null;
 
 	interface PollutionCertificateDetails {
 		id: number;
@@ -34,7 +30,7 @@
 		error = '';
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/pucc`,
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/pucc`,
 				{
 					headers: {
 						'X-User-PIN': browser ? localStorage.getItem('userPin') || '' : ''
@@ -60,7 +56,7 @@
 		}
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/pucc`,
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/pucc`,
 				{
 					method: 'DELETE',
 					headers: {

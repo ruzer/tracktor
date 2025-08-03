@@ -1,14 +1,17 @@
 <script lang="ts">
-	export let id = '';
-	export let type: string = 'text';
-	export let placeholder: string = '';
-	export let value: any;
-	export let icon: any = null;
-	export let required: boolean = false;
-	export let ariaLabel: string = '';
-	export let disabled: boolean = false;
-	export let inputClass: string = '';
-	export let onInput: ((e: Event) => void) | undefined = undefined;
+	let {
+		id,
+		type = 'text',
+		placeholder = '',
+		value = $bindable(),
+		icon = null,
+		required = false,
+		ariaLabel = '',
+		disabled = false,
+		inputClass = '',
+		onInput = undefined
+	} = $props();
+	const Icon = icon;
 </script>
 
 <div class="mb-6">
@@ -22,14 +25,20 @@
 			{required}
 			aria-label={ariaLabel}
 			{disabled}
-			on:input={onInput}
+			oninput={onInput}
+			autocomplete="off"
 		/>
 		{#if icon}
-			<svelte:component
-				this={icon}
+			<Icon
 				class="absolute top-1/2 left-4 h-6 w-6 -translate-y-1/2 text-gray-400 dark:text-gray-500"
 				aria-hidden="true"
 			/>
 		{/if}
 	</div>
 </div>
+
+<style>
+	::-webkit-calendar-picker-indicator {
+		filter: contrast(0.2);
+	}
+</style>

@@ -1,12 +1,11 @@
-
 import { Request, Response } from "express";
 import * as vehicleService from "../services/vehicleService.js";
 import { VehicleNotFoundError } from "../exceptions/VehicleErrors.js";
 
 export const addVehicle = async (req: Request, res: Response) => {
-  const { vehicleType, make, model, year, licensePlate } = req.body;
+  const { make, model, year, licensePlate } = req.body;
 
-  if (!vehicleType || !make || !model || !year || !licensePlate) {
+  if (!make || !model || !year || !licensePlate) {
     return res
       .status(400)
       .json({ message: "Make, Model, Year, and License Plate are required." });
@@ -55,9 +54,7 @@ export const updateVehicle = async (req: Request, res: Response) => {
       .json({ message: "Make, Model, Year, and License Plate are required." });
   }
   if (!id) {
-    return res
-      .status(400)
-      .json({ message: "Vehicle ID is required." });
+    return res.status(400).json({ message: "Vehicle ID is required." });
   }
   try {
     const result = await vehicleService.updateVehicle(id, req.body);

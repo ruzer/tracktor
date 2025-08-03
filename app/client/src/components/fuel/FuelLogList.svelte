@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { env } from '$env/dynamic/public';
-	import dayjs from 'dayjs';
-	import { configJson } from '../../lib/states/config';
+	import {
+		formatCurrency,
+		formatDate,
+		formatVolume,
+		formatMileage,
+		formatDistance
+	} from '../../lib/utils/formatting';
 
-	$: formatDate = (date: string) => dayjs(date).format($configJson.dateFormat);
-	$: formatCurrency = (amount: number) => `${$configJson.currency} ${amount.toLocaleString()}`;
-
-	export let vehicleId: number;
+	const { vehicleId } = $props();
 
 	interface FuelLog {
 		id: number;
@@ -19,9 +21,18 @@
 		mileage?: number;
 	}
 
-	let fuelLogs: FuelLog[] = [];
-	let loading = true;
-	let error = '';
+	let fuelLogs: FuelLog[] = $state([]);
+	let loading = $state(true);
+	let error = $state('');
+
+	$effect(() => {
+		if (!vehicleId) {
+			error = 'Vehicle ID is required.';
+			loading = false;
+		} else {
+			fetchFuelLogs();
+		}
+	});
 
 	async function fetchFuelLogs() {
 		loading = true;
@@ -51,11 +62,6 @@
 	onMount(() => {
 		fetchFuelLogs();
 	});
-
-	// Reactively fetch logs when vehicleId changes
-	$: if (vehicleId) {
-		fetchFuelLogs();
-	}
 </script>
 
 <div class="container mx-auto p-4 text-gray-600 dark:text-gray-300">
@@ -77,11 +83,11 @@
 							>Odometer</th
 						>
 						<th class="px-4 py-2 text-left font-semibold text-gray-600 dark:text-gray-300"
-							>Fuel Amount (L)</th
+							>Fuel Amount</th
 						>
 						<th class="px-4 py-2 text-left font-semibold text-gray-600 dark:text-gray-300">Cost</th>
 						<th class="px-4 py-2 text-left font-semibold text-gray-600 dark:text-gray-300"
-							>Mileage (km/L)</th
+							>Mileage</th
 						>
 						<th class="px-4 py-2 text-left font-semibold text-gray-600 dark:text-gray-300">Notes</th
 						>
@@ -91,11 +97,15 @@
 					{#each fuelLogs as log (log.id)}
 						<tr class="border-b border-gray-200 last:border-b-0 dark:border-gray-700">
 							<td class="px-4 py-2 text-gray-800 dark:text-gray-200">{formatDate(log.date)}</td>
-							<td class="px-4 py-2 text-gray-800 dark:text-gray-200">{log.odometer} km</td>
-							<td class="px-4 py-2 text-gray-800 dark:text-gray-200">{log.fuelAmount} L</td>
-							<td class="px-4 py-2 text-gray-800 dark:text-gray-200">{formatCurrency(log.cost)}</td>
 							<td class="px-4 py-2 text-gray-800 dark:text-gray-200"
-								>{log.mileage ? log.mileage.toFixed(2) : 'N/A'}</td
+								>{formatDistance(log.odometer)}</td
+							>
+							<td class="px-4 py-2 text-gray-800 dark:text-gray-200"
+								>{formatVolume(log.fuelAmount)}</td
+							>
+							<td class="px-4 py-2 text-gray-800 dark:text-gray-200">{formatCurrency(log.cost)}</td>
+							<td class="styled-text px-4 py-2 text-gray-800 dark:text-gray-200"
+								>{log.mileage ? formatMileage(log.mileage) : 'N/A'}</td
 							>
 							<td class="px-4 py-2 text-gray-800 dark:text-gray-200">{log.notes || 'N/A'}</td>
 						</tr>

@@ -3,80 +3,55 @@
 	import { Line } from 'svelte5-chartjs';
 	import { Chart, registerables } from 'chart.js';
 	import { Plus } from '@lucide/svelte';
-	import { browser } from '$app/environment';
-	import { derived } from 'svelte/store';
 	import { env } from '$env/dynamic/public';
-	import ChartCard from '../../components/chart/ChartCard.svelte';
-	import FuelRefillForm from '../../components/fuel/FuelRefillForm.svelte';
-	import FuelRefillList from '../../components/fuel/FuelRefillList.svelte';
-	import InsuranceDetails from '../../components/insurance/InsuranceDetails.svelte';
-	import MaintenanceLogForm from '../../components/maintenance/MaintenanceLogForm.svelte';
-	import MaintenanceLogList from '../../components/maintenance/MaintenanceLogList.svelte';
-	import PollutionCertificateDetails from '../../components/pucc/PollutionCertificateDetails.svelte';
-	import AddVehicleForm from '../../components/vehicle/AddVehicleForm.svelte';
-	import VehicleList from '../../components/vehicle/VehicleList.svelte';
-	import { config } from '../../lib/states/config';
+	import ChartCard from '$components/chart/ChartCard.svelte';
+	import FuelLogModal from '$components/fuel/FuelLogModal.svelte';
+	import FuelLogList from '$components/fuel/FuelLogList.svelte';
+	import InsuranceDetails from '$components/insurance/InsuranceDetails.svelte';
+	import MaintenanceLogForm from '$components/maintenance/MaintenanceLogForm.svelte';
+	import MaintenanceLogList from '$components/maintenance/MaintenanceLogList.svelte';
+	import PollutionCertificateDetails from '$components/pucc/PollutionCertificateDetails.svelte';
+	import VehicleModal from '$components/vehicle/VehicleModal.svelte';
+	import VehicleList from '$components/vehicle/VehicleList.svelte';
+	import { config } from '$lib/states/config';
 	import dayjs from 'dayjs';
+	import type { NewVehicle, Vehicle } from '$lib/models/vehicle';
+	import { darkModeStore } from '$lib/states/dark-mode';
+	import { formatDate, getCurrencySymbol, getMileageUnit } from '$lib/utils/formatting';
+	import { Jumper } from 'svelte-loading-spinners';
+	import { simulateNetworkDelay } from '$lib/utils/dev';
 
-	Chart.register(...registerables);
-
-	interface Vehicle {
-		id: number;
-		make: string;
-		model: string;
-		year: number;
-		licensePlate: string;
-		vin?: string;
-		color?: string;
-		odometer?: number;
-		insuranceStatus?: string;
-		puccStatus?: string;
-	}
+	$effect(() => {
+		Chart.register(...registerables);
+	});
 
 	let vehicles = $state<Vehicle[]>([]);
 	let loading = $state(true);
 	let error = $state('');
 
-	let newVehicle = $state({
-		vehicleType: 'car',
-		make: '',
-		model: '',
-		year: null,
-		licensePlate: '',
-		vin: '',
-		color: '',
-		odometer: null
-	});
+	let showVehicleModal = $state(false);
+	let vehicleToEdit = $state<Vehicle | null>(null);
 
-	let addVehicleError = $state('');
-	let addVehicleSuccess = $state('');
-
-	let showAddVehicleModal = $state(false);
-
-	let editVehicle = $state<Vehicle | null>(null);
-	let showEditVehicleModal = $state(false);
-
-	let selectedVehicleId = $state<number | null>(null);
-
-	function handleVehicleSelect(event: CustomEvent<{ vehicleId: number }>) {
-		selectedVehicleId = event.detail.vehicleId;
-		fetchChartData(selectedVehicleId);
-	}
+	let selectedVehicleId = $state<string | null>(null);
 
 	let fuelCostData: any = $state({});
 	let mileageData: any = $state({});
 
 	let showFuelRefillModal = $state(false);
 	let showMaintenanceLogModal = $state(false);
-	let activeTab = $state('dashboard'); // 'dashboard', 'fuel', 'maintenance', 'insurance', 'pollution'
+	let activeTab = $state('dashboard');
 
 	// Dark mode chart options
-	let isDarkMode = false;
-	if (browser) {
-		isDarkMode = document.documentElement.classList.contains('dark');
-	}
-
+	let isDarkMode = $state(false);
+	darkModeStore.subscribe((isDarkMode) => {
+		isDarkMode = isDarkMode;
+	});
 	let chartOptions = $derived({});
+
+	function handleVehicleSelect(vehicleId: string) {
+		selectedVehicleId = vehicleId;
+		fetchChartData(selectedVehicleId);
+	}
 
 	$effect(() => {
 		chartOptions = {
@@ -101,8 +76,10 @@
 			}
 		};
 	});
+
 	async function fetchVehicles() {
 		loading = true;
+		// await simulateNetworkDelay(2000); // Simulate network delay for development
 		error = '';
 		try {
 			const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles`, {
@@ -124,88 +101,22 @@
 		loading = false;
 	}
 
-	async function addVehicle() {
-		addVehicleError = '';
-		addVehicleSuccess = '';
-		try {
-			const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'X-User-PIN': localStorage.getItem('userPin') || ''
-				},
-				body: JSON.stringify(newVehicle)
-			});
-
-			if (response.ok) {
-				addVehicleSuccess = 'Vehicle added successfully!';
-				newVehicle = {
-					make: '',
-					model: '',
-					year: null,
-					licensePlate: '',
-					vin: '',
-					color: '',
-					odometer: null
-				};
-				fetchVehicles();
-				showAddVehicleModal = false;
-			} else {
-				const data = await response.json();
-				addVehicleError = data.message || 'Failed to add vehicle.';
-			}
-		} catch (e) {
-			addVehicleError = 'Failed to connect to the server.';
-		}
-	}
-
 	function openAddVehicleModal() {
-		addVehicleError = '';
-		addVehicleSuccess = '';
-		showAddVehicleModal = true;
+		showVehicleModal = true;
 	}
 
-	function handleEditVehicle(event: CustomEvent<{ vehicle: Vehicle }>) {
-		editVehicle = { ...event.detail.vehicle };
-		showEditVehicleModal = true;
+	function handleEditVehicle(vehicle: Vehicle) {
+		vehicleToEdit = vehicle;
+		showVehicleModal = true;
 	}
 
-	async function updateVehicle() {
-		addVehicleError = '';
-		addVehicleSuccess = '';
-		try {
-			if (!editVehicle) return;
-			const response = await fetch(`http://localhost:3000/api/vehicles/${editVehicle.id}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-					'X-User-PIN': localStorage.getItem('userPin') || ''
-				},
-				body: JSON.stringify(editVehicle)
-			});
-			if (response.ok) {
-				addVehicleSuccess = 'Vehicle updated successfully!';
-				showEditVehicleModal = false;
-				editVehicle = null;
-				await fetchVehicles();
-			} else {
-				const data = await response.json();
-				addVehicleError = data.message || 'Failed to update vehicle.';
-			}
-		} catch (e) {
-			addVehicleError = 'Failed to connect to the server.';
-		}
-	}
-
-	function handleDeleteVehicle(event: CustomEvent<{ vehicle: Vehicle }>) {
+	function handleDeleteVehicle(vehicle: Vehicle) {
 		if (confirm('Are you sure you want to delete this vehicle?')) {
-			deleteVehicle(event.detail.vehicle.id);
+			deleteVehicle(vehicle.id);
 		}
 	}
 
-	async function deleteVehicle(vehicleId: number) {
-		addVehicleError = '';
-		addVehicleSuccess = '';
+	async function deleteVehicle(vehicleId: string) {
 		try {
 			const response = await fetch(`http://localhost:3000/api/vehicles/${vehicleId}`, {
 				method: 'DELETE',
@@ -214,29 +125,29 @@
 				}
 			});
 			if (response.ok) {
-				addVehicleSuccess = 'Vehicle deleted successfully!';
 				await fetchVehicles();
-				if (selectedVehicleId === vehicleId) {
-					selectedVehicleId = vehicles.length > 0 ? vehicles[0].id : null;
+				if (vehicles.length > 0) {
+					selectedVehicleId = vehicles[0].id;
+					fetchChartData(selectedVehicleId);
 				}
 			} else {
 				const data = await response.json();
-				addVehicleError = data.message || 'Failed to delete vehicle.';
+				alert(data.message || 'Failed to delete vehicle.');
 			}
 		} catch (e) {
-			addVehicleError = 'Failed to connect to the server.';
+			alert('Failed to connect to the server.');
 		}
 	}
 
-	onMount(() => {
-		fetchVehicles();
+	onMount(async () => {
+		await fetchVehicles();
 		if (vehicles.length > 0) {
 			selectedVehicleId = vehicles[0].id;
 			fetchChartData(selectedVehicleId);
 		}
 	});
 
-	async function fetchChartData(vehicleId: number) {
+	async function fetchChartData(vehicleId: string) {
 		try {
 			const response = await fetch(
 				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/fuel-logs`,
@@ -248,7 +159,7 @@
 			);
 			if (response.ok) {
 				const data = await response.json();
-				const labels = data.map((log: any) => dayjs(log.date).format($config.dateFormat));
+				const labels = data.map((log: any) => formatDate(log.date));
 				const costData = data.map((log: any) => log.cost);
 				const mileageDataPoints = data.map((log: any) => log.mileage);
 
@@ -256,9 +167,9 @@
 					labels,
 					datasets: [
 						{
-							label: 'Fuel Cost',
+							label: `Fuel Cost (${getCurrencySymbol()})`,
 							data: costData,
-							fill: false,
+							fill: true,
 							borderColor: 'rgb(75, 192, 192)',
 							tension: 0.1
 						}
@@ -269,9 +180,9 @@
 					labels,
 					datasets: [
 						{
-							label: 'Mileage (km/L)',
+							label: `Mileage (${getMileageUnit()})`,
 							data: mileageDataPoints,
-							fill: false,
+							fill: true,
 							borderColor: 'rgb(255, 99, 132)',
 							tension: 0.1
 						}
@@ -299,45 +210,31 @@
 		</button>
 	</div>
 	{#if loading}
-		<p class="text-lg text-gray-500 dark:text-gray-400">Loading vehicles...</p>
+		<p class="flex items-center justify-center gap-5 text-lg text-gray-500 dark:text-gray-400">
+			<Jumper size="40" color="#155dfc" unit="px" duration="2s" />
+			Loading Vehicles...
+		</p>
 	{:else if error}
 		<p class="text-lg text-red-500 dark:text-red-400">Error: {error}</p>
 	{:else}
 		<VehicleList
 			{vehicles}
 			{selectedVehicleId}
-			on:vehicleSelect={handleVehicleSelect}
-			on:editVehicle={handleEditVehicle}
-			on:deleteVehicle={handleDeleteVehicle}
-			on:refillFuel={(e) => {
-				selectedVehicleId = e.detail.vehicle.id;
+			onVehicleSelect={handleVehicleSelect}
+			onEditVehicle={handleEditVehicle}
+			onDeleteVehicle={handleDeleteVehicle}
+			onRefillFuel={(vehicle: Vehicle) => {
+				selectedVehicleId = vehicle.id;
 				showFuelRefillModal = true;
 			}}
-			on:addMaintenance={(e) => {
-				selectedVehicleId = e.detail.vehicle.id;
+			onAddMaintenance={(vehicle: Vehicle) => {
+				selectedVehicleId = vehicle.id;
 				showMaintenanceLogModal = true;
 			}}
 		/>
 	{/if}
 
-	<AddVehicleForm
-		bind:newVehicle
-		bind:addVehicleError
-		bind:addVehicleSuccess
-		bind:showModal={showAddVehicleModal}
-		{addVehicle}
-	/>
-
-	{#if showEditVehicleModal}
-		<AddVehicleForm
-			newVehicle={editVehicle}
-			addVehicle={updateVehicle}
-			{addVehicleError}
-			{addVehicleSuccess}
-			showModal={showEditVehicleModal}
-			editMode={true}
-		/>
-	{/if}
+	<VehicleModal {vehicleToEdit} {loading} bind:showModal={showVehicleModal} />
 
 	{#if selectedVehicleId}
 		<div class="mt-12">
@@ -489,7 +386,7 @@
 						role="tabpanel"
 						aria-labelledby="fuel-logs-tab"
 					>
-						<FuelRefillList vehicleId={selectedVehicleId} />
+						<FuelLogList vehicleId={selectedVehicleId} />
 					</div>
 				{:else if activeTab === 'maintenance'}
 					<div
@@ -518,24 +415,17 @@
 				{/if}
 			</div>
 		</div>
-		<FuelRefillForm
-			vehicleId={selectedVehicleId}
-			showModal={showFuelRefillModal}
-			closeModal={() => (showFuelRefillModal = false)}
-			on:success={() => {
-				if (selectedVehicleId) fetchChartData(selectedVehicleId);
-				showFuelRefillModal = false;
-			}}
-		/>
+		<FuelLogModal vehicleId={selectedVehicleId} bind:showModal={showFuelRefillModal} {loading} />
 		<MaintenanceLogForm
+			initialData={{ vehicleId: selectedVehicleId }}
 			vehicleId={selectedVehicleId}
 			showModal={showMaintenanceLogModal}
 			closeModal={() => (showMaintenanceLogModal = false)}
-			on:success={() => {
+			onSuccess={() => {
 				showMaintenanceLogModal = false;
 			}}
 		/>
-	{:else}
+	{:else if vehicles.length > 0 && !loading}
 		<div class="py-12 text-center">
 			<p class="text-lg text-gray-500 dark:text-gray-400">
 				Select a vehicle to view fuel and mileage data.

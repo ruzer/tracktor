@@ -8,26 +8,8 @@ export interface Config {
 	description?: string;
 }
 
-export interface ConfigStore {
-	dateFormat: string;
-	currency: string;
-	theme: string;
-	language: string;
-}
-
-const defaultConfig: ConfigStore = {
-	dateFormat: 'DD/MM/YYYY',
-	currency: 'USD',
-	theme: 'light',
-	language: 'en'
-};
-
-// const defaultConfig: ConfigStore = [];
-
 const createConfigStore = () => {
 	const { subscribe, set } = writable<Config[]>([]);
-	const configJson = writable<ConfigStore>(defaultConfig);
-
 	async function fetchConfig() {
 		if (browser) {
 			try {
@@ -38,13 +20,6 @@ const createConfigStore = () => {
 				});
 				if (response.ok) {
 					const data: Config[] = await response.json();
-					const newConfig: any = {};
-					data.forEach((item) => {
-						if (item.key && item.value !== undefined) {
-							newConfig[item.key] = item.value;
-						}
-					});
-					configJson.set(newConfig);
 					set(data);
 				} else {
 					console.error('Failed to fetch config');
@@ -81,7 +56,6 @@ const createConfigStore = () => {
 
 	return {
 		subscribe,
-		configJson,
 		save: (localConfig: Config[]) => {
 			console.log('Saving config:', localConfig);
 			updateConfig(localConfig);

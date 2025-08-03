@@ -1,17 +1,18 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import VehicleCard from './VehicleCard.svelte';
-	export let vehicles: Array<any> = [];
-	export let selectedVehicleId: number | null = null;
 
-	const dispatch = createEventDispatcher();
+	const {
+		vehicles,
+		selectedVehicleId,
+		onVehicleSelect,
+		onEditVehicle,
+		onDeleteVehicle,
+		onRefillFuel,
+		onAddMaintenance
+	} = $props();
 
-	function selectVehicle(vehicleId: number) {
-		dispatch('vehicleSelect', { vehicleId });
-	}
-
-	function addVehicle() {
-		dispatch('addVehicle');
+	function selectVehicle(vehicleId: string) {
+		onVehicleSelect(vehicleId);
 	}
 </script>
 
@@ -30,13 +31,7 @@
 			class:ring-blue-500={selectedVehicleId === vehicle.id}
 			class="cursor-pointer rounded-2xl transition-all duration-300 ease-in-out"
 		>
-			<VehicleCard
-				{vehicle}
-				on:editVehicle={(e) => dispatch('editVehicle', e.detail)}
-				on:deleteVehicle={(e) => dispatch('deleteVehicle', e.detail)}
-				on:refillFuel={(e) => dispatch('refillFuel', e.detail)}
-				on:addMaintenance={(e) => dispatch('addMaintenance', e.detail)}
-			/>
+			<VehicleCard {vehicle} {onEditVehicle} {onDeleteVehicle} {onRefillFuel} {onAddMaintenance} />
 		</div>
 	{/each}
 </div>

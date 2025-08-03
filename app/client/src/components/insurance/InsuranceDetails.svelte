@@ -4,13 +4,8 @@
 	import { env } from '$env/dynamic/public';
 	import { Shield, Calendar, Hash, DollarSign, Pencil, Trash2 } from '@lucide/svelte';
 	import InsuranceForm from './InsuranceForm.svelte';
-	import { config } from '../../lib/states/config';
-	import dayjs from 'dayjs';
 
-	$: formatDate = (date: string) => dayjs(date).format($config.dateFormat);
-	$: formatCurrency = (amount: number) => `${$config.currency} ${amount.toLocaleString()}`;
-
-	export let vehicleId: number | null = null;
+	export let vehicleId: string | null = null;
 
 	interface InsuranceDetails {
 		id: number;
@@ -35,7 +30,7 @@
 		error = '';
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/insurance`,
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/insurance`,
 				{
 					headers: {
 						'X-User-PIN': browser ? localStorage.getItem('userPin') || '' : ''
@@ -61,7 +56,7 @@
 		}
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/insurance`,
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/insurance`,
 				{
 					method: 'DELETE',
 					headers: {
