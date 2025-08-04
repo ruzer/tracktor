@@ -1,14 +1,14 @@
 import { writable } from 'svelte/store';
 
-const createFuelLogModalStore = () => {
+const createInsuranceModalStore = () => {
 	const { subscribe, set } = writable<{
-		logToEdit?: any;
+		entryToEdit?: any;
 		vehicleId?: string;
 		editMode: boolean;
 		show: boolean;
 		callback: (status: boolean) => void;
 	}>({
-		logToEdit: undefined,
+		entryToEdit: undefined,
 		vehicleId: undefined,
 		editMode: false,
 		show: false,
@@ -17,12 +17,12 @@ const createFuelLogModalStore = () => {
 
 	function show(
 		vehicleId: string,
-		logToEdit?: any,
+		entryToEdit?: any,
 		editMode: boolean = false,
 		callback: any = undefined
 	) {
 		set({
-			logToEdit,
+			entryToEdit,
 			vehicleId,
 			editMode,
 			show: true,
@@ -31,7 +31,7 @@ const createFuelLogModalStore = () => {
 	}
 	function hide() {
 		set({
-			logToEdit: undefined,
+			entryToEdit: undefined,
 			vehicleId: undefined,
 			editMode: false,
 			show: false,
@@ -46,4 +46,4 @@ const createFuelLogModalStore = () => {
 	};
 };
 
-export const fuelLogModelStore = createFuelLogModalStore();
+export const insuranceModelStore = createInsuranceModalStore();

@@ -14,6 +14,9 @@
 	import InsuranceTab from '$components/tabs/InsuranceTab.svelte';
 	import PollutionTab from '$components/tabs/PollutionTab.svelte';
 	import { vehicleModelStore, vehiclesStore } from '$lib/stores/vehicle';
+	import PollutionCertificateModal from '$components/pucc/PollutionCertificateModal.svelte';
+	import InsuranceForm from '$components/insurance/InsuranceForm.svelte';
+	import InsuranceModal from '$components/insurance/InsuranceModal.svelte';
 
 	let vehicles = $state<Vehicle[]>([]);
 	let loading = $state(true);
@@ -93,4 +96,6 @@
 	<VehicleModal />
 	<FuelLogModal />
 	<MaintenanceLogModal />
+	<PollutionCertificateModal />
+	<InsuranceModal />
 </div>

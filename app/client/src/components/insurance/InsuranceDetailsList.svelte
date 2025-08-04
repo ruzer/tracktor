@@ -4,6 +4,7 @@
 	import { env } from '$env/dynamic/public';
 	import { Shield, Calendar, Hash, DollarSign, Pencil, Trash2 } from '@lucide/svelte';
 	import { formatCurrency, formatDate } from '$lib/utils/formatting';
+	import { insuranceModelStore } from '$lib/stores/insurance';
 
 	let { vehicleId } = $props();
 
@@ -107,7 +108,13 @@
 				<div class="flex gap-2">
 					<button
 						class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-						onclick={() => {}}
+						onclick={() => {
+							insuranceModelStore.show(vehicleId, ins, true, (status: boolean) => {
+								if (status) {
+									fetchInsuranceDetails();
+								}
+							});
+						}}
 					>
 						<Pencil
 							class="h-5 w-5 text-gray-500 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
@@ -115,7 +122,9 @@
 					</button>
 					<button
 						class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-						onclick={() => {}}
+						onclick={() => {
+							deleteInsurance(ins.id);
+						}}
 					>
 						<Trash2
 							class="h-5 w-5 text-gray-500 hover:text-red-600 dark:text-gray-300 dark:hover:text-red-400"
