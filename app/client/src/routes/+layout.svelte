@@ -4,9 +4,8 @@
 	import { browser } from '$app/environment';
 	import '../styles/app.css';
 	import { tick } from 'svelte';
-	import { Car, LogOut, Tractor, Settings } from '@lucide/svelte';
+	import { LogOut, Tractor, Settings } from '@lucide/svelte';
 	import ThemeToggle from '$components/common/ThemeToggle.svelte';
-	import { onMount } from 'svelte';
 	import { env } from '$env/dynamic/public';
 
 	let { children } = $props();
@@ -17,6 +16,7 @@
 	let demoMode = $state(false);
 
 	$effect(() => {
+		demoMode = env.PUBLIC_DEMO_MODE === 'true';
 		if (browser) {
 			const pin = localStorage.getItem('userPin');
 			isAuthenticated = !!pin;
@@ -30,17 +30,10 @@
 		});
 	});
 
-	onMount(() => {
-		if (browser) {
-			demoMode = Boolean(env.PUBLIC_DEMO_MODE);
-		}
-	});
-
 	function logout() {
 		if (browser) {
 			localStorage.removeItem('userPin');
 			isAuthenticated = false;
-			// goto is already handled by the effect
 		}
 	}
 </script>
