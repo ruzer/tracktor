@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 
 const createDarkModeStore = () => {
-	const { subscribe, set, update } = writable<boolean>(false);
+	const { subscribe, set } = writable<boolean>(false);
 
 	function loadDarkModePreference() {
 		if (typeof window !== 'undefined') {
@@ -14,11 +14,11 @@ const createDarkModeStore = () => {
 		}
 	}
 
+	loadDarkModePreference();
+
 	return {
 		subscribe,
-		toggle: () => update((current) => !current),
-		enable: () => set(true),
-		disable: () => set(false)
+		set
 	};
 };
 

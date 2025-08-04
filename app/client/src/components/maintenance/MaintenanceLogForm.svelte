@@ -1,87 +1,152 @@
 <script lang="ts">
-	import MaintenanceLogFormComponent from './MaintenanceLogFormComponent.svelte';
+	import FormField from '$components/common/FormField.svelte';
+	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
 	import { env } from '$env/dynamic/public';
-	import ModalContainer from '../../components/common/ModalContainer.svelte';
+	import { getCurrencySymbol, getDistanceUnit } from '$lib/utils/formatting';
+	import { BadgeDollarSign, Calendar1, Gauge, Hammer, Notebook } from '@lucide/svelte';
 
-	const { vehicleId, showModal, closeModal, initialData, onSuccess } = $props();
+	let {
+		vehicleId,
+		logToEdit = $bindable(),
+		modalVisibility = $bindable(),
+		editMode,
+		loading,
+		callback
+	} = $props();
 
-	let log = {
+	let log = $state({
 		date: '',
 		odometer: null,
 		service: '',
 		cost: null,
 		notes: ''
-	};
+	});
 
-	let error = '';
-	let success = '';
+	let status = $state<{
+		message: string | null;
+		type: 'ERROR' | 'SUCCESS' | null;
+	}>({
+		message: null,
+		type: null
+	});
 
 	$effect(() => {
-		if (initialData) {
-			log = { ...initialData };
-		} else {
-			log = {
-				date: '',
-				odometer: null,
-				service: '',
-				cost: null,
-				notes: ''
-			};
+		if (logToEdit) {
+			Object.assign(log, logToEdit);
 		}
 	});
 
-	async function handleSubmit() {
-		error = '';
-		success = '';
-
-		if (!log.date || !log.odometer || !log.service || !log.cost) {
-			error = 'Date, Odometer, Service, and Cost are required.';
+	async function persistLog() {
+		if (!log.date || !log.odometer || !log.service || log.cost === null) {
+			status.message = 'Date, Odometer, Service, and Cost are required.';
+			status.type = 'ERROR';
 			return;
 		}
 
-		const method = initialData && initialData.id ? 'PUT' : 'POST';
-		const urlPath =
-			initialData && initialData.id
-				? `/api/maintenance-logs/${initialData.id}`
-				: `/api/vehicles/${vehicleId}/maintenance-logs`;
-
 		try {
-			const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}${urlPath}`, {
-				method: method,
-				headers: {
-					'Content-Type': 'application/json',
-					'X-User-PIN': localStorage.getItem('userPin') || ''
-				},
-				body: JSON.stringify(log)
-			});
+			const response = await fetch(
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/maintenance-logs/${editMode ? logToEdit.id : ''}`,
+				{
+					method: `${editMode ? 'PUT' : 'POST'}`,
+					headers: {
+						'Content-Type': 'application/json',
+						'X-User-PIN': localStorage.getItem('userPin') || ''
+					},
+					body: JSON.stringify(log)
+				}
+			);
 
 			if (response.ok) {
-				success = `Maintenance log ${method === 'POST' ? 'added' : 'updated'} successfully!`;
-				onSuccess();
-				closeModal();
+				status.message = `Maintenance log ${editMode ? 'updated' : 'added'} successfully!`;
+				status.type = 'SUCCESS';
+				Object.assign(log, {
+					date: '',
+					odometer: null,
+					service: '',
+					cost: null,
+					notes: ''
+				});
+				modalVisibility = false; // Close the modal after successful submission
 			} else {
 				const data = await response.json();
-				error =
-					data.message || `Failed to ${method === 'POST' ? 'add' : 'update'} maintenance log.`;
+				status.message =
+					data.message || `Failed to ${editMode ? 'update' : 'add'} maintenance log.`;
+				status.type = 'ERROR';
 			}
 		} catch (e) {
-			error = 'Failed to connect to the server.';
+			status.message = 'Failed to connect to the server.';
+			status.type = 'ERROR';
+		}
+		loading = false;
+		if (status.type === 'SUCCESS') {
+			logToEdit = null;
+			callback(true);
 		}
 	}
 </script>
 
-{#if showModal}
-	<ModalContainer
-		onclose={closeModal}
-		title={initialData ? 'Edit Maintenance Log' : 'Add Maintenance Log'}
+<form
+	onsubmit={(e) => {
+		persistLog();
+		e.preventDefault();
+	}}
+	class="space-y-6"
+>
+	<FormField
+		id="date"
+		type="date"
+		placeholder="Date"
+		bind:value={log.date}
+		icon={Calendar1}
+		required={true}
+		ariaLabel="Log Date"
+	/>
+	<FormField
+		id="odometer"
+		type="number"
+		placeholder="Odometer ( {getDistanceUnit()} )"
+		bind:value={log.odometer}
+		icon={Gauge}
+		required={true}
+		ariaLabel="Odometer Reading"
+	/>
+	<FormField
+		id="cost"
+		type="number"
+		placeholder="Cost ( {getCurrencySymbol()} )"
+		bind:value={log.cost}
+		icon={BadgeDollarSign}
+		required={true}
+		ariaLabel="Service Cost ( {getCurrencySymbol()} )"
+	/>
+	<FormField
+		id="service"
+		type="text"
+		placeholder="Service"
+		bind:value={log.service}
+		icon={Hammer}
+		required={true}
+		ariaLabel="Service Description"
+	/>
+	<FormField
+		id="notes"
+		type="textarea"
+		placeholder="Notes"
+		bind:value={log.notes}
+		icon={Notebook}
+		required={false}
+		ariaLabel="Additional Notes"
+	/>
+	<FormSubmitButton text={editMode ? 'Update Log' : 'Add Log'} {loading} />
+</form>
+{#if status.message}
+	<p
+		class={`mt-4 text-center text-sm ${status.type === 'ERROR' ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'}`}
 	>
-		<MaintenanceLogFormComponent
-			bind:log
-			onSubmit={handleSubmit}
-			bind:error
-			bind:success
-			editMode={!!initialData}
-			on:close={closeModal}
-		/>
-	</ModalContainer>
+		{#if status.type === 'ERROR'}
+			<span class="font-semibold">Error:</span> {status.message}
+		{:else}
+			{status.message}
+		{/if}
+	</p>
 {/if}

@@ -27,6 +27,7 @@
 			{disabled}
 			oninput={onInput}
 			autocomplete="off"
+			step=".01"
 		/>
 		{#if icon}
 			<Icon

@@ -16,16 +16,19 @@ interface PollutionCertificateCreationAttributes
   extends Optional<PollutionCertificateAttributes, "id"> {}
 
 class PollutionCertificate
-  extends Model<PollutionCertificateAttributes, PollutionCertificateCreationAttributes>
+  extends Model<
+    PollutionCertificateAttributes,
+    PollutionCertificateCreationAttributes
+  >
   implements PollutionCertificateAttributes
 {
-  public declare id: string;
-  public declare vehicleId: string;
-  public declare certificateNumber: string;
-  public declare issueDate: string;
-  public declare expiryDate: string;
-  public declare testingCenter: string;
-  public declare notes: string;
+  declare public id: string;
+  declare public vehicleId: string;
+  declare public certificateNumber: string;
+  declare public issueDate: string;
+  declare public expiryDate: string;
+  declare public testingCenter: string;
+  declare public notes: string;
 }
 
 PollutionCertificate.init(
@@ -42,7 +45,7 @@ PollutionCertificate.init(
         model: Vehicle, // Use string reference
         key: "id",
       },
-      allowNull: false
+      allowNull: false,
     },
     certificateNumber: {
       type: DataTypes.STRING,
@@ -86,7 +89,7 @@ PollutionCertificate.init(
     tableName: "pollution_certificates",
     timestamps: true,
     underscored: true,
-  }
+  },
 );
 
 export default PollutionCertificate;

@@ -1,18 +1,11 @@
 <script lang="ts">
+	import { vehiclesStore } from '$lib/stores/vehicle';
 	import VehicleCard from './VehicleCard.svelte';
 
-	const {
-		vehicles,
-		selectedVehicleId,
-		onVehicleSelect,
-		onEditVehicle,
-		onDeleteVehicle,
-		onRefillFuel,
-		onAddMaintenance
-	} = $props();
+	let { vehicles, selectedVehicleId, updateCallback } = $props();
 
 	function selectVehicle(vehicleId: string) {
-		onVehicleSelect(vehicleId);
+		vehiclesStore.selectVehicle(vehicleId);
 	}
 </script>
 
@@ -31,7 +24,7 @@
 			class:ring-blue-500={selectedVehicleId === vehicle.id}
 			class="cursor-pointer rounded-2xl transition-all duration-300 ease-in-out"
 		>
-			<VehicleCard {vehicle} {onEditVehicle} {onDeleteVehicle} {onRefillFuel} {onAddMaintenance} />
+			<VehicleCard {vehicle} {updateCallback} />
 		</div>
 	{/each}
 </div>

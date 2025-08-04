@@ -1,4 +1,8 @@
-import { InsuranceNotFoundError, InsuranceExistsError, InsuranceServiceError } from "../exceptions/InsuranceError.js";
+import {
+  InsuranceNotFoundError,
+  InsuranceExistsError,
+  InsuranceServiceError,
+} from "../exceptions/InsuranceError.js";
 import { Insurance, Vehicle } from "../models/index.js";
 import { UniqueConstraintError } from "sequelize";
 
@@ -28,9 +32,9 @@ export const addInsurance = async (vehicleId: string, insuranceData: any) => {
   }
 };
 
-export const getInsurance = async (vehicleId: string) => {
+export const getInsurances = async (vehicleId: string) => {
   try {
-    const insurance = await Insurance.findOne({
+    const insurance = await Insurance.findAll({
       where: { vehicleId: vehicleId },
     });
     if (!insurance) {
@@ -45,7 +49,10 @@ export const getInsurance = async (vehicleId: string) => {
   }
 };
 
-export const updateInsurance = async (vehicleId: string, insuranceData: any) => {
+export const updateInsurance = async (
+  vehicleId: string,
+  insuranceData: any,
+) => {
   try {
     const insurance = await Insurance.findOne({
       where: { vehicleId: vehicleId },

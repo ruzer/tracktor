@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { config, type Config } from '../../lib/states/config';
+	import { config, type Config } from '$lib/stores/config';
 
 	let localConfig: Config[] = [];
 	let saveSuccess = false;
