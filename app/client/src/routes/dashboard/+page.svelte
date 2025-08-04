@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { Plus } from '@lucide/svelte';
 	import FuelLogModal from '$components/fuel/FuelLogModal.svelte';
 	import VehicleModal from '$components/vehicle/VehicleModal.svelte';
@@ -15,8 +14,8 @@
 	import PollutionTab from '$components/tabs/PollutionTab.svelte';
 	import { vehicleModelStore, vehiclesStore } from '$lib/stores/vehicle';
 	import PollutionCertificateModal from '$components/pucc/PollutionCertificateModal.svelte';
-	import InsuranceForm from '$components/insurance/InsuranceForm.svelte';
 	import InsuranceModal from '$components/insurance/InsuranceModal.svelte';
+	import { browser } from '$app/environment';
 
 	let vehicles = $state<Vehicle[]>([]);
 	let loading = $state(true);
@@ -38,9 +37,18 @@
 
 	function updateCallback(status: boolean) {
 		if (status) {
-			vehiclesStore.fetchVehicles();
+			fetchVehicles();
 		}
 	}
+
+	const fetchVehicles = () => {
+		if (browser) {
+			const pin = localStorage.getItem('userPin') || undefined;
+			if (pin) vehiclesStore.fetchVehicles(pin);
+		}
+	};
+
+	fetchVehicles();
 </script>
 
 <div class="container mx-auto bg-gray-100 p-6 transition-colors dark:bg-gray-900">

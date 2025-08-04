@@ -37,14 +37,14 @@ export const addInsurance = async (req: Request, res: Response) => {
   }
 };
 
-export const getInsurance = async (req: Request, res: Response) => {
+export const getInsurances = async (req: Request, res: Response) => {
   const { vehicleId } = req.params;
   if (!vehicleId) {
     return res.status(400).json({ message: "Vehicle ID is required." });
   }
   try {
-    const insurance = await insuranceService.getInsurances(vehicleId);
-    res.status(200).json(insurance);
+    const insurances = await insuranceService.getInsurances(vehicleId);
+    res.status(200).json(insurances);
   } catch (error: any) {
     if (error instanceof InsuranceNotFoundError) {
       return res.status(404).json({ message: error.message });
@@ -57,11 +57,13 @@ export const getInsurance = async (req: Request, res: Response) => {
 };
 
 export const updateInsurance = async (req: Request, res: Response) => {
-  const { vehicleId } = req.params;
+  const { vehicleId, id } = req.params;
   const { provider, policyNumber, startDate, endDate, cost } = req.body;
 
-  if (!vehicleId) {
-    return res.status(400).json({ message: "Vehicle ID is required." });
+  if (!vehicleId || !id) {
+    return res
+      .status(400)
+      .json({ message: "Vehicle ID and Insurance Id is required." });
   }
   if (!provider || !policyNumber || !startDate || !endDate || !cost) {
     return res.status(400).json({
@@ -71,7 +73,11 @@ export const updateInsurance = async (req: Request, res: Response) => {
   }
 
   try {
-    const result = await insuranceService.updateInsurance(vehicleId, req.body);
+    const result = await insuranceService.updateInsurance(
+      vehicleId,
+      id,
+      req.body,
+    );
     res.status(200).json(result);
   } catch (error: any) {
     if (error instanceof InsuranceNotFoundError) {

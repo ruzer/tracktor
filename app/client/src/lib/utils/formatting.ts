@@ -1,5 +1,5 @@
-import dayjs from 'dayjs/esm';
 import { config } from '$lib/stores/config';
+import { format } from 'date-fns';
 
 export interface ConfigStore {
 	dateFormat: string;
@@ -28,7 +28,7 @@ config.subscribe((value) => {
 });
 
 const formatDate = (date: Date | string): string => {
-	return dayjs(date).format(configs.dateFormat);
+	return format(date, configs.dateFormat);
 };
 
 const getCurrencySymbol = (): string => {

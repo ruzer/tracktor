@@ -79,9 +79,6 @@ PollutionCertificate.init(
     notes: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        notEmpty: true,
-      },
     },
   },
   {

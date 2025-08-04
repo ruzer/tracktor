@@ -24,7 +24,7 @@ const seedDatabase = async () => {
     const configData = [
       {
         key: "dateFormat",
-        value: "DD/MM/YYYY",
+        value: "dd/MM/yyyy",
         description: "Format for displaying dates",
       },
       {
