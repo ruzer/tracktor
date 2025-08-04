@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-  import { config } from '../../lib/states/config';
+	import { config } from '$lib/stores/config';
 
-  $: formatCurrency = (amount: number) => `${$config.currency} ${amount.toLocaleString()}`
+	$: formatCurrency = (amount: number) => `${$config.currency} ${amount.toLocaleString()}`;
 
 	const dispatch = createEventDispatcher();
 
 	export let insurance;
 	export let onSubmit;
 	export let error = '';
-	  export let success = '';
+	export let success = '';
 </script>
 
 <form on:submit|preventDefault={onSubmit}>

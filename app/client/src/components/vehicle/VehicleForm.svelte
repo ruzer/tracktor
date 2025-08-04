@@ -14,6 +14,9 @@
 	import { onMount } from 'svelte';
 	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
 	import { simulateNetworkDelay } from '$lib/utils/dev';
+	import { vehiclesStore } from '$lib/stores/vehicle';
+
+	let { vehicleToEdit = null, editMode = false, modalVisibility = $bindable(), loading } = $props();
 
 	const vehicle: NewVehicle = $state({
 		make: '',
@@ -24,8 +27,6 @@
 		color: '',
 		odometer: null
 	});
-
-	let { vehicleToEdit = null, editMode = false, modalVisibility = $bindable(), loading } = $props();
 
 	let status = $state<{
 		message: string | null;
@@ -52,7 +53,7 @@
 			loading = true;
 			status.message = null;
 			status.type = null;
-			await simulateNetworkDelay(2000); // Simulate network delay for development
+			// await simulateNetworkDelay(2000); // Simulate network delay for development
 			const response = await fetch(
 				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${editMode ? vehicleToEdit.id : ''}`,
 				{
@@ -66,7 +67,7 @@
 			);
 
 			if (response.ok) {
-				status.message = 'Vehicle added successfully!';
+				status.message = `Vehicle ${editMode ? 'updated' : 'added'} successfully!`;
 				status.type = 'SUCCESS';
 				Object.assign(vehicle, {
 					make: '',
@@ -78,9 +79,10 @@
 					odometer: null
 				});
 				modalVisibility = false;
+				vehiclesStore.fetchVehicles(); // Refresh the vehicle list after closing the modal
 			} else {
 				const data = await response.json();
-				status.message = data.message || 'Failed to add vehicle.';
+				status.message = data.message || `Failed to ${editMode ? 'update' : 'add'} vehicle.`;
 				status.type = 'ERROR';
 			}
 		} catch (e) {
@@ -94,7 +96,7 @@
 <form
 	onsubmit={(e) => {
 		persistVehicle();
-		// e.preventDefault();
+		e.preventDefault();
 	}}
 	class="space-y-6"
 >

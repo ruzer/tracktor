@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { config, type Config } from '../states/config';
+import { config, type Config } from '$lib/stores/config';
 
 export interface ConfigStore {
 	dateFormat: string;
@@ -49,6 +49,16 @@ const formatCurrency = (amount: number): string => {
 	}).format(amount);
 };
 
+const getDistanceUnit = (): string => {
+	if (configs.unitOfMeasure === 'metric') {
+		return 'km';
+	}
+	if (configs.unitOfMeasure === 'imperial') {
+		return 'mi';
+	}
+	return '';
+};
+
 const formatDistance = (distance: number): string => {
 	if (configs.unitOfMeasure === 'metric') {
 		return `${distance} km`;
@@ -90,6 +100,7 @@ export {
 	formatDate,
 	getCurrencySymbol,
 	formatCurrency,
+	getDistanceUnit,
 	formatDistance,
 	formatVolume,
 	getMileageUnit,

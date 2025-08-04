@@ -2,11 +2,18 @@
 	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
 	import { env } from '$env/dynamic/public';
 	import { simulateNetworkDelay } from '$lib/utils/dev';
-	import { getCurrencySymbol } from '$lib/utils/formatting';
+	import { formatDate, getCurrencySymbol } from '$lib/utils/formatting';
 	import FormField from '../common/FormField.svelte';
 	import { Calendar1, Gauge, Fuel, FileText, BadgeDollarSign } from '@lucide/svelte';
 
-	let { vehicleId, modalVisibility = $bindable(), loading = false, editMode = false } = $props();
+	let {
+		vehicleId,
+		logToEdit,
+		modalVisibility = $bindable(),
+		loading = false,
+		editMode = false,
+		callback
+	} = $props();
 
 	let refill = $state({
 		date: '',
@@ -24,7 +31,7 @@
 		type: null
 	});
 
-	async function handleSubmit() {
+	async function persistLog() {
 		status.message = '';
 		if (!vehicleId) {
 			status.message = 'No vehicle selected.';
@@ -41,11 +48,11 @@
 			loading = true;
 			status.message = null;
 			status.type = null;
-			await simulateNetworkDelay(2000); // Simulate network delay for development
+			// await simulateNetworkDelay(2000); // Simulate network delay for development
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/fuel-logs`,
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/fuel-logs/${editMode ? logToEdit.id : ''}`,
 				{
-					method: 'POST',
+					method: `${editMode ? 'PUT' : 'POST'}`,
 					headers: {
 						'Content-Type': 'application/json',
 						'X-User-PIN': localStorage.getItem('userPin') || ''
@@ -81,12 +88,16 @@
 			loading = false;
 			if (status.type === 'SUCCESS') {
 				modalVisibility = false; // Close modal on success
+				callback(true);
 			}
 		}
 	}
+	$effect(() => {
+		Object.assign(refill, logToEdit);
+	});
 </script>
 
-<form class="space-y-6" onsubmit={handleSubmit} aria-labelledby="fuel-refill-form-title">
+<form class="space-y-6" onsubmit={persistLog} aria-labelledby="fuel-refill-form-title">
 	<FormField
 		id="date"
 		type="date"
