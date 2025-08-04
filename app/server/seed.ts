@@ -33,9 +33,9 @@ const seedDatabase = async () => {
         description: "Default currency for financial transactions",
       },
       {
-        key: "language",
-        value: "en",
-        description: "Default language for the application",
+        key: "unitOfMeasure",
+        value: "metric",
+        description: "Unit of measure for distance and volume",
       },
     ];
     await Config.bulkCreate(configData);

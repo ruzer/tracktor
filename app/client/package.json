@@ -34,6 +34,7 @@
 		"chart.js": "^4.5.0",
 		"dayjs": "^1.11.13",
 		"dot-env": "^0.0.1",
+		"svelte-loading-spinners": "^0.3.6",
 		"svelte5-chartjs": "^1.0.0"
 	}
 }

@@ -1,68 +1,57 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
+	import FormField from '$components/common/FormField.svelte';
+	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
 	import { env } from '$env/dynamic/public';
-	import PollutionCertificateFormComponent from './PollutionCertificateFormComponent.svelte';
+	import { Calendar1, IdCard, Notebook, TestTube, TestTube2 } from '@lucide/svelte';
 
-	export let vehicleId: number | null = null;
-	export let showModal: boolean = false;
-	export let closeModal: () => void;
-	export let initialData: {
-		id?: number;
-		certificateNumber: string;
-		issueDate: string;
-		expiryDate: string;
-		testingCenter: string;
-		notes?: string;
-	} | null = null;
+	let {
+		vehicleId,
+		entryToEdit = $bindable(),
+		modalVisibility = $bindable(),
+		editMode,
+		loading,
+		callback
+	} = $props();
 
-	let certificate = {
+	let certificate = $state({
 		certificateNumber: '',
 		issueDate: '',
 		expiryDate: '',
 		testingCenter: '',
 		notes: ''
-	};
+	});
 
-	let error = '';
-	let success = '';
+	let status = $state<{
+		message: string | null;
+		type: 'ERROR' | 'SUCCESS' | null;
+	}>({
+		message: null,
+		type: null
+	});
 
-	const dispatch = createEventDispatcher();
-
-	onMount(() => {
-		if (initialData) {
-			certificate = {
-				...initialData,
-				issueDate: initialData.issueDate
-					? new Date(initialData.issueDate).toISOString().split('T')[0]
-					: '',
-				expiryDate: initialData.expiryDate
-					? new Date(initialData.expiryDate).toISOString().split('T')[0]
-					: ''
-			};
+	$effect(() => {
+		if (entryToEdit) {
+			Object.assign(certificate, entryToEdit);
 		}
 	});
 
-	async function savePollutionCertificate() {
-		error = '';
-		success = '';
-
+	async function persistCertificate() {
 		if (
 			!certificate.certificateNumber ||
 			!certificate.issueDate ||
 			!certificate.expiryDate ||
 			!certificate.testingCenter
 		) {
-			error = 'All fields are required.';
+			status.message = 'Certificate Number, Issue Date, Expiry Date, Testing Center are required.';
+			status.type = 'ERROR';
 			return;
 		}
 
-		const method = initialData && initialData.id ? 'PUT' : 'POST';
-
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/pucc`,
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/pucc/${editMode ? entryToEdit.id : ''}`,
 				{
-					method,
+					method: `${editMode ? 'PUT' : 'POST'}`,
 					headers: {
 						'Content-Type': 'application/json',
 						'X-User-PIN': localStorage.getItem('userPin') || ''
@@ -72,34 +61,97 @@
 			);
 
 			if (response.ok) {
-				success = `Pollution certificate ${initialData ? 'updated' : 'added'} successfully!`;
-				dispatch('success');
-				closeModal();
+				status.message = `Pollution Certificate ${editMode ? 'updated' : 'added'} successfully!`;
+				status.type = 'SUCCESS';
+				Object.assign(certificate, {
+					certificateNumber: '',
+					issueDate: '',
+					expiryDate: '',
+					testingCenter: '',
+					notes: ''
+				});
+				modalVisibility = false;
 			} else {
 				const data = await response.json();
-				error = data.message || 'Failed to save pollution certificate.';
+				status.message =
+					data.message || `Failed to ${editMode ? 'update' : 'add'} pollution certificate.`;
+				status.type = 'ERROR';
 			}
 		} catch (e) {
-			error = 'Failed to connect to the server.';
+			status.message = 'Failed to connect to the server.';
+			status.type = 'ERROR';
+		}
+		loading = false;
+		if (status.type === 'SUCCESS') {
+			entryToEdit = null;
+			callback(true);
 		}
 	}
 </script>
 
-{#if showModal}
-	<div class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-		<div class="w-full max-w-lg rounded-lg bg-white p-8 shadow-2xl dark:bg-gray-800">
-			<h2 class="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">
-				{initialData ? 'Edit' : 'Add'} Pollution Certificate Details
-			</h2>
+<form
+	onsubmit={(e) => {
+		persistCertificate();
+		e.preventDefault();
+	}}
+	class="space-y-6"
+>
+	<FormField
+		id="certificate-number"
+		type="text"
+		placeholder="Certificate Number"
+		bind:value={certificate.certificateNumber}
+		icon={IdCard}
+		required={true}
+		ariaLabel="Certificate Number"
+	/>
+	<FormField
+		id="issue-date"
+		type="date"
+		placeholder="Issue Date"
+		bind:value={certificate.issueDate}
+		icon={Calendar1}
+		required={true}
+		ariaLabel="Issue Date"
+	/>
+	<FormField
+		id="expiry-date"
+		type="date"
+		placeholder="Expiry Date"
+		bind:value={certificate.expiryDate}
+		icon={Calendar1}
+		required={true}
+		ariaLabel="Expiry Date"
+	/>
+	<FormField
+		id="testing-center"
+		type="text"
+		placeholder="Testing Center"
+		bind:value={certificate.testingCenter}
+		icon={TestTube2}
+		required={true}
+		ariaLabel="Testing Center"
+	/>
+	<FormField
+		id="notes"
+		type="text"
+		placeholder="Notes"
+		bind:value={certificate.notes}
+		icon={Notebook}
+		required={false}
+		ariaLabel="Notes"
+	/>
+	<FormSubmitButton text={editMode ? 'Update Certificate' : 'Add Certificate'} {loading} />
+</form>
 
-			<PollutionCertificateFormComponent
-				bind:certificate
-				onSubmit={savePollutionCertificate}
-				bind:error
-				bind:success
-				editMode={!!initialData}
-				on:close={closeModal}
-			/>
-		</div>
-	</div>
+{#if status.message}
+	<p
+		class={`mt-4 text-center text-sm ${status.type === 'ERROR' ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'}`}
+	>
+		{#if status.type === 'ERROR'}
+			<span class="font-semibold">Error:</span> {status.message}
+		{:else}
+			{status.message}
+		{/if}
+	</p>
 {/if}

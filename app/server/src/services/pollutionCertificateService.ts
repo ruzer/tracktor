@@ -2,13 +2,13 @@ import { Vehicle, PollutionCertificate } from "../models/index.js";
 import {
   PollutionCertificateNotFoundError,
   PollutionCertificateExistsError,
-  PollutionCertificateServiceError
+  PollutionCertificateServiceError,
 } from "../exceptions/PollutionCertificateErrors.js";
 import { UniqueConstraintError } from "sequelize";
 
 export const addPollutionCertificate = async (
   vehicleId: string,
-  pollutionCertificateData: any
+  pollutionCertificateData: any,
 ) => {
   try {
     const vehicle = await Vehicle.findByPk(vehicleId);
@@ -31,13 +31,15 @@ export const addPollutionCertificate = async (
     if (error instanceof PollutionCertificateNotFoundError) {
       throw error;
     }
-    throw new PollutionCertificateServiceError("Error adding pollution certificate.");
+    throw new PollutionCertificateServiceError(
+      "Error adding pollution certificate.",
+    );
   }
 };
 
-export const getPollutionCertificate = async (vehicleId: string) => {
+export const getPollutionCertificates = async (vehicleId: string) => {
   try {
-    const pollutionCertificate = await PollutionCertificate.findOne({
+    const pollutionCertificate = await PollutionCertificate.findAll({
       where: { vehicleId: vehicleId },
     });
     if (!pollutionCertificate) {
@@ -48,13 +50,15 @@ export const getPollutionCertificate = async (vehicleId: string) => {
     if (error instanceof PollutionCertificateNotFoundError) {
       throw error;
     }
-    throw new PollutionCertificateServiceError("Error fetching pollution certificate.");
+    throw new PollutionCertificateServiceError(
+      "Error fetching pollution certificate.",
+    );
   }
 };
 
 export const updatePollutionCertificate = async (
   vehicleId: string,
-  pollutionCertificateData: any
+  pollutionCertificateData: any,
 ) => {
   try {
     const pollutionCertificate = await PollutionCertificate.findOne({
@@ -70,7 +74,9 @@ export const updatePollutionCertificate = async (
     if (error instanceof PollutionCertificateNotFoundError) {
       throw error;
     }
-    throw new PollutionCertificateServiceError("Error updating pollution certificate.");
+    throw new PollutionCertificateServiceError(
+      "Error updating pollution certificate.",
+    );
   }
 };
 
@@ -87,6 +93,8 @@ export const deletePollutionCertificate = async (vehicleId: string) => {
     if (error instanceof PollutionCertificateNotFoundError) {
       throw error;
     }
-    throw new PollutionCertificateServiceError("Error deleting pollution certificate.");
+    throw new PollutionCertificateServiceError(
+      "Error deleting pollution certificate.",
+    );
   }
 };

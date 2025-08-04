@@ -3,7 +3,7 @@ import * as insuranceService from "../services/insuranceService.js";
 import {
   InsuranceNotFoundError,
   InsuranceExistsError,
-  InsuranceServiceError
+  InsuranceServiceError,
 } from "../exceptions/InsuranceError.js";
 
 export const addInsurance = async (req: Request, res: Response) => {
@@ -15,7 +15,8 @@ export const addInsurance = async (req: Request, res: Response) => {
   }
   if (!provider || !policyNumber || !startDate || !endDate || !cost) {
     return res.status(400).json({
-      message: "Provider, Policy Number, Start Date, End Date, and Cost are required.",
+      message:
+        "Provider, Policy Number, Start Date, End Date, and Cost are required.",
     });
   }
 
@@ -42,7 +43,7 @@ export const getInsurance = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Vehicle ID is required." });
   }
   try {
-    const insurance = await insuranceService.getInsurance(vehicleId);
+    const insurance = await insuranceService.getInsurances(vehicleId);
     res.status(200).json(insurance);
   } catch (error: any) {
     if (error instanceof InsuranceNotFoundError) {
@@ -64,7 +65,8 @@ export const updateInsurance = async (req: Request, res: Response) => {
   }
   if (!provider || !policyNumber || !startDate || !endDate || !cost) {
     return res.status(400).json({
-      message: "Provider, Policy Number, Start Date, End Date, and Cost are required.",
+      message:
+        "Provider, Policy Number, Start Date, End Date, and Cost are required.",
     });
   }
 
