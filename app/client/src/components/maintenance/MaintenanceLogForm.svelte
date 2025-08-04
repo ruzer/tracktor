@@ -66,7 +66,7 @@
 					cost: null,
 					notes: ''
 				});
-				modalVisibility = false; // Close the modal after successful submission
+				modalVisibility = false;
 			} else {
 				const data = await response.json();
 				status.message =

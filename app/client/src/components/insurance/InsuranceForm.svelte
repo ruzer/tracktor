@@ -1,51 +1,42 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
+	import FormField from '$components/common/FormField.svelte';
+	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
 	import { env } from '$env/dynamic/public';
-	import InsuranceFormComponent from './InsuranceFormComponent.svelte';
+	import { getCurrencySymbol } from '$lib/utils/formatting';
+	import { BadgeDollarSign, Building2, Calendar1, IdCard } from '@lucide/svelte';
 
-	export let vehicleId: number | null = null;
-	export let showModal: boolean = false;
-	export let closeModal: () => void;
-	export let initialData: {
-		id?: number;
-		provider: string;
-		policyNumber: string;
-		startDate: string;
-		endDate: string;
-		cost: number;
-	} | null = null;
+	let {
+		vehicleId,
+		entryToEdit = $bindable(),
+		modalVisibility = $bindable(),
+		editMode,
+		loading,
+		callback
+	} = $props();
 
-	let insurance = {
+	let insurance = $state({
 		provider: '',
 		policyNumber: '',
 		startDate: '',
 		endDate: '',
 		cost: null
-	};
+	});
 
-	let error = '';
-	let success = '';
+	let status = $state<{
+		message: string | null;
+		type: 'ERROR' | 'SUCCESS' | null;
+	}>({
+		message: null,
+		type: null
+	});
 
-	const dispatch = createEventDispatcher();
-
-	onMount(() => {
-		if (initialData) {
-			insurance = {
-				...initialData,
-				startDate: initialData.startDate
-					? new Date(initialData.startDate).toISOString().split('T')[0]
-					: '',
-				endDate: initialData.endDate
-					? new Date(initialData.endDate).toISOString().split('T')[0]
-					: ''
-			};
+	$effect(() => {
+		if (entryToEdit) {
+			Object.assign(insurance, entryToEdit);
 		}
 	});
 
-	async function saveInsurance() {
-		error = '';
-		success = '';
-
+	async function persistInsurance() {
 		if (
 			!insurance.provider ||
 			!insurance.policyNumber ||
@@ -53,17 +44,16 @@
 			!insurance.endDate ||
 			!insurance.cost
 		) {
-			error = 'All fields are required.';
+			status.message = 'Provider, Policy Number, Start Date, End Date, Cost are required.';
+			status.type = 'ERROR';
 			return;
 		}
 
-		const method = initialData && initialData.id ? 'PUT' : 'POST';
-
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL||""}/api/vehicles/${vehicleId}/insurance`,
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/insurance/${editMode ? entryToEdit.id : ''}`,
 				{
-					method,
+					method: `${editMode ? 'PUT' : 'POST'}`,
 					headers: {
 						'Content-Type': 'application/json',
 						'X-User-PIN': localStorage.getItem('userPin') || ''
@@ -73,34 +63,104 @@
 			);
 
 			if (response.ok) {
-				success = `Insurance details ${initialData ? 'updated' : 'added'} successfully!`;
-				dispatch('success');
-				closeModal();
+				status.message = `Insurance details ${editMode ? 'updated' : 'added'} successfully!`;
+				status.type = 'SUCCESS';
+				Object.assign(insurance, {
+					provider: '',
+					policyNumber: '',
+					startDate: '',
+					endDate: '',
+					cost: null
+				});
+				modalVisibility = false;
 			} else {
 				const data = await response.json();
-				error = data.message || 'Failed to save insurance details.';
+				status.message = data.message || 'Failed to save insurance details.';
+				status.type = 'ERROR';
 			}
 		} catch (e) {
-			error = 'Failed to connect to the server.';
+			status.message = 'Failed to connect to the server.';
+			status.type = 'ERROR';
+		}
+		loading = false;
+		if (status.type === 'SUCCESS') {
+			entryToEdit = null;
+			callback(true);
 		}
 	}
 </script>
 
-{#if showModal}
-	<div class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-		<div class="w-full max-w-lg rounded-lg bg-white p-8 shadow-2xl dark:bg-gray-800">
-			<h2 class="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">
-				{initialData ? 'Edit' : 'Add'} Insurance Details
-			</h2>
+<form
+	onsubmit={(e) => {
+		persistInsurance();
+		e.preventDefault();
+	}}
+>
+	<FormField
+		id="provider"
+		type="text"
+		placeholder="Provider"
+		bind:value={insurance.provider}
+		icon={Building2}
+		required={true}
+		ariaLabel="Provider"
+	/>
+	<FormField
+		id="policy-number"
+		type="text"
+		placeholder="Policy Number"
+		bind:value={insurance.policyNumber}
+		icon={IdCard}
+		required={true}
+		ariaLabel="Policy Number"
+	/>
+	<FormField
+		id="start-date"
+		type="date"
+		placeholder="Start Date"
+		bind:value={insurance.startDate}
+		icon={Calendar1}
+		required={true}
+		ariaLabel="Start Date"
+	/>
+	<FormField
+		id="end-date"
+		type="date"
+		placeholder="End Date"
+		bind:value={insurance.endDate}
+		icon={Calendar1}
+		required={true}
+		ariaLabel="End Date"
+	/>
+	<FormField
+		id="cost"
+		type="number"
+		placeholder="Cost ( {getCurrencySymbol} )"
+		bind:value={insurance.cost}
+		icon={BadgeDollarSign}
+		required={true}
+		ariaLabel="Cost"
+	/>
+	<!-- <FormField
+		id="notes"
+		type="text"
+		placeholder="Notes"
+		bind:value={insurance.notes}
+		icon={Notebook}
+		required={false}
+		ariaLabel="Notes"
+	/> -->
+	<FormSubmitButton text={editMode ? 'Update Insurance' : 'Add Insurance'} {loading} />
+</form>
 
-			<InsuranceFormComponent
-				bind:insurance
-				onSubmit={saveInsurance}
-				bind:error
-				bind:success
-				editMode={!!initialData}
-				on:close={closeModal}
-			/>
-		</div>
-	</div>
+{#if status.message}
+	<p
+		class={`mt-4 text-center text-sm ${status.type === 'ERROR' ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'}`}
+	>
+		{#if status.type === 'ERROR'}
+			<span class="font-semibold">Error:</span> {status.message}
+		{:else}
+			{status.message}
+		{/if}
+	</p>
 {/if}

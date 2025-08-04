@@ -16,6 +16,8 @@
 	import { vehicleModelStore, vehiclesStore } from '$lib/stores/vehicle';
 	import { maintenanceModelStore } from '$lib/stores/maintenance';
 	import { fuelLogModelStore } from '$lib/stores/fuel-log';
+	import { insuranceModelStore } from '$lib/stores/insurance';
+	import { puccModelStore } from '$lib/stores/pucc';
 
 	const { vehicle, updateCallback } = $props();
 
@@ -125,16 +127,16 @@
 			<button
 				type="button"
 				class="rounded-full p-2 transition-colors hover:bg-blue-100 dark:hover:bg-blue-700"
-				onclick={() => maintenanceModelStore.show(vehicle.id, null, false, updateCallback)}
-				aria-label="Log maintenance"
+				onclick={() => insuranceModelStore.show(vehicle.id, null, false, updateCallback)}
+				aria-label="Add Insurance"
 			>
 				<Shield class="h-5 w-5 text-blue-500 hover:text-blue-600 dark:text-blue-400" />
 			</button>
 			<button
 				type="button"
 				class="rounded-full p-2 transition-colors hover:bg-purple-100 dark:hover:bg-purple-700"
-				onclick={() => maintenanceModelStore.show(vehicle.id, null, false, updateCallback)}
-				aria-label="Log maintenance"
+				onclick={() => puccModelStore.show(vehicle.id, null, false, updateCallback)}
+				aria-label="Add Pollution Certificate"
 			>
 				<BadgeCheck class="h-5 w-5 text-purple-500 hover:text-purple-600 dark:text-purple-400" />
 			</button>
