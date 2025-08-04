@@ -1,5 +1,5 @@
-import dayjs from 'dayjs';
-import { config, type Config } from '$lib/stores/config';
+import dayjs from 'dayjs/esm';
+import { config } from '$lib/stores/config';
 
 export interface ConfigStore {
 	dateFormat: string;
