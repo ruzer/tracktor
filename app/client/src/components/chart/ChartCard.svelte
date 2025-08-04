@@ -1,8 +1,5 @@
 <script lang="ts">
-	export let title: string;
-	export let chartData: any;
-	export let ChartComponent: any;
-	export let options: any = {};
+	const { title, chartData, options, ChartComponent } = $props();
 </script>
 
 <div

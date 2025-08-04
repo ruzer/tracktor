@@ -5,6 +5,7 @@ COPY app/client/package*.json ./
 RUN npm install
 COPY app/client/ ./
 ENV PUBLIC_API_BASE_URL=/
+ENV PUBLIC_DEMO_MODE=false
 ENV NODE_ENV=production
 RUN npm run build
 

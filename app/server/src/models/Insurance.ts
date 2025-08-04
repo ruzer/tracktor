@@ -19,13 +19,13 @@ class Insurance
   extends Model<InsuranceAttributes, InsuranceCreationAttributes>
   implements InsuranceAttributes
 {
-  public declare id: string;
-  public declare vehicleId: string;
-  public declare provider: string;
-  public declare policyNumber: string;
-  public declare startDate: string;
-  public declare endDate: string;
-  public declare cost: number;
+  declare public id: string;
+  declare public vehicleId: string;
+  declare public provider: string;
+  declare public policyNumber: string;
+  declare public startDate: string;
+  declare public endDate: string;
+  declare public cost: number;
 }
 
 Insurance.init(
@@ -59,17 +59,17 @@ Insurance.init(
       },
     },
     startDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
         isDate: true,
       },
     },
     endDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
-        isDate: true
+        isDate: true,
       },
     },
     cost: {
@@ -85,8 +85,8 @@ Insurance.init(
     tableName: "insurances",
     timestamps: true,
     underscored: true,
-    sequelize
-  }
+    sequelize,
+  },
 );
 
 export default Insurance;

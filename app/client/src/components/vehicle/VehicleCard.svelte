@@ -12,22 +12,38 @@
 		Shield,
 		BadgeCheck
 	} from '@lucide/svelte';
-	import { createEventDispatcher } from 'svelte';
+	import { formatDistance } from '$lib/utils/formatting';
+	import { vehicleModelStore, vehiclesStore } from '$lib/stores/vehicle';
+	import { maintenanceModelStore } from '$lib/stores/maintenance';
+	import { fuelLogModelStore } from '$lib/stores/fuel-log';
+	import { insuranceModelStore } from '$lib/stores/insurance';
+	import { puccModelStore } from '$lib/stores/pucc';
 
-	export let vehicle: {
-		id: number;
-		make: string;
-		model: string;
-		year: number;
-		licensePlate: string;
-		vin?: string;
-		color?: string;
-		odometer?: number;
-		insuranceStatus?: string;
-		puccStatus?: string;
-	};
+	const { vehicle, updateCallback } = $props();
 
-	const dispatch = createEventDispatcher();
+	async function deleteVehicle(vehicleId: string) {
+		if (!confirm('Are you sure you want to delete this vehicle?')) {
+			return;
+		}
+		try {
+			const response = await fetch(`http://localhost:3000/api/vehicles/${vehicleId}`, {
+				method: 'DELETE',
+				headers: {
+					'X-User-PIN': localStorage.getItem('userPin') || ''
+				}
+			});
+			if (response.ok) {
+				alert('Vehicle deleted successfully.');
+				vehicleModelStore.hide();
+				vehiclesStore.fetchVehicles();
+			} else {
+				const data = await response.json();
+				alert(data.message || 'Failed to delete vehicle.');
+			}
+		} catch (e) {
+			alert('Failed to connect to the server.');
+		}
+	}
 </script>
 
 <div
@@ -52,29 +68,24 @@
 			>
 			{vehicle.licensePlate}
 		</p>
-		{#if vehicle.vin}
-			<p class="flex items-center gap-2">
-				<Fingerprint class="h-5 w-5 text-gray-400 dark:text-gray-500" /><span class="font-semibold"
-					>VIN:</span
-				>
-				{vehicle.vin}
-			</p>
-		{/if}
-		{#if vehicle.color}
-			<p class="flex items-center gap-2">
-				<Paintbrush class="h-5 w-5 text-gray-400 dark:text-gray-500" /><span class="font-semibold"
-					>Color:</span
-				>
-				{vehicle.color}
-			</p>
-		{/if}
-		{#if vehicle.odometer}
-			<p class="flex items-center gap-2">
-				<Gauge class="h-5 w-5 text-gray-400 dark:text-gray-500" />
-				<span class="font-semibold">Odometer:</span>
-				{vehicle.odometer} km
-			</p>
-		{/if}
+		<p class="flex items-center gap-2">
+			<Fingerprint class="h-5 w-5 text-gray-400 dark:text-gray-500" /><span class="font-semibold"
+				>VIN:</span
+			>
+			{vehicle.vin ? vehicle.vin : '-'}
+		</p>
+
+		<p class="flex items-center gap-2">
+			<Paintbrush class="h-5 w-5 text-gray-400 dark:text-gray-500" /><span class="font-semibold"
+				>Color:</span
+			>
+			{vehicle.color ? vehicle.color : '-'}
+		</p>
+		<p class="flex items-center gap-2">
+			<Gauge class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+			<span class="font-semibold">Odometer:</span>
+			{vehicle.odometer ? formatDistance(vehicle.odometer) : '-'}
+		</p>
 		{#if vehicle.insuranceStatus}
 			<p class="flex items-center gap-2">
 				<Shield class="h-5 w-5 text-gray-400 dark:text-gray-500" />
@@ -94,43 +105,65 @@
 			</p>
 		{/if}
 	</div>
-	<div class="flex justify-end gap-2">
-		<button
-			type="button"
-			class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-			on:click={() => dispatch('editVehicle', { vehicle })}
-			aria-label="Edit vehicle"
-		>
-			<Pencil
-				class="h-5 w-5 text-gray-500 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-			/>
-		</button>
-		<button
-			type="button"
-			class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-			on:click={() => dispatch('deleteVehicle', { vehicle })}
-			aria-label="Delete vehicle"
-		>
-			<Trash2
-				class="h-5 w-5 text-gray-500 hover:text-red-600 dark:text-gray-300 dark:hover:text-red-400"
-			/>
-		</button>
-		<button
-			type="button"
-			class="rounded-full p-2 transition-colors hover:bg-green-100 dark:hover:bg-green-700"
-			on:click={() => dispatch('refillFuel', { vehicle })}
-			aria-label="Log fuel refill"
-		>
-			<!-- Fuel icon from Lucide or fallback SVG -->
-			<Fuel class="h-5 w-5 text-green-500 hover:text-green-600 dark:text-green-400" />
-		</button>
-		<button
-			type="button"
-			class="rounded-full p-2 transition-colors hover:bg-yellow-100 dark:hover:bg-yellow-700"
-			on:click={() => dispatch('addMaintenance', { vehicle })}
-			aria-label="Log maintenance"
-		>
-			<Wrench class="h-5 w-5 text-yellow-500 hover:text-yellow-600 dark:text-yellow-400" />
-		</button>
+	<div class=" flex justify-between">
+		<div class="flex justify-start gap-2">
+			<button
+				type="button"
+				class="rounded-full p-2 transition-colors hover:bg-green-100 dark:hover:bg-green-700"
+				onclick={() => fuelLogModelStore.show(vehicle.id, null, false, updateCallback)}
+				aria-label="Log fuel refill"
+			>
+				<!-- Fuel icon from Lucide or fallback SVG -->
+				<Fuel class="h-5 w-5 text-green-500 hover:text-green-600 dark:text-green-400" />
+			</button>
+			<button
+				type="button"
+				class="rounded-full p-2 transition-colors hover:bg-yellow-100 dark:hover:bg-yellow-700"
+				onclick={() => maintenanceModelStore.show(vehicle.id, null, false, updateCallback)}
+				aria-label="Log maintenance"
+			>
+				<Wrench class="h-5 w-5 text-yellow-500 hover:text-yellow-600 dark:text-yellow-400" />
+			</button>
+			<button
+				type="button"
+				class="rounded-full p-2 transition-colors hover:bg-blue-100 dark:hover:bg-blue-700"
+				onclick={() => insuranceModelStore.show(vehicle.id, null, false, updateCallback)}
+				aria-label="Add Insurance"
+			>
+				<Shield class="h-5 w-5 text-blue-500 hover:text-blue-600 dark:text-blue-400" />
+			</button>
+			<button
+				type="button"
+				class="rounded-full p-2 transition-colors hover:bg-purple-100 dark:hover:bg-purple-700"
+				onclick={() => puccModelStore.show(vehicle.id, null, false, updateCallback)}
+				aria-label="Add Pollution Certificate"
+			>
+				<BadgeCheck class="h-5 w-5 text-purple-500 hover:text-purple-600 dark:text-purple-400" />
+			</button>
+		</div>
+		<div class="flex justify-end gap-2">
+			<button
+				type="button"
+				class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+				onclick={() => {
+					vehicleModelStore.show(vehicle, true);
+				}}
+				aria-label="Edit vehicle"
+			>
+				<Pencil
+					class="h-5 w-5 text-gray-500 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+				/>
+			</button>
+			<button
+				type="button"
+				class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+				onclick={() => deleteVehicle(vehicle.id)}
+				aria-label="Delete vehicle"
+			>
+				<Trash2
+					class="h-5 w-5 text-gray-500 hover:text-red-600 dark:text-gray-300 dark:hover:text-red-400"
+				/>
+			</button>
+		</div>
 	</div>
 </div>

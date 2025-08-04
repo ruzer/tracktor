@@ -1,0 +1,135 @@
+<script lang="ts">
+	import { Line } from 'svelte5-chartjs';
+	import ChartCard from '$components/chart/ChartCard.svelte';
+	import { darkModeStore } from '$lib/stores/dark-mode';
+	import { env } from '$env/dynamic/public';
+	import { formatDate, getCurrencySymbol, getMileageUnit } from '$lib/utils/formatting';
+	import { Chart, registerables, type ChartOptions } from 'chart.js';
+	import TabContainer from '$components/common/TabContainer.svelte';
+
+	const { vehicleId } = $props();
+
+	$effect(() => {
+		Chart.register(...registerables);
+	});
+
+	let fuelCostData: any = $state({});
+	let mileageData: any = $state({});
+
+	const generateChartOptions = (isDarkMode: boolean): ChartOptions => {
+		return {
+			responsive: true,
+			plugins: {
+				legend: {
+					labels: {
+						color: isDarkMode ? '#e5e7eb' : '#374151' // Tailwind gray-200 or gray-700
+					}
+				}
+			},
+			scales: {
+				x: {
+					ticks: { textStrokeColor: isDarkMode ? '#e5e7eb' : '#374151' },
+					grid: { color: isDarkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.1)' }
+				},
+				y: {
+					ticks: { textStrokeColor: isDarkMode ? '#e5e7eb' : '#374151' },
+					grid: { color: isDarkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.1)' }
+				}
+			}
+		};
+	};
+
+	let chartOptions = $state({});
+
+	darkModeStore.subscribe((isDarkMode) => {
+		chartOptions = generateChartOptions(isDarkMode);
+		fetchChartData();
+	});
+
+	async function fetchChartData() {
+		try {
+			const response = await fetch(
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/fuel-logs`,
+				{
+					headers: {
+						'X-User-PIN': localStorage.getItem('userPin') || ''
+					}
+				}
+			);
+			if (response.ok) {
+				const data = await response.json();
+				const labels = data.map((log: any) => formatDate(log.date));
+				const costData = data.map((log: any) => log.cost);
+				// Calculate Cumulative cost
+				for (let i = 1; i < costData.length; i++) {
+					costData[i] += costData[i - 1];
+				}
+				const mileageDataPoints = data.map((log: any) => log.mileage);
+
+				fuelCostData = {
+					labels,
+					datasets: [
+						{
+							label: `Total Fuel Cost (${getCurrencySymbol()})`,
+							data: costData,
+							fill: false,
+							borderColor: 'rgb(75, 192, 192)',
+							tension: 0.3,
+							borderWidth: 2,
+							borderCapStyle: 'round',
+							pointStyle: 'circle',
+							pointRadius: 2
+						}
+					]
+				};
+
+				mileageData = {
+					labels,
+					datasets: [
+						{
+							label: `Mileage (${getMileageUnit()})`,
+							data: mileageDataPoints,
+							fill: true,
+							borderColor: 'rgb(255, 99, 132)',
+							tension: 0.1
+						}
+					]
+				};
+			} else {
+				console.error('Failed to fetch chart data');
+			}
+		} catch (e) {
+			console.error('Failed to connect to the server.');
+		}
+	}
+	$effect(() => {
+		if (vehicleId) {
+			fetchChartData();
+		}
+	});
+</script>
+
+<TabContainer title="Fuel Cost & Mileage Trends">
+	<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+		{#if fuelCostData?.datasets?.length > 0 && mileageData?.datasets?.length > 0}
+			<ChartCard
+				title="Fuel Cost Over Time"
+				chartData={fuelCostData}
+				ChartComponent={Line}
+				options={chartOptions}
+			/>
+			<ChartCard
+				title="Mileage Over Time"
+				chartData={mileageData}
+				ChartComponent={Line}
+				options={chartOptions}
+			/>
+		{:else}
+			<div class="col-span-2 py-12 text-center">
+				<p class="text-lg text-gray-500 dark:text-gray-400">
+					No fuel or mileage data available for this vehicle.
+				</p>
+			</div>
+		{/if}
+	</div>
+</TabContainer>

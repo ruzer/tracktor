@@ -19,13 +19,13 @@ class MaintenanceLog
   extends Model<MaintenanceLogAttributes, MaintenanceLogCreationAttributes>
   implements MaintenanceLogAttributes
 {
-  public declare id: string;
-  public declare vehicleId: string;
-  public declare date: string;
-  public declare odometer: number;
-  public declare service: string;
-  public declare cost: number;
-  public declare notes: string;
+  declare public id: string;
+  declare public vehicleId: string;
+  declare public date: string;
+  declare public odometer: number;
+  declare public service: string;
+  declare public cost: number;
+  declare public notes: string;
 }
 
 MaintenanceLog.init(
@@ -39,13 +39,13 @@ MaintenanceLog.init(
     vehicleId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Vehicle, 
+        model: Vehicle,
         key: "id",
       },
       allowNull: false,
     },
     date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
         isDate: true,
@@ -78,7 +78,7 @@ MaintenanceLog.init(
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        notEmpty: true
+        notEmpty: true,
       },
     },
   },
@@ -87,7 +87,7 @@ MaintenanceLog.init(
     timestamps: true,
     underscored: true,
     sequelize,
-  }
+  },
 );
 
 export default MaintenanceLog;

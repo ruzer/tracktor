@@ -5,7 +5,7 @@
 	import '../styles/app.css';
 	import { tick } from 'svelte';
 	import { Car, LogOut, Tractor, Settings } from '@lucide/svelte';
-	import ThemeToggle from '../components/common/ThemeToggle.svelte';
+	import ThemeToggle from '$components/common/ThemeToggle.svelte';
 	import { onMount } from 'svelte';
 	import { env } from '$env/dynamic/public';
 
@@ -54,7 +54,7 @@
 			>🚜 Demo Mode: This is a demo instance. Data will be reset periodically and is not saved
 			permanently. Please avoid adding any persoanl info.</span
 		>
-		<br>
+		<br />
 		<strong>Default PIN : 123456</strong>
 	</div>
 {/if}
@@ -76,7 +76,10 @@
 				</a>
 				<div class="flex items-center justify-center gap-4 align-middle">
 					<ThemeToggle />
-					<a href="/config" class="flex items-center gap-1 text-gray-600 transition-colors duration-300 hover:text-blue-500 dark:text-gray-300">
+					<a
+						href="/config"
+						class="flex items-center gap-1 text-gray-600 transition-colors duration-300 hover:text-blue-500 dark:text-gray-300"
+					>
 						<Settings class="h-5 w-5" />
 					</a>
 					<div class="flex items-center gap-2">
@@ -85,7 +88,6 @@
 							class="flex items-center gap-1 text-gray-600 transition-colors duration-300 hover:text-red-500 dark:text-gray-300"
 						>
 							<LogOut class="h-5 w-5" />
-							Logout
 						</button>
 					</div>
 				</div>

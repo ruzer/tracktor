@@ -1,17 +1,11 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { vehiclesStore } from '$lib/stores/vehicle';
 	import VehicleCard from './VehicleCard.svelte';
-	export let vehicles: Array<any> = [];
-	export let selectedVehicleId: number | null = null;
 
-	const dispatch = createEventDispatcher();
+	let { vehicles, selectedVehicleId, updateCallback } = $props();
 
-	function selectVehicle(vehicleId: number) {
-		dispatch('vehicleSelect', { vehicleId });
-	}
-
-	function addVehicle() {
-		dispatch('addVehicle');
+	function selectVehicle(vehicleId: string) {
+		vehiclesStore.selectVehicle(vehicleId);
 	}
 </script>
 
@@ -30,13 +24,7 @@
 			class:ring-blue-500={selectedVehicleId === vehicle.id}
 			class="cursor-pointer rounded-2xl transition-all duration-300 ease-in-out"
 		>
-			<VehicleCard
-				{vehicle}
-				on:editVehicle={(e) => dispatch('editVehicle', e.detail)}
-				on:deleteVehicle={(e) => dispatch('deleteVehicle', e.detail)}
-				on:refillFuel={(e) => dispatch('refillFuel', e.detail)}
-				on:addMaintenance={(e) => dispatch('addMaintenance', e.detail)}
-			/>
+			<VehicleCard {vehicle} {updateCallback} />
 		</div>
 	{/each}
 </div>
