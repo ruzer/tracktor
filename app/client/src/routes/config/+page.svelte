@@ -5,10 +5,10 @@
 	let saveSuccess = false;
 
 	const dateFormatOptions = [
-		{ value: 'DD/MM/YYYY', label: 'DD/MM/YYYY (e.g., 31/12/2000)' },
-		{ value: 'MM/DD/YYYY', label: 'MM/DD/YYYY (e.g., 12/25/2000)' },
-		{ value: 'YYYY-MM-DD', label: 'YYYY-MM-DD (e.g., 2000-12-31)' },
-		{ value: 'DD MMM, YYYY', label: 'DD MMM, YYYY (e.g., 31 Dec, 2000)' }
+		{ value: 'dd/MM/yyyy', label: 'dd/MM/yyyy (e.g., 31/12/2000)' },
+		{ value: 'MM/dd/yyyy', label: 'MM/dd/yyyy (e.g., 12/25/2000)' },
+		{ value: 'yyyy-MM-dd', label: 'yyyy-MM-dd (e.g., 2000-12-31)' },
+		{ value: 'dd MMM, yyyy', label: 'dd MMM, yyyy (e.g., 31 Dec, 2000)' }
 	];
 
 	const currencyOptions = [

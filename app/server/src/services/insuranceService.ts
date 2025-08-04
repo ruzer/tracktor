@@ -51,11 +51,12 @@ export const getInsurances = async (vehicleId: string) => {
 
 export const updateInsurance = async (
   vehicleId: string,
+  id: string,
   insuranceData: any,
 ) => {
   try {
     const insurance = await Insurance.findOne({
-      where: { vehicleId: vehicleId },
+      where: { vehicleId: vehicleId, id },
     });
     if (!insurance) {
       throw new InsuranceNotFoundError();

@@ -10,7 +10,6 @@
     "dev": "lerna run dev --stream"
   },
   "devDependencies": {
-    "@types/chart.js": "^2.9.41",
     "lerna": "^8.2.3"
   }
 }

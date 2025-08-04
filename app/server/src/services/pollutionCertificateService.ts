@@ -58,11 +58,12 @@ export const getPollutionCertificates = async (vehicleId: string) => {
 
 export const updatePollutionCertificate = async (
   vehicleId: string,
+  id: string,
   pollutionCertificateData: any,
 ) => {
   try {
     const pollutionCertificate = await PollutionCertificate.findOne({
-      where: { vehicleId: vehicleId },
+      where: { vehicleId: vehicleId, id: id },
     });
     if (!pollutionCertificate) {
       throw new PollutionCertificateNotFoundError();
@@ -71,6 +72,7 @@ export const updatePollutionCertificate = async (
     await pollutionCertificate.update(pollutionCertificateData);
     return { message: "Pollution certificate updated successfully." };
   } catch (error: unknown) {
+    console.error(error);
     if (error instanceof PollutionCertificateNotFoundError) {
       throw error;
     }

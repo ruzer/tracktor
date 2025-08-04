@@ -49,7 +49,7 @@ const createVehiclesStore = () => {
 		selectedVehicleId: undefined
 	});
 
-	async function fetchVehicles() {
+	async function fetchVehicles(pin: string) {
 		let tempSelection: string | undefined = undefined;
 		update((current) => {
 			if (current.selectedVehicleId) {
@@ -66,7 +66,7 @@ const createVehiclesStore = () => {
 		try {
 			const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles`, {
 				headers: {
-					'X-User-PIN': localStorage.getItem('userPin') || ''
+					'X-User-PIN': pin || ''
 				}
 			});
 			if (response.ok) {
@@ -117,8 +117,6 @@ const createVehiclesStore = () => {
 			selectedVehicleId: vehicleId
 		}));
 	}
-
-	fetchVehicles();
 
 	return {
 		subscribe,
