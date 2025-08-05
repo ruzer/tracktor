@@ -8,7 +8,7 @@ export interface ConfigStore {
 }
 
 const configs: ConfigStore = {
-	dateFormat: 'DD/MM/YYYY',
+	dateFormat: 'dd/MM/yyyy',
 	currency: 'USD',
 	unitOfMeasure: 'metric'
 };

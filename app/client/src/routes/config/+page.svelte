@@ -20,7 +20,7 @@
 
 	const uomOptions = [
 		{ value: 'metric', label: 'Metric' },
-		{ value: 'Imperial', label: 'Imperial' }
+		{ value: 'imperial', label: 'Imperial' }
 	];
 
 	config.subscribe((value) => {
