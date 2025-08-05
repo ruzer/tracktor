@@ -1,7 +1,7 @@
 <script lang="ts">
-	import MaintenanceLogForm from './MaintenanceLogForm.svelte';
+	import FuelLogForm from '$components/forms/FuelLogForm.svelte';
 	import ModalContainer from '$components/common/ModalContainer.svelte';
-	import { maintenanceModelStore } from '$lib/stores/maintenance';
+	import { fuelLogModelStore } from '$lib/stores/fuel-log';
 
 	let logToEdit = $state<any>(null);
 	let showModal = $state(false);
@@ -10,7 +10,7 @@
 	let vehicleId = $state<string | undefined>(undefined);
 	let callback = $state<any>();
 
-	maintenanceModelStore.subscribe((data) => {
+	fuelLogModelStore.subscribe((data) => {
 		logToEdit = data.logToEdit;
 		showModal = data.show;
 		editMode = data.editMode;
@@ -20,21 +20,21 @@
 	});
 
 	function closeModal() {
-		maintenanceModelStore.hide();
+		fuelLogModelStore.hide();
 	}
 </script>
 
 {#if showModal}
 	<ModalContainer
-		onclose={closeModal}
-		title={editMode ? 'Edit Maintenance Log' : 'Add Maintenance Log'}
+		onclose={() => closeModal()}
+		title={editMode ? 'Edit Fuel Log' : 'Log Fuel Refill'}
 		{loading}
 	>
-		<MaintenanceLogForm
-			bind:modalVisibility={showModal}
-			bind:logToEdit
-			{editMode}
+		<FuelLogForm
 			{vehicleId}
+			{logToEdit}
+			{editMode}
+			bind:modalVisibility={showModal}
 			{callback}
 			{loading}
 		/>

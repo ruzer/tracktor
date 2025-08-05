@@ -1,8 +1,7 @@
 <script lang="ts">
 	import ModalContainer from '$components/common/ModalContainer.svelte';
 	import { insuranceModelStore } from '$lib/stores/insurance';
-	import { puccModelStore } from '$lib/stores/pucc';
-	import InsuranceForm from './InsuranceForm.svelte';
+	import InsuranceForm from '$components/forms/InsuranceForm.svelte';
 
 	let entryToEdit = $state<any>(null);
 	let showModal = $state(false);

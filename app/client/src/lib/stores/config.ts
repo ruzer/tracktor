@@ -63,4 +63,36 @@ const createConfigStore = () => {
 	};
 };
 
+const createConfigModalStore = () => {
+	const { subscribe, set } = writable<{
+		show: boolean;
+		callback?: any;
+	}>({
+		show: false,
+		callback: undefined
+	});
+
+	function show(
+		callback: any = undefined
+	) {
+		set({
+			show: true,
+			callback
+		});
+	}
+
+	function hide() {
+		set({
+			show: false
+		});
+	}
+
+	return {
+		subscribe,
+		show,
+		hide
+	};
+};
+
+export const configModelStore = createConfigModalStore();
 export const config = createConfigStore();

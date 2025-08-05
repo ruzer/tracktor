@@ -18,6 +18,7 @@
 	import { fuelLogModelStore } from '$lib/stores/fuel-log';
 	import { insuranceModelStore } from '$lib/stores/insurance';
 	import { puccModelStore } from '$lib/stores/pucc';
+	import { browser } from '$app/environment';
 
 	const { vehicle, updateCallback } = $props();
 
@@ -35,7 +36,7 @@
 			if (response.ok) {
 				alert('Vehicle deleted successfully.');
 				vehicleModelStore.hide();
-				vehiclesStore.fetchVehicles();
+				fetchVehicles();
 			} else {
 				const data = await response.json();
 				alert(data.message || 'Failed to delete vehicle.');
@@ -44,6 +45,13 @@
 			alert('Failed to connect to the server.');
 		}
 	}
+
+	const fetchVehicles = () => {
+		if (browser) {
+			const pin = localStorage.getItem('userPin') || undefined;
+			if (pin) vehiclesStore.fetchVehicles(pin);
+		}
+	};
 </script>
 
 <div

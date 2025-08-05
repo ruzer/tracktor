@@ -1,17 +1,17 @@
 <script lang="ts">
+	import MaintenanceLogForm from '$components/forms/MaintenanceLogForm.svelte';
 	import ModalContainer from '$components/common/ModalContainer.svelte';
-	import { puccModelStore } from '$lib/stores/pucc';
-	import PollutionCertificateForm from './PollutionCertificateForm.svelte';
+	import { maintenanceModelStore } from '$lib/stores/maintenance';
 
-	let entryToEdit = $state<any>(null);
+	let logToEdit = $state<any>(null);
 	let showModal = $state(false);
 	let editMode = $state(false);
 	let loading = $state(false);
 	let vehicleId = $state<string | undefined>(undefined);
 	let callback = $state<any>();
 
-	puccModelStore.subscribe((data) => {
-		entryToEdit = data.entryToEdit;
+	maintenanceModelStore.subscribe((data) => {
+		logToEdit = data.logToEdit;
 		showModal = data.show;
 		editMode = data.editMode;
 		vehicleId = data.vehicleId;
@@ -20,19 +20,19 @@
 	});
 
 	function closeModal() {
-		puccModelStore.hide();
+		maintenanceModelStore.hide();
 	}
 </script>
 
 {#if showModal}
 	<ModalContainer
 		onclose={closeModal}
-		title={editMode ? 'Edit Pollution Certificate' : 'Add Pollution Certificate'}
+		title={editMode ? 'Edit Maintenance Log' : 'Add Maintenance Log'}
 		{loading}
 	>
-		<PollutionCertificateForm
+		<MaintenanceLogForm
 			bind:modalVisibility={showModal}
-			bind:entryToEdit
+			bind:logToEdit
 			{editMode}
 			{vehicleId}
 			{callback}
