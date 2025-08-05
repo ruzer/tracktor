@@ -135,7 +135,7 @@
 	<FormField
 		id="cost"
 		type="number"
-		placeholder="Cost ( {getCurrencySymbol} )"
+		placeholder="Cost ( {getCurrencySymbol()} )"
 		bind:value={insurance.cost}
 		icon={BadgeDollarSign}
 		required={true}
