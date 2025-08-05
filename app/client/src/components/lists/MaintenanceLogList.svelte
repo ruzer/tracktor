@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
-	import { formatCurrency, formatDate } from '$lib/utils/formatting';
+	import { formatCurrency, formatDate, formatDistance } from '$lib/utils/formatting';
 	import { Pencil, Trash2 } from '@lucide/svelte';
 	import { maintenanceModelStore } from '$lib/stores/maintenance';
 
@@ -116,7 +116,7 @@
 				{#each maintenanceLogs as log (log.id)}
 					<tr class="border-b border-gray-200 last:border-b-0 dark:border-gray-700">
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{formatDate(log.date)}</td>
-						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{log.odometer}</td>
+						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{formatDistance(log.odometer)}</td>
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{log.service}</td>
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{formatCurrency(log.cost)}</td>
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{log.notes || '-'}</td>

@@ -8,6 +8,8 @@
 	import ThemeToggle from '$components/common/ThemeToggle.svelte';
 	import { env } from '$env/dynamic/public';
 	import { Jumper } from 'svelte-loading-spinners';
+	import { configModelStore } from '$lib/stores/config';
+	import { vehiclesStore } from '$lib/stores/vehicle';
 
 	let { children } = $props();
 
@@ -37,6 +39,13 @@
 			isAuthenticated = false;
 		}
 	}
+
+	const fetchVehicles = () => {
+		if (browser) {
+			const pin = localStorage.getItem('userPin') || undefined;
+			if (pin) vehiclesStore.fetchVehicles(pin);
+		}
+	};
 </script>
 
 <!-- Dark mode toggle, scrolls with screen -->
@@ -54,7 +63,7 @@
 {/if}
 {#if checkingAuth}
 	<div class="flex min-h-screen items-center justify-center bg-gray-50">
-		 <Jumper size="64" color="#155dfc" duration="2s" />
+		<Jumper size="64" color="#155dfc" duration="2s" />
 		<p class="text-lg text-gray-600">Loading...</p>
 	</div>
 {:else if isAuthenticated}
@@ -70,12 +79,18 @@
 				</a>
 				<div class="flex items-center justify-center gap-4 align-middle">
 					<ThemeToggle />
-					<a
-						href="/config"
+					<div
 						class="flex items-center gap-1 text-gray-600 transition-colors duration-300 hover:text-blue-500 dark:text-gray-300"
 					>
-						<Settings class="h-5 w-5" />
-					</a>
+						<Settings
+							class="h-5 w-5"
+							onclick={() => {
+								configModelStore.show((status: boolean) => {
+									fetchVehicles();
+								});
+							}}
+						/>
+					</div>
 					<div class="flex items-center gap-2">
 						<button
 							onclick={logout}
