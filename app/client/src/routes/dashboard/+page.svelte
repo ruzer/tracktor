@@ -16,6 +16,7 @@
 	import PollutionCertificateModal from '$components/modals/PollutionCertificateModal.svelte';
 	import InsuranceModal from '$components/modals/InsuranceModal.svelte';
 	import { browser } from '$app/environment';
+	import ConfigModal from '$components/modals/ConfigModal.svelte';
 
 	let vehicles = $state<Vehicle[]>([]);
 	let loading = $state(true);
@@ -106,4 +107,5 @@
 	<MaintenanceLogModal />
 	<PollutionCertificateModal />
 	<InsuranceModal />
+	<ConfigModal/>
 </div>
