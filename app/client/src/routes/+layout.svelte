@@ -7,6 +7,7 @@
 	import { LogOut, Tractor, Settings } from '@lucide/svelte';
 	import ThemeToggle from '$components/common/ThemeToggle.svelte';
 	import { env } from '$env/dynamic/public';
+	import { Jumper } from 'svelte-loading-spinners';
 
 	let { children } = $props();
 
@@ -53,7 +54,7 @@
 {/if}
 {#if checkingAuth}
 	<div class="flex min-h-screen items-center justify-center bg-gray-50">
-		<!-- You can replace this with a more sophisticated loading spinner -->
+		 <Jumper size="64" color="#155dfc" duration="2s" />
 		<p class="text-lg text-gray-600">Loading...</p>
 	</div>
 {:else if isAuthenticated}
@@ -86,7 +87,7 @@
 				</div>
 			</nav>
 		</header>
-		<main>
+		<main class="text-gray-600 dark:text-gray-100">
 			{@render children()}
 		</main>
 	</div>
