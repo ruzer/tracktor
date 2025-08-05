@@ -1,6 +1,6 @@
 <script lang="ts">
 	import TabContainer from '$components/common/TabContainer.svelte';
-	import FuelLogList from '$components/fuel/FuelLogList.svelte';
+	import FuelLogList from '$components/lists/FuelLogList.svelte';
 
 	let { vehicleId } = $props();
 </script>

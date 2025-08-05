@@ -15,6 +15,7 @@
 	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
 	import { simulateNetworkDelay } from '$lib/utils/dev';
 	import { vehiclesStore } from '$lib/stores/vehicle';
+	import { browser } from '$app/environment';
 
 	let { vehicleToEdit = null, editMode = false, modalVisibility = $bindable(), loading } = $props();
 
@@ -79,7 +80,7 @@
 					odometer: null
 				});
 				modalVisibility = false;
-				vehiclesStore.fetchVehicles(); // Refresh the vehicle list after closing the modal
+				fetchVehicles(); // Refresh the vehicle list after closing the modal
 			} else {
 				const data = await response.json();
 				status.message = data.message || `Failed to ${editMode ? 'update' : 'add'} vehicle.`;
@@ -91,6 +92,13 @@
 		}
 		loading = false;
 	}
+
+	const fetchVehicles = () => {
+		if (browser) {
+			const pin = localStorage.getItem('userPin') || undefined;
+			if (pin) vehiclesStore.fetchVehicles(pin);
+		}
+	};
 </script>
 
 <form

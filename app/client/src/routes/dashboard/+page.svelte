@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Plus } from '@lucide/svelte';
-	import FuelLogModal from '$components/fuel/FuelLogModal.svelte';
-	import VehicleModal from '$components/vehicle/VehicleModal.svelte';
-	import VehicleList from '$components/vehicle/VehicleList.svelte';
+	import FuelLogModal from '$components/modals/FuelLogModal.svelte';
+	import VehicleModal from '$components/modals/VehicleModal.svelte';
+	import VehicleList from '$components/lists/VehicleList.svelte';
 	import type { Vehicle } from '$lib/models/vehicle';
 	import { Jumper } from 'svelte-loading-spinners';
-	import MaintenanceLogModal from '$components/maintenance/MaintenanceLogModal.svelte';
+	import MaintenanceLogModal from '$components/modals/MaintenanceLogModal.svelte';
 	import TabHeader from '$components/tabs/TabHeader.svelte';
 	import DashboardTab from '$components/tabs/DashboardTab.svelte';
 	import FuelLogTab from '$components/tabs/FuelLogTab.svelte';
@@ -13,8 +13,8 @@
 	import InsuranceTab from '$components/tabs/InsuranceTab.svelte';
 	import PollutionTab from '$components/tabs/PollutionTab.svelte';
 	import { vehicleModelStore, vehiclesStore } from '$lib/stores/vehicle';
-	import PollutionCertificateModal from '$components/pucc/PollutionCertificateModal.svelte';
-	import InsuranceModal from '$components/insurance/InsuranceModal.svelte';
+	import PollutionCertificateModal from '$components/modals/PollutionCertificateModal.svelte';
+	import InsuranceModal from '$components/modals/InsuranceModal.svelte';
 	import { browser } from '$app/environment';
 
 	let vehicles = $state<Vehicle[]>([]);
