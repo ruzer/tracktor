@@ -28,7 +28,8 @@
 			return;
 		}
 		try {
-			const response = await fetch(`${env.PUBLIC_API_BASE_URL}/api/vehicles/${vehicleId}`, {
+			const response = await fetch(
+				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}`, {
 				method: 'DELETE',
 				headers: {
 					'X-User-PIN': localStorage.getItem('userPin') || ''
