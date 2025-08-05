@@ -19,6 +19,7 @@
 	import { insuranceModelStore } from '$lib/stores/insurance';
 	import { puccModelStore } from '$lib/stores/pucc';
 	import { browser } from '$app/environment';
+	import { env } from '$env/dynamic/public';
 
 	const { vehicle, updateCallback } = $props();
 
@@ -27,7 +28,7 @@
 			return;
 		}
 		try {
-			const response = await fetch(`http://localhost:3000/api/vehicles/${vehicleId}`, {
+			const response = await fetch(`${env.PUBLIC_API_BASE_URL}/api/vehicles/${vehicleId}`, {
 				method: 'DELETE',
 				headers: {
 					'X-User-PIN': localStorage.getItem('userPin') || ''
@@ -42,6 +43,7 @@
 				alert(data.message || 'Failed to delete vehicle.');
 			}
 		} catch (e) {
+			console.log(e);
 			alert('Failed to connect to the server.');
 		}
 	}

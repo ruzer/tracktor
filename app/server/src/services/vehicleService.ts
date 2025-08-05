@@ -93,6 +93,7 @@ export const deleteVehicle = async (id: string) => {
   try {
     const result = await Vehicle.destroy({
       where: { id: id },
+      cascade: true
     });
     if (result === 0) {
       throw new VehicleNotFoundError();
