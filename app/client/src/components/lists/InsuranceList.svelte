@@ -5,6 +5,7 @@
 	import { Shield, Calendar, Hash, DollarSign, Pencil, Trash2 } from '@lucide/svelte';
 	import { formatCurrency, formatDate } from '$lib/utils/formatting';
 	import { insuranceModelStore } from '$lib/stores/insurance';
+	import { Jumper } from 'svelte-loading-spinners';
 
 	let { vehicleId } = $props();
 
@@ -90,11 +91,13 @@
 </script>
 
 {#if loading}
-	<div class="text-gray-500 dark:text-gray-400">Loading insurance details...</div>
+	<p class="flex items-center justify-center gap-5 text-lg text-gray-500 dark:text-gray-400">
+		<Jumper size="100" color="#155dfc" unit="px" duration="2s" />
+	</p>
 {:else if error}
-	<div class="text-red-600 dark:text-red-400" role="alert">{error}</div>
+	<p class="text-red-500">Error: {error}</p>
 {:else if insurances.length === 0}
-	<div class="text-gray-500 dark:text-gray-400">No Insurance found for this vehicle.</div>
+	<div>No Insurance found for this vehicle.</div>
 {:else}
 	{#each insurances as ins (ins.id)}
 		<div

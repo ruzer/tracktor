@@ -3,13 +3,14 @@
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import '../styles/app.css';
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { LogOut, Tractor, Settings } from '@lucide/svelte';
 	import ThemeToggle from '$components/common/ThemeToggle.svelte';
 	import { env } from '$env/dynamic/public';
 	import { Jumper } from 'svelte-loading-spinners';
 	import { configModelStore } from '$lib/stores/config';
 	import { vehiclesStore } from '$lib/stores/vehicle';
+	import { darkModeStore } from '$lib/stores/dark-mode';
 
 	let { children } = $props();
 
@@ -62,9 +63,9 @@
 	</div>
 {/if}
 {#if checkingAuth}
-	<div class="flex min-h-screen items-center justify-center bg-gray-50">
+	<div class="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
 		<Jumper size="64" color="#155dfc" duration="2s" />
-		<p class="text-lg text-gray-600">Loading...</p>
+		<p class="text-lg text-gray-600">Validating Auth...</p>
 	</div>
 {:else if isAuthenticated}
 	<div class="min-h-screen bg-gray-100 transition-colors dark:bg-gray-900">
