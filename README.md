@@ -123,3 +123,7 @@ Contributions are welcome! Please read the [contributing guidelines](app/docs/co
 
 
 This project is licensed under the ISC License. See the [LICENSE](LICENSE) file for details.
+
+## ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=javedh-dev/tracktor&type=Timeline)](https://www.star-history.com/#javedh-dev/tracktor&Timeline)
