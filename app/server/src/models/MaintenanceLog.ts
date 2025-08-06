@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
-import sequelize from "../config/database.js";
+import { db } from "../db/index.js";
 import Vehicle from "./Vehicle.js";
 
 interface MaintenanceLogAttributes {
@@ -13,12 +13,11 @@ interface MaintenanceLogAttributes {
 }
 
 interface MaintenanceLogCreationAttributes
-  extends Optional<MaintenanceLogAttributes, "id"> {}
+  extends Optional<MaintenanceLogAttributes, "id"> { }
 
 class MaintenanceLog
   extends Model<MaintenanceLogAttributes, MaintenanceLogCreationAttributes>
-  implements MaintenanceLogAttributes
-{
+  implements MaintenanceLogAttributes {
   declare public id: string;
   declare public vehicleId: string;
   declare public date: string;
@@ -86,7 +85,7 @@ MaintenanceLog.init(
     tableName: "maintenance_logs",
     timestamps: true,
     underscored: true,
-    sequelize,
+    sequelize: db,
   },
 );
 

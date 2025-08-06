@@ -11,7 +11,7 @@ POST http://localhost:3000/api/pin/verify
 Content-Type: application/json
 
 {
-  "pin": "123456"
+  "pin": "553388"
 }
 
 ### Pin Status

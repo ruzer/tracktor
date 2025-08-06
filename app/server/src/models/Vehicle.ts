@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
-import sequelize from "../config/database.js";
+import { db } from "../db/index.js";
 
 interface VehicleAttributes {
   id: string;
@@ -12,12 +12,11 @@ interface VehicleAttributes {
   odometer?: number;
 }
 
-interface VehicleCreationAttributes extends Optional<VehicleAttributes, "id"> {}
+interface VehicleCreationAttributes extends Optional<VehicleAttributes, "id"> { }
 
 class Vehicle
   extends Model<VehicleAttributes, VehicleCreationAttributes>
-  implements VehicleAttributes
-{
+  implements VehicleAttributes {
   declare public id: string;
   declare public make: string;
   declare public model: string;
@@ -90,7 +89,7 @@ Vehicle.init(
     tableName: "vehicles",
     timestamps: true,
     underscored: true,
-    sequelize,
+    sequelize: db,
   },
 );
 

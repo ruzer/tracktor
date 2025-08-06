@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
-import sequelize from "../config/database.js";
+import { db } from "../db/index.js";
 import Vehicle from "./Vehicle.js";
 
 interface PollutionCertificateAttributes {
@@ -13,15 +13,14 @@ interface PollutionCertificateAttributes {
 }
 
 interface PollutionCertificateCreationAttributes
-  extends Optional<PollutionCertificateAttributes, "id"> {}
+  extends Optional<PollutionCertificateAttributes, "id"> { }
 
 class PollutionCertificate
   extends Model<
     PollutionCertificateAttributes,
     PollutionCertificateCreationAttributes
   >
-  implements PollutionCertificateAttributes
-{
+  implements PollutionCertificateAttributes {
   declare public id: string;
   declare public vehicleId: string;
   declare public certificateNumber: string;
@@ -82,10 +81,10 @@ PollutionCertificate.init(
     },
   },
   {
-    sequelize,
     tableName: "pollution_certificates",
     timestamps: true,
     underscored: true,
+    sequelize: db
   },
 );
 

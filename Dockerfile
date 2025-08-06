@@ -18,7 +18,6 @@ COPY app/server/ ./
 ENV NODE_ENV=production
 ENV DB_PATH=./vehicles.db
 RUN npm run build
-RUN npm run seed
 
 # Stage 3: Final production image
 FROM node:22-alpine
@@ -28,7 +27,6 @@ WORKDIR /app
 COPY --from=backend-builder /app/server/dist ./server/dist
 COPY --from=backend-builder /app/server/node_modules ./server/node_modules
 COPY --from=backend-builder /app/server/package.json ./server/package.json
-COPY --from=backend-builder /app/server/vehicles.db /data/vehicles.db
 
 # Copy built frontend from frontend-builder stage
 COPY --from=frontend-builder /app/client/build ./server/client/build
