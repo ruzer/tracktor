@@ -13,7 +13,7 @@
 	}
 </script>
 
-<div class="flex min-h-screen items-center justify-center gap-10 bg-gray-50">
+<div class="flex min-h-screen items-center justify-center gap-10 bg-gray-100 dark:bg-gray-900">
 	<Jumper size="64" color="#155dfc" duration="2s" />
 	<p class="text-lg text-gray-600 dark:text-gray-100">Redirecting...</p>
 </div>

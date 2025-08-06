@@ -11,6 +11,7 @@
 	} from '$lib/utils/formatting';
 
 	import { fuelLogModelStore } from '$lib/stores/fuel-log';
+	import { Jumper } from 'svelte-loading-spinners';
 
 	const { vehicleId } = $props();
 
@@ -94,7 +95,9 @@
 </script>
 
 {#if loading}
-	<p>Loading fuel logs...</p>
+	<p class="flex items-center justify-center gap-5 text-lg text-gray-500 dark:text-gray-400">
+		<Jumper size="100" color="#155dfc" unit="px" duration="2s" />
+	</p>
 {:else if error}
 	<p class="text-red-500">Error: {error}</p>
 {:else if fuelLogs.length === 0}

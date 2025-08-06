@@ -4,7 +4,7 @@
 	import PinInput from '$components/auth/PinInput.svelte';
 	import ThemeToggle from '$components/common/ThemeToggle.svelte';
 	import { env } from '$env/dynamic/public';
-	import { Tractor } from '@lucide/svelte';
+	import { ShieldEllipsis, ShieldPlus, Tractor } from '@lucide/svelte';
 	import { DoubleBounce, Jumper, Shadow } from 'svelte-loading-spinners';
 	import { simulateNetworkDelay } from '$lib/utils/dev';
 
@@ -16,12 +16,6 @@
 	// If the user is already logged in, redirect to the dashboard.
 	$effect(() => {
 		if (browser) {
-			const localPin = localStorage.getItem('userPin');
-			if (localPin) {
-				goto('/dashboard', { replaceState: true });
-				return;
-			}
-
 			// Check if PIN exists on the server
 			async function checkPinStatus() {
 				try {
@@ -39,44 +33,52 @@
 				}
 			}
 			checkPinStatus();
+			const localPin = localStorage.getItem('userPin');
+			if (localPin) {
+				endpointCall(localPin, true);
+				return;
+			}
 		}
 	});
 
 	async function handlePinComplete(pin: string) {
 		loading = true;
 		error = '';
-		await simulateNetworkDelay(1000); // Simulate network delay for development
+		// await simulateNetworkDelay(1000); // Simulate network delay for development
 		try {
-			const endpoint = pinExists ? '/api/pin/verify' : '/api/pin';
-			const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}${endpoint}`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ pin })
-			});
-
-			if (response.ok) {
-				// Store PIN and redirect
-				if (browser) {
-					localStorage.setItem('userPin', pin);
-				}
-				goto('/dashboard', { replaceState: true });
-			} else {
-				const data = await response.json();
-				error =
-					data.message || (pinExists ? 'Invalid PIN. Please try again.' : 'Failed to set PIN.');
-			}
+			await endpointCall(pin, pinExists);
 		} catch (e) {
 			error = 'Failed to connect to the server. Please check your connection.';
 		} finally {
 			loading = false;
 		}
 	}
+
+	const endpointCall = async (pin: string, verify = true) => {
+		const endpoint = verify ? '/api/pin/verify' : '/api/pin';
+		const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}${endpoint}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ pin })
+		});
+
+		if (response.ok) {
+			// Store PIN and redirect
+			if (browser) {
+				localStorage.setItem('userPin', pin);
+			}
+			goto('/dashboard', { replaceState: true });
+		} else {
+			const data = await response.json();
+			error = data.message || (pinExists ? 'Invalid PIN. Please try again.' : 'Failed to set PIN.');
+		}
+	};
 </script>
 
 <div
-	class="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4 transition-colors dark:bg-gray-900"
+	class="flex min-h-screen flex-col items-center justify-center bg-gray-100 p-4 transition-colors dark:bg-gray-900"
 >
 	<div class="absolute top-4 right-4">
 		<ThemeToggle />
@@ -95,12 +97,18 @@
 		{#if checkingPinStatus}
 			<p class="mb-6 text-center text-gray-600 dark:text-gray-300">Checking PIN status...</p>
 		{:else if pinExists}
-			<p class="mb-6 text-center text-gray-600 dark:text-gray-300">
-				Enter your 6-digit PIN to access your dashboard.
+			<p
+				class="mb-6 flex items-center justify-center gap-2 text-center text-gray-600 dark:text-gray-300"
+			>
+				<ShieldEllipsis class="h-8 w-8" />
+				Enter your 6-digit PIN to access Tracktor
 			</p>
 		{:else}
-			<p class="mb-6 text-center text-gray-600 dark:text-gray-300">
-				Set your 6-digit PIN to secure your dashboard.
+			<p
+				class="mb-6 flex items-center justify-center gap-2 text-center text-gray-600 dark:text-gray-300"
+			>
+				<ShieldPlus class="h-8 w-8" />
+				Set your 6-digit PIN for Tracktor
 			</p>
 		{/if}
 

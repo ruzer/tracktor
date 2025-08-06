@@ -5,6 +5,7 @@
 	import { formatCurrency, formatDate, formatDistance } from '$lib/utils/formatting';
 	import { Pencil, Trash2 } from '@lucide/svelte';
 	import { maintenanceModelStore } from '$lib/stores/maintenance';
+	import { Jumper } from 'svelte-loading-spinners';
 
 	let { vehicleId } = $props();
 
@@ -90,11 +91,13 @@
 </script>
 
 {#if loading}
-	<div class="text-gray-500 dark:text-gray-400">Loading maintenance logs...</div>
+	<p class="flex items-center justify-center gap-5 text-lg text-gray-500 dark:text-gray-400">
+		<Jumper size="100" color="#155dfc" unit="px" duration="2s" />
+	</p>
 {:else if error}
-	<div class="text-red-600 dark:text-red-400" role="alert">{error}</div>
+	<p class="text-red-500">Error: {error}</p>
 {:else if maintenanceLogs.length === 0}
-	<div class="text-gray-500 dark:text-gray-400">No maintenance logs for this vehicle.</div>
+	<div>No maintenance logs for this vehicle.</div>
 {:else}
 	<div class="overflow-x-auto">
 		<table class="min-w-full overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">
@@ -116,7 +119,9 @@
 				{#each maintenanceLogs as log (log.id)}
 					<tr class="border-b border-gray-200 last:border-b-0 dark:border-gray-700">
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{formatDate(log.date)}</td>
-						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{formatDistance(log.odometer)}</td>
+						<td class="px-4 py-2 text-gray-900 dark:text-gray-100"
+							>{formatDistance(log.odometer)}</td
+						>
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{log.service}</td>
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{formatCurrency(log.cost)}</td>
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{log.notes || '-'}</td>

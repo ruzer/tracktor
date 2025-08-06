@@ -1,6 +1,8 @@
+import { goto, replaceState } from '$app/navigation';
 import { env } from '$env/dynamic/public';
 import type { Vehicle } from '$lib/models/vehicle';
 import { simulateNetworkDelay } from '$lib/utils/dev';
+import { redirect } from '@sveltejs/kit';
 import { writable } from 'svelte/store';
 
 const createVehicleModalStore = () => {
@@ -86,6 +88,9 @@ const createVehiclesStore = () => {
 					});
 				}
 			} else {
+				if (response.status == 401) {
+					goto("/login", { replaceState: true });
+				}
 				console.log('Failed to fetch vehicles', response);
 				const data = await response.json();
 				const error = data.message || 'Failed to fetch vehicles.';
@@ -94,6 +99,7 @@ const createVehiclesStore = () => {
 					error,
 					vehicles: []
 				});
+				return;
 			}
 		} catch (e) {
 			console.error('Failed to connect to the server.', e);
@@ -102,6 +108,7 @@ const createVehiclesStore = () => {
 				error: 'Failed to connect to the server.',
 				vehicles: []
 			});
+			return;
 		}
 		update((current) => ({
 			loading: current.loading,

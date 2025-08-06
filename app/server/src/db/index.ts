@@ -34,8 +34,8 @@ const seedData = async () => {
 }
 
 const setupPinAndConfigs = async () => {
-  const pin = process.env.AUTH_PIN || '123456'
-  await generatePin(pin);
+  const pin = process.env.AUTH_PIN
+  if (pin) await generatePin(pin);
   await generateConfigs();
 }
 
