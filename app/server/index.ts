@@ -1,15 +1,9 @@
 import express from "express";
 import cors from "cors";
-import swaggerUi from "swagger-ui-express";
-import swaggerSpec from "./swagger.js";
-
-import sequelize from "./src/config/database.js";
 import pinRoutes from "./src/routes/pinRoutes.js";
 import vehicleRoutes from "./src/routes/vehicleRoutes.js";
 import configRoutes from "./src/routes/configRoutes.js";
-import { config } from "dotenv";
-
-config({ quiet: true });
+import { performDbMigrations, seedData } from "./src/db/index.js";
 
 const app = express();
 const PORT = Number(process.env.APP_PORT) || 3000;
@@ -18,10 +12,6 @@ const HOST = process.env.HOST || "0.0.0.0";
 app.use(cors());
 app.use(express.json());
 
-// Serve Swagger UI
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// Use the route files
 app.use("/api", pinRoutes);
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/config", configRoutes);
@@ -37,16 +27,19 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Synchronize Sequelize models with the database
-sequelize
-  .sync()
+performDbMigrations()
   .then(() => {
-    console.log("Database & tables created!");
-    // Start the server after database synchronization
-    app.listen(PORT, HOST, () => {
-      console.log(`Server running @ http://${HOST}:${PORT}`);
-    });
+    console.log("DB Migration is Successfull!!!");
+    seedData().then(() => {
+      console.log("Data Seeded Successfully!!!");
+      app.listen(PORT, HOST, () => {
+        console.log(`🖥️ Server running @ http://${HOST}:${PORT}`);
+      });
+    }).catch((err) => {
+      console.error("Error while seeding : ", err);
+    })
+
   })
   .catch((err) => {
-    console.error("Error syncing database:", err);
+    console.error("Error while running db migrations : ", err);
   });

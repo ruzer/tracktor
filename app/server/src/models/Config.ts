@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
-import sequelize from "../config/database.js";
+import { db } from "../db/index.js";
 
 interface ConfigAttributes {
   key: string;
@@ -7,12 +7,11 @@ interface ConfigAttributes {
   description?: string;
 }
 
-interface ConfigCreationAttributes extends Optional<ConfigAttributes, "key"> {}
+interface ConfigCreationAttributes extends Optional<ConfigAttributes, "key"> { }
 
 class Config
   extends Model<ConfigAttributes, ConfigCreationAttributes>
-  implements ConfigAttributes
-{
+  implements ConfigAttributes {
   declare public key: string;
   declare public value: string;
   declare public description: string;
@@ -41,7 +40,7 @@ Config.init(
     tableName: "config",
     timestamps: true,
     underscored: true,
-    sequelize,
+    sequelize: db,
   },
 );
 
