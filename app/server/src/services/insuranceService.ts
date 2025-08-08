@@ -22,6 +22,7 @@ export const addInsurance = async (vehicleId: string, insuranceData: any) => {
       message: "Insurance details added successfully.",
     };
   } catch (error: unknown) {
+    console.error("Error adding fuel log: ", error);
     if (error instanceof UniqueConstraintError) {
       throw new InsuranceExistsError();
     }
@@ -42,6 +43,7 @@ export const getInsurances = async (vehicleId: string) => {
     }
     return insurance;
   } catch (error: unknown) {
+    console.error("Error getting insurance: ", error);
     if (error instanceof InsuranceNotFoundError) {
       throw error;
     }

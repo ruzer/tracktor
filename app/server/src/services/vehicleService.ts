@@ -1,5 +1,9 @@
-import { VehicleExistsError, VehicleServiceError, VehicleNotFoundError } from "../exceptions/VehicleErrors.js";
-import { Vehicle } from "../models/index.js";
+import {
+  VehicleExistsError,
+  VehicleServiceError,
+  VehicleNotFoundError,
+} from "../exceptions/VehicleErrors.js";
+import { Insurance, PollutionCertificate, Vehicle } from "../models/index.js";
 import { UniqueConstraintError } from "sequelize";
 
 export const addVehicle = async (vehicleData: any) => {
@@ -19,31 +23,46 @@ export const getAllVehicles = async () => {
   try {
     const vehicles = await Vehicle.findAll({
       include: [
-        { association: 'insurance' },
-        { association: 'pollutionCertificate' }
-      ]
+        { association: "insurance" },
+        { association: "pollutionCertificate" },
+      ],
     });
 
-    return vehicles.map(vehicle => {
-      const insurance = (vehicle as any).insurance;
-      const pollutionCertificate = (vehicle as any).pollutionCertificate;
+    // console.log(JSON.stringify(vehicles, null, 4));
+
+    return vehicles.map((vehicle) => {
+      const insurances: Insurance[] = (vehicle as any).insurance;
+      const pollutionCertificates: PollutionCertificate[] = (vehicle as any)
+        .pollutionCertificate;
 
       let insuranceStatus = "N/A";
-      if (insurance) {
-        const endDate = new Date(insurance.endDate);
-        insuranceStatus = endDate > new Date() ? "Active" : "Expired";
+      if (insurances && insurances.length > 0) {
+        insuranceStatus = "Expired";
+        insurances.forEach((insurance) => {
+          const endDate = new Date(insurance.endDate);
+          const today = new Date();
+          if (endDate > today) {
+            insuranceStatus = "Active";
+          }
+        });
       }
 
       let puccStatus = "N/A";
-      if (pollutionCertificate) {
-        const expiryDate = new Date(pollutionCertificate.expiryDate);
-        puccStatus = expiryDate > new Date() ? "Active" : "Expired";
+      if (pollutionCertificates && pollutionCertificates.length > 0) {
+        puccStatus = "Expired";
+        pollutionCertificates.forEach((pucc) => {
+          const expiryDate = new Date(pucc.expiryDate);
+          const today = new Date();
+          if (expiryDate > today) {
+            puccStatus = "Active";
+          }
+        });
       }
 
       return {
         ...vehicle.toJSON(),
         insuranceStatus,
-        puccStatus
+        puccStatus,
       };
     });
   } catch (error: unknown) {
@@ -93,7 +112,7 @@ export const deleteVehicle = async (id: string) => {
   try {
     const result = await Vehicle.destroy({
       where: { id: id },
-      cascade: true
+      cascade: true,
     });
     if (result === 0) {
       throw new VehicleNotFoundError();

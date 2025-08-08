@@ -1,6 +1,8 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "../db/index.js";
 import Vehicle from "./Vehicle.js";
+import { VehicleServiceError } from "../exceptions/VehicleErrors.js";
+import { FuelLogError } from "../exceptions/FuelLogError.js";
 
 interface FuelLogAttributes {
   id: string;
@@ -12,11 +14,12 @@ interface FuelLogAttributes {
   notes?: string;
 }
 
-interface FuelLogCreationAttributes extends Optional<FuelLogAttributes, "id"> { }
+interface FuelLogCreationAttributes extends Optional<FuelLogAttributes, "id"> {}
 
 class FuelLog
   extends Model<FuelLogAttributes, FuelLogCreationAttributes>
-  implements FuelLogAttributes {
+  implements FuelLogAttributes
+{
   declare public id: string;
   declare public vehicleId: string;
   declare public date: string;
@@ -45,36 +48,63 @@ FuelLog.init(
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
-      validate: {
-        isDate: true,
-        notEmpty: true,
-      },
     },
     odometer: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        isInt: true,
-        min: 0,
+        async validateOdometer(value: number) {
+          const maxOdometer: number = await FuelLog.max("odometer", {
+            where: {
+              vehicleId: this.vehicleId as string,
+            },
+          });
+
+          const vehicle = await Vehicle.findOne({
+            where: {
+              id: this.vehicleId as string,
+            },
+            attributes: ["odometer"],
+          });
+
+          const vehicleOdometer = vehicle?.odometer || 0;
+
+          if (value <= maxOdometer || value <= vehicleOdometer) {
+            throw new FuelLogError(
+              "Odometer Reading must be greater than current vehicle odometer.",
+            );
+          }
+        },
       },
     },
     fuelAmount: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      validate: {
+        min: {
+          args: [0],
+          msg: "Fuel Amount must be greater than 0.",
+        },
+      },
     },
     cost: {
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        isFloat: true,
-        min: 0,
+        min: {
+          args: [0],
+          msg: "Fuel Amount must be greater than 0.",
+        },
       },
     },
     notes: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        len: [0, 500],
+        len: {
+          args: [0, 500],
+          msg: "Notes must be lesser than 500 length.",
+        },
       },
     },
   },

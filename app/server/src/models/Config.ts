@@ -7,11 +7,12 @@ interface ConfigAttributes {
   description?: string;
 }
 
-interface ConfigCreationAttributes extends Optional<ConfigAttributes, "key"> { }
+interface ConfigCreationAttributes extends Optional<ConfigAttributes, "key"> {}
 
 class Config
   extends Model<ConfigAttributes, ConfigCreationAttributes>
-  implements ConfigAttributes {
+  implements ConfigAttributes
+{
   declare public key: string;
   declare public value: string;
   declare public description: string;
@@ -27,13 +28,11 @@ Config.init(
     },
     value: {
       type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: "",
+      allowNull: false,
     },
     description: {
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: "",
     },
   },
   {
