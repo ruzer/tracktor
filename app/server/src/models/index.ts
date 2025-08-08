@@ -7,10 +7,10 @@ import Auth from "./Auth.js";
 import Config from "./Config.js";
 
 // Associations
-Vehicle.hasOne(Insurance, { foreignKey: "vehicleId", as: "insurance" });
+Vehicle.hasMany(Insurance, { foreignKey: "vehicleId", as: "insurance" });
 Insurance.belongsTo(Vehicle, { foreignKey: "vehicleId", as: "vehicle" });
 
-Vehicle.hasOne(PollutionCertificate, {
+Vehicle.hasMany(PollutionCertificate, {
   foreignKey: "vehicleId",
   as: "pollutionCertificate",
 });

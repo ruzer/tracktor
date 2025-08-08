@@ -20,12 +20,12 @@
 	let { vehicleToEdit = null, editMode = false, modalVisibility = $bindable(), loading } = $props();
 
 	const vehicle: NewVehicle = $state({
-		make: '',
-		model: '',
+		make: null,
+		model: null,
 		year: null,
-		licensePlate: '',
-		vin: '',
-		color: '',
+		licensePlate: null,
+		vin: null,
+		color: null,
 		odometer: null
 	});
 

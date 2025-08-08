@@ -101,7 +101,7 @@
 {:else}
 	{#each insurances as ins (ins.id)}
 		<div
-			class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+			class="mt-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
 		>
 			<div class="flex items-center justify-between">
 				<div class="flex items-center gap-2">
