@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "../db/index.js";
+import { VehicleExistsError, VehicleServiceError } from "../exceptions/VehicleErrors.js";
 
 interface VehicleAttributes {
   id: string;
@@ -39,14 +40,20 @@ Vehicle.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        len: {
+          args: [3, 50],
+          msg: "Manufacturer must be between length 3 to 50."
+        }
       },
     },
     model: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        len: {
+          args: [3, 50],
+          msg: "Model must be between length 3 to 50."
+        }
       },
     },
     year: {
@@ -54,8 +61,14 @@ Vehicle.init(
       allowNull: false,
       validate: {
         isInt: true,
-        min: 1886, // The year the first car was invented
-        max: new Date().getFullYear() + 1,
+        min: {
+          args: [1886],
+          msg: "Year should be grater than 1886(when first car was invented)."
+        },
+        max: {
+          args: [new Date().getFullYear()],
+          msg: "Year should be less than current year."
+        },
       },
     },
     licensePlate: {
@@ -63,25 +76,53 @@ Vehicle.init(
       allowNull: false,
       unique: true,
       validate: {
-        notEmpty: true,
-        len: [1, 15], // Assuming a maximum length for license plates
+        is: {
+          args: "^[A-Z0-9\- ]{2,10}$",
+          msg: "Licence Plate format is incorrect."
+        }
       },
     },
     vin: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: true,
+      validate: {
+        is: {
+          args: "^[A-HJ-NPR-Z0-9]{17}$",
+          msg: "VIN number format is incorrect."
+        },
+        async isUnique(value: string) {
+          if (!value) return;
+          const existingVehicles = await db.getQueryInterface().select(null, "vehicles", {
+            where: {
+              vin: value
+            }
+          });
+          if (existingVehicles.length > 0) {
+            throw new VehicleExistsError();
+          }
+        }
+      }
+
     },
     color: {
       type: DataTypes.STRING,
       allowNull: true,
+      validate: {
+        is: {
+          args: "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          msg: "Only hex color codes are allowed."
+        }
+      }
     },
     odometer: {
       type: DataTypes.INTEGER,
       allowNull: true,
       validate: {
         isInt: true,
-        min: 0, // Odometer cannot be negative
+        min: {
+          args: [0],
+          msg: "Odometer must always be non negative."
+        }
       },
     },
   },
