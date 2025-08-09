@@ -1,8 +1,5 @@
-import {
-  InsuranceNotFoundError,
-  InsuranceExistsError,
-  InsuranceServiceError,
-} from "../exceptions/InsuranceError.js";
+import { InsuranceError } from "../exceptions/InsuranceError.js";
+import { Status, statusFromError } from "../exceptions/ServiceError.js";
 import { Insurance, Vehicle } from "../models/index.js";
 import { UniqueConstraintError } from "sequelize";
 
@@ -10,9 +7,11 @@ export const addInsurance = async (vehicleId: string, insuranceData: any) => {
   try {
     const vehicle = await Vehicle.findByPk(vehicleId);
     if (!vehicle) {
-      throw new InsuranceNotFoundError("Vehicle not found.");
+      throw new InsuranceError(
+        `No Vehicle found for id : ${vehicleId}`,
+        Status.NOT_FOUND,
+      );
     }
-
     const insurance = await Insurance.create({
       ...insuranceData,
       vehicleId: vehicleId,
@@ -21,15 +20,9 @@ export const addInsurance = async (vehicleId: string, insuranceData: any) => {
       id: insurance.id,
       message: "Insurance details added successfully.",
     };
-  } catch (error: unknown) {
-    console.error("Error adding fuel log: ", error);
-    if (error instanceof UniqueConstraintError) {
-      throw new InsuranceExistsError();
-    }
-    if (error instanceof InsuranceNotFoundError) {
-      throw error;
-    }
-    throw new InsuranceServiceError("Error adding insurance details.");
+  } catch (error: any) {
+    console.error("Add Insurance: ", error);
+    throw new InsuranceError(error.message, statusFromError(error));
   }
 };
 
@@ -39,15 +32,15 @@ export const getInsurances = async (vehicleId: string) => {
       where: { vehicleId: vehicleId },
     });
     if (!insurance) {
-      throw new InsuranceNotFoundError();
+      throw new InsuranceError(
+        `No Insurances found for vehicle id : ${vehicleId}`,
+        Status.NOT_FOUND,
+      );
     }
     return insurance;
-  } catch (error: unknown) {
-    console.error("Error getting insurance: ", error);
-    if (error instanceof InsuranceNotFoundError) {
-      throw error;
-    }
-    throw new InsuranceServiceError("Error fetching insurance details.");
+  } catch (error: any) {
+    console.error("Get Insurances: ", error);
+    throw new InsuranceError(error.message, statusFromError(error));
   }
 };
 
@@ -61,32 +54,32 @@ export const updateInsurance = async (
       where: { vehicleId: vehicleId, id },
     });
     if (!insurance) {
-      throw new InsuranceNotFoundError();
+      throw new InsuranceError(
+        `No Insurances found for id: ${id}`,
+        Status.NOT_FOUND,
+      );
     }
-
     await insurance.update(insuranceData);
     return { message: "Insurance details updated successfully." };
-  } catch (error: unknown) {
-    if (error instanceof InsuranceNotFoundError) {
-      throw error;
-    }
-    throw new InsuranceServiceError("Error updating insurance details.");
+  } catch (error: any) {
+    console.error("Update Insurance: ", error);
+    throw new InsuranceError(error.message, statusFromError(error));
   }
 };
 
-export const deleteInsurance = async (vehicleId: string) => {
+export const deleteInsurance = async (id: string) => {
   try {
     const result = await Insurance.destroy({
-      where: { vehicleId: vehicleId },
+      where: { id },
     });
     if (result === 0) {
-      throw new InsuranceNotFoundError();
+      throw new InsuranceError(
+        `No Insurances found for id: ${id}`,
+        Status.NOT_FOUND,
+      );
     }
     return { message: "Insurance details deleted successfully." };
-  } catch (error: unknown) {
-    if (error instanceof InsuranceNotFoundError) {
-      throw error;
-    }
-    throw new InsuranceServiceError("Error deleting insurance details.");
+  } catch (error: any) {
+    throw new InsuranceError(error.message, statusFromError(error));
   }
 };

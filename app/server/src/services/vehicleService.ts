@@ -1,21 +1,14 @@
-import {
-  VehicleExistsError,
-  VehicleServiceError,
-  VehicleNotFoundError,
-} from "../exceptions/VehicleErrors.js";
+import { Status, statusFromError } from "../exceptions/ServiceError.js";
+import { VehicleError } from "../exceptions/VehicleError.js";
 import { Insurance, PollutionCertificate, Vehicle } from "../models/index.js";
-import { UniqueConstraintError } from "sequelize";
 
 export const addVehicle = async (vehicleData: any) => {
   try {
     const vehicle = await Vehicle.create(vehicleData);
     return { id: vehicle.id, message: "Vehicle added successfully." };
-  } catch (error: unknown) {
-    console.error("Error adding vehicle: ", error);
-    if (error instanceof UniqueConstraintError) {
-      throw new VehicleExistsError();
-    }
-    throw new VehicleServiceError("Error adding vehicle.");
+  } catch (error: any) {
+    console.error("Add vehicle: ", error);
+    throw new VehicleError(error.message, statusFromError(error));
   }
 };
 
@@ -27,8 +20,6 @@ export const getAllVehicles = async () => {
         { association: "pollutionCertificate" },
       ],
     });
-
-    // console.log(JSON.stringify(vehicles, null, 4));
 
     return vehicles.map((vehicle) => {
       const insurances: Insurance[] = (vehicle as any).insurance;
@@ -65,9 +56,9 @@ export const getAllVehicles = async () => {
         puccStatus,
       };
     });
-  } catch (error: unknown) {
-    console.error("Error fetching vehicles: ", error);
-    throw new VehicleServiceError("Error fetching vehicles.");
+  } catch (error: any) {
+    console.error("Get vehicles: ", error);
+    throw new VehicleError(error.message, statusFromError(error));
   }
 };
 
@@ -75,15 +66,15 @@ export const getVehicleById = async (id: string) => {
   try {
     const vehicle = await Vehicle.findByPk(id);
     if (!vehicle) {
-      throw new VehicleNotFoundError();
+      throw new VehicleError(
+        `No vehicle found for id : ${id}`,
+        Status.NOT_FOUND,
+      );
     }
     return vehicle;
-  } catch (error: unknown) {
-    console.error(`Error fetching vehicle(${id}):`, error);
-    if (error instanceof VehicleNotFoundError) {
-      throw error;
-    }
-    throw new VehicleServiceError("Error fetching vehicle.");
+  } catch (error: any) {
+    console.error(`Get vehicle:`, error);
+    throw new VehicleError(error.message, statusFromError(error));
   }
 };
 
@@ -91,20 +82,17 @@ export const updateVehicle = async (id: string, vehicleData: any) => {
   try {
     const vehicle = await Vehicle.findByPk(id);
     if (!vehicle) {
-      throw new VehicleNotFoundError();
+      throw new VehicleError(
+        `No vehicle found for id : ${id}`,
+        Status.NOT_FOUND,
+      );
     }
 
     await vehicle.update(vehicleData);
     return { message: "Vehicle updated successfully." };
-  } catch (error: unknown) {
-    console.error(`Error updating vehicle(${id}):`, error);
-    if (error instanceof UniqueConstraintError) {
-      throw new VehicleExistsError();
-    }
-    if (error instanceof VehicleNotFoundError) {
-      throw error;
-    }
-    throw new VehicleServiceError("Error updating vehicle.");
+  } catch (error: any) {
+    console.error(`Update vehicle:`, error);
+    throw new VehicleError(error.message, statusFromError(error));
   }
 };
 
@@ -115,14 +103,14 @@ export const deleteVehicle = async (id: string) => {
       cascade: true,
     });
     if (result === 0) {
-      throw new VehicleNotFoundError();
+      throw new VehicleError(
+        `No vehicle found for id : ${id}`,
+        Status.NOT_FOUND,
+      );
     }
     return { message: "Vehicle deleted successfully." };
-  } catch (error: unknown) {
-    console.error(`Error deleting vehicle(${id}):`, error);
-    if (error instanceof VehicleNotFoundError) {
-      throw error;
-    }
-    throw new VehicleServiceError("Error deleting vehicle.");
+  } catch (error: any) {
+    console.error(`Delete vehicle:`, error);
+    throw new VehicleError(error.message, statusFromError(error));
   }
 };

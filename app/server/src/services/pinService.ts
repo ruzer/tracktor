@@ -1,7 +1,7 @@
-
 import bcrypt from "bcrypt";
-import {Auth} from "../models/index.js";
-import { PinError } from "../exceptions/PinErrors.js";
+import { Auth } from "../models/index.js";
+import { AuthError } from "../exceptions/AuthError.js";
+import { Status, statusFromError } from "../exceptions/ServiceError.js";
 
 export const setPin = async (pin: string) => {
   try {
@@ -15,13 +15,13 @@ export const setPin = async (pin: string) => {
     if (!created) {
       auth.hash = hash;
       await auth.save();
-      return { status: 200, message: "PIN updated successfully." };
+      return { message: "PIN updated successfully." };
     } else {
-      return { status: 201, message: "PIN set successfully." };
+      return { message: "PIN set successfully." };
     }
   } catch (error: any) {
-    console.error("Error hashing or setting PIN:", error);
-    throw new PinError("Error hashing or setting PIN.");
+    console.error("Set PIN:", error);
+    throw new AuthError(error.message, statusFromError(error));
   }
 };
 
@@ -29,21 +29,20 @@ export const verifyPin = async (pin: string) => {
   try {
     const auth = await Auth.findByPk(1);
     if (!auth) {
-      return {
-        status: 404,
-        message: "PIN not set. Please set a PIN first.",
-      };
+      throw new AuthError("PIN is not set yet. Please set PIN first.");
     }
-
     const match = await bcrypt.compare(pin, auth.get("hash"));
     if (match) {
-      return { status: 200, message: "PIN verified successfully." };
+      return { message: "PIN verified successfully." };
     } else {
-      return { status: 401, message: "Invalid PIN." };
+      throw new AuthError(
+        "Incorrect PIN provided. Please try again with correct PIN",
+        Status.UNAUTHORIZED,
+      );
     }
   } catch (error: any) {
-    console.error("Error verifying PIN:", error);
-    throw new PinError("Error while verifying PIN.");
+    console.error("Verify PIN:", error);
+    throw new AuthError(error.message, statusFromError(error));
   }
 };
 
@@ -52,7 +51,7 @@ export const getPinStatus = async () => {
     const auth = await Auth.findByPk(1);
     return { exists: !!auth };
   } catch (error: any) {
-    console.error("Error checking PIN status:", error);
-    throw new PinError("Error checking PIN status.");
+    console.error("PIN status:", error);
+    throw new AuthError(error.message, statusFromError(error));
   }
 };

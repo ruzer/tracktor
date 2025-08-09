@@ -34,6 +34,8 @@
 		selectedVehicleId = data.selectedVehicleId;
 		if (vehicles.length > 0) {
 			selectedVehicleId = selectedVehicleId || vehicles[0].id;
+		} else {
+			selectedVehicleId = undefined;
 		}
 	});
 

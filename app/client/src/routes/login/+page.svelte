@@ -5,18 +5,21 @@
 	import ThemeToggle from '$components/common/ThemeToggle.svelte';
 	import { env } from '$env/dynamic/public';
 	import { ShieldEllipsis, ShieldPlus, Tractor } from '@lucide/svelte';
-	import { DoubleBounce, Jumper, Shadow } from 'svelte-loading-spinners';
+	import { Jumper } from 'svelte-loading-spinners';
 	import { simulateNetworkDelay } from '$lib/utils/dev';
+	import StatusBlock from '$components/common/StatusBlock.svelte';
+	import type { Status } from '$lib/models/status';
 
 	let loading = $state(false);
-	let error = $state('');
-	let pinExists = $state(false); // New state to track if PIN exists on server
-	let checkingPinStatus = $state(true); // New state to track initial status check
+	let status = $state<Status>({
+		message: undefined,
+		type: 'INFO'
+	});
+	let pinExists = $state(false);
+	let checkingPinStatus = $state(true);
 
-	// If the user is already logged in, redirect to the dashboard.
 	$effect(() => {
 		if (browser) {
-			// Check if PIN exists on the server
 			async function checkPinStatus() {
 				try {
 					const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}/api/pin/status`);
@@ -24,10 +27,16 @@
 						const data = await response.json();
 						pinExists = data.exists;
 					} else {
-						error = 'Failed to check PIN status.';
+						status = {
+							message: 'Failed to check PIN status.',
+							type: 'ERROR'
+						};
 					}
 				} catch (e) {
-					error = 'Failed to connect to the server. Please check your connection.';
+					status = {
+						message: 'Unknown Server Error Occurred.',
+						type: 'ERROR'
+					};
 				} finally {
 					checkingPinStatus = false;
 				}
@@ -43,12 +52,15 @@
 
 	async function handlePinComplete(pin: string) {
 		loading = true;
-		error = '';
-		// await simulateNetworkDelay(1000); // Simulate network delay for development
+		status.message = '';
+		await simulateNetworkDelay(1000); // Simulate network delay for development
 		try {
 			await endpointCall(pin, pinExists);
 		} catch (e) {
-			error = 'Failed to connect to the server. Please check your connection.';
+			status = {
+				message: 'Failed to connect to the server. Please check your connection.',
+				type: 'ERROR'
+			};
 		} finally {
 			loading = false;
 		}
@@ -69,10 +81,20 @@
 			if (browser) {
 				localStorage.setItem('userPin', pin);
 			}
+			loading = false;
+			status = {
+				message: 'PIN Verified Successfully',
+				type: 'SUCCESS'
+			};
+			await simulateNetworkDelay(1000);
 			goto('/dashboard', { replaceState: true });
 		} else {
 			const data = await response.json();
-			error = data.message || (pinExists ? 'Invalid PIN. Please try again.' : 'Failed to set PIN.');
+			status = {
+				message:
+					data.message || (pinExists ? 'Invalid PIN. Please try again.' : 'Failed to set PIN.'),
+				type: 'ERROR'
+			};
 		}
 	};
 </script>
@@ -123,12 +145,6 @@
 				<Jumper size="40" color="#155dfc" unit="px" duration="2s" />
 			</p>
 		{/if}
-		{#if error}
-			<p
-				class="mt-4 rounded-md bg-red-100 p-3 text-center font-medium text-red-700 dark:bg-red-900 dark:text-red-300"
-			>
-				{error}
-			</p>
-		{/if}
+		<StatusBlock message={status.message} type={status.type} />
 	</div>
 </div>

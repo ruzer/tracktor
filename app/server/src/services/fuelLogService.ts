@@ -1,25 +1,25 @@
-import { FuelLogError, FuelLogNotFoundError } from "../exceptions/FuelLogError.js";
-import { VehicleNotFoundError } from "../exceptions/VehicleErrors.js";
-import {Vehicle, FuelLog} from "../models/index.js";
+import { FuelLogError } from "../exceptions/FuelLogError.js";
+import { Status, statusFromError } from "../exceptions/ServiceError.js";
+import { VehicleError } from "../exceptions/VehicleError.js";
+import { Vehicle, FuelLog } from "../models/index.js";
 
 export const addFuelLog = async (vehicleId: string, fuelLogData: any) => {
   try {
     const vehicle = await Vehicle.findByPk(vehicleId);
     if (!vehicle) {
-      throw new VehicleNotFoundError("Vehicle not found.");
+      throw new VehicleError(
+        `No vehicle found for id : ${vehicleId}`,
+        Status.NOT_FOUND,
+      );
     }
-
     const fuelLog = await FuelLog.create({
       ...fuelLogData,
       vehicleId: vehicleId,
     });
     return { id: fuelLog.id, message: "Fuel log added successfully." };
   } catch (error: any) {
-    console.error("Error adding fuel log: ", error);
-    if (error instanceof VehicleNotFoundError) {
-      throw error;
-    }
-    throw new FuelLogError("Error adding fuel log.");
+    console.error("Add Fuel Log : ", error);
+    throw new FuelLogError(error.message, statusFromError(error));
   }
 };
 
@@ -41,14 +41,14 @@ export const getFuelLogs = async (vehicleId: string) => {
           return { ...log.toJSON(), mileage: null };
         }
         const distance = log.odometer - prevLog.odometer;
-        const mileage = distance / log.fuelAmount; // km/L or miles/gallon
+        const mileage = distance / log.fuelAmount;
         return { ...log.toJSON(), mileage: parseFloat(mileage.toFixed(2)) };
       }
       return { ...log.toJSON(), mileage: null };
     });
   } catch (error: any) {
-    console.error("Error fetching fuel logs: ", error);
-    throw new FuelLogError("Error fetching fuel logs.");
+    console.error("Get Fuel Log : ", error);
+    throw new FuelLogError(error.message, statusFromError(error));
   }
 };
 
@@ -56,15 +56,15 @@ export const getFuelLogById = async (id: string) => {
   try {
     const fuelLog = await FuelLog.findByPk(id);
     if (!fuelLog) {
-      throw new FuelLogNotFoundError();
+      throw new FuelLogError(
+        `No Fuel Logs found for id : ${id}`,
+        Status.NOT_FOUND,
+      );
     }
     return fuelLog;
   } catch (error: any) {
-    console.error("Error fetching fuel log: ", error);
-    if (error instanceof FuelLogNotFoundError) {
-      throw error;
-    }
-    throw new FuelLogError("Error fetching fuel log.");
+    console.error("Get Fuel Log By Key: ", error);
+    throw new FuelLogError(error.message, statusFromError(error));
   }
 };
 
@@ -72,17 +72,17 @@ export const updateFuelLog = async (id: string, fuelLogData: any) => {
   try {
     const fuelLog = await FuelLog.findByPk(id);
     if (!fuelLog) {
-      throw new FuelLogNotFoundError();
+      throw new FuelLogError(
+        `No Fuel Logs found for id : ${id}`,
+        Status.NOT_FOUND,
+      );
     }
 
     await fuelLog.update(fuelLogData);
     return { message: "Fuel log updated successfully." };
   } catch (error: any) {
-    console.error("Error updating fuel log: ", error);
-    if (error instanceof FuelLogNotFoundError) {
-      throw error;
-    }
-    throw new Error("Error updating fuel log.");
+    console.error("Update Fuel Log: ", error);
+    throw new FuelLogError(error.message, statusFromError(error));
   }
 };
 
@@ -92,14 +92,14 @@ export const deleteFuelLog = async (id: string) => {
       where: { id: id },
     });
     if (result === 0) {
-      throw new FuelLogNotFoundError();
+      throw new FuelLogError(
+        `No Fuel Logs found for id : ${id}`,
+        Status.NOT_FOUND,
+      );
     }
     return { message: "Fuel log deleted successfully." };
   } catch (error: any) {
-    console.error("Error deleting fuel log: ", error);
-    if (error instanceof FuelLogNotFoundError) {
-      throw error;
-    }
-    throw new Error("Error deleting fuel log.");
+    console.error("Delete Fuel Log: ", error);
+    throw new FuelLogError(error.message, statusFromError(error));
   }
 };

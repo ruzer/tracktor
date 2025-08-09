@@ -1,7 +1,8 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "../db/index.js";
 import Vehicle from "./Vehicle.js";
-import { InsuranceServiceError } from "../exceptions/InsuranceError.js";
+import { InsuranceError } from "../exceptions/InsuranceError.js";
+import { Status } from "../exceptions/ServiceError.js";
 
 interface InsuranceAttributes {
   id: string;
@@ -60,10 +61,11 @@ Insurance.init(
     policyNumber: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         len: {
           args: [3, 50],
-          msg: "Provider must be between length 3 to 50.",
+          msg: "Policy Number must be between length 3 to 50.",
         },
         is: {
           args: "^[0-9A-Za-z\s\-]*$",
@@ -75,14 +77,20 @@ Insurance.init(
       type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
-        isDate: true,
+        isDate: {
+          args: true,
+          msg: "Start date format is not correct.",
+        },
       },
     },
     endDate: {
       type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
-        isDate: true,
+        isDate: {
+          args: true,
+          msg: "End date format is not correct.",
+        },
       },
     },
     cost: {
@@ -124,14 +132,16 @@ Insurance.init(
         const maxEndDate = new Date(previousInsEndDate as string);
 
         if (sDate >= eDate) {
-          throw new InsuranceServiceError(
+          throw new InsuranceError(
             "Start date must always be before end date.",
+            Status.BAD_REQUEST,
           );
         }
 
         if (sDate < maxEndDate) {
-          throw new InsuranceServiceError(
+          throw new InsuranceError(
             "Start date must always be after previous insurance end date.",
+            Status.BAD_REQUEST,
           );
         }
       },

@@ -7,22 +7,23 @@ interface MaintenanceLogAttributes {
   vehicleId: string;
   date: string;
   odometer: number;
-  service: string;
+  serviceCenter: string;
   cost: number;
   notes?: string;
 }
 
 interface MaintenanceLogCreationAttributes
-  extends Optional<MaintenanceLogAttributes, "id"> { }
+  extends Optional<MaintenanceLogAttributes, "id"> {}
 
 class MaintenanceLog
   extends Model<MaintenanceLogAttributes, MaintenanceLogCreationAttributes>
-  implements MaintenanceLogAttributes {
+  implements MaintenanceLogAttributes
+{
   declare public id: string;
   declare public vehicleId: string;
   declare public date: string;
   declare public odometer: number;
-  declare public service: string;
+  declare public serviceCenter: string;
   declare public cost: number;
   declare public notes: string;
 }
@@ -47,37 +48,50 @@ MaintenanceLog.init(
       type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
-        isDate: true,
+        isDate: {
+          args: true,
+          msg: "Date format is not correct",
+        },
       },
     },
     odometer: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        isInt: true,
-        min: 0,
+        min: {
+          args: [0],
+          msg: "Odometer reading must be greater than 0.",
+        },
       },
     },
-    service: {
+    serviceCenter: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        len: {
+          args: [3, 50],
+          msg: "Service Center must be between length 3 to 50.",
+        },
       },
     },
     cost: {
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        isFloat: true,
-        min: 0,
+        min: {
+          args: [0],
+          msg: "Cost must be greater than 0.",
+        },
       },
     },
     notes: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        notEmpty: true,
+        len: {
+          args: [0, 500],
+          msg: "Notes must be lesser than 500 length.",
+        },
       },
     },
   },

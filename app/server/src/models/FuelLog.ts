@@ -1,8 +1,8 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "../db/index.js";
 import Vehicle from "./Vehicle.js";
-import { VehicleServiceError } from "../exceptions/VehicleErrors.js";
 import { FuelLogError } from "../exceptions/FuelLogError.js";
+import { Status } from "../exceptions/ServiceError.js";
 
 interface FuelLogAttributes {
   id: string;
@@ -72,6 +72,7 @@ FuelLog.init(
           if (value <= maxOdometer || value <= vehicleOdometer) {
             throw new FuelLogError(
               "Odometer Reading must be greater than current vehicle odometer.",
+              Status.BAD_REQUEST,
             );
           }
         },
