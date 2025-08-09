@@ -9,13 +9,11 @@
 		Building2
 	} from '@lucide/svelte';
 	import FormField from '../common/FormField.svelte';
-	import type { NewVehicle, Vehicle } from '$lib/models/vehicle';
+	import type { NewVehicle } from '$lib/models/vehicle';
 	import { env } from '$env/dynamic/public';
-	import { onMount } from 'svelte';
-	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
-	import { simulateNetworkDelay } from '$lib/utils/dev';
 	import { vehiclesStore } from '$lib/stores/vehicle';
 	import { browser } from '$app/environment';
+	import Button from '$components/common/Button.svelte';
 
 	let { vehicleToEdit = null, editMode = false, modalVisibility = $bindable(), loading } = $props();
 
@@ -168,7 +166,7 @@
 		icon={Gauge}
 		ariaLabel="Odometer (Optional)"
 	/>
-	<FormSubmitButton text={editMode ? 'Save Vehicle' : 'Add Vehicle'} {loading} />
+	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
 
 	{#if editMode}
 		<input type="hidden" name="id" value={vehicleToEdit?.id || ''} />
