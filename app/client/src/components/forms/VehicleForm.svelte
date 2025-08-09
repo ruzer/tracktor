@@ -106,65 +106,78 @@
 	}}
 	class="space-y-6"
 >
-	<FormField
-		id="make"
-		type="text"
-		placeholder="Make"
-		bind:value={vehicle.make}
-		icon={Building2}
-		required={true}
-		ariaLabel="Vehicle Make"
-	/>
-	<FormField
-		id="model"
-		type="text"
-		placeholder="Model"
-		bind:value={vehicle.model}
-		icon={Car}
-		required={true}
-		ariaLabel="Vehicle Model"
-	/>
-	<FormField
-		id="year"
-		type="number"
-		placeholder="Year"
-		bind:value={vehicle.year}
-		icon={Calendar1}
-		required={true}
-		ariaLabel="Vehicle Year"
-	/>
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
+		<FormField
+			id="make"
+			type="text"
+			placeholder="Make"
+			bind:value={vehicle.make}
+			icon={Building2}
+			label="Manufacturer"
+			required={true}
+			ariaLabel="Vehicle Make"
+		/>
+		<FormField
+			id="model"
+			type="text"
+			placeholder="Model"
+			bind:value={vehicle.model}
+			icon={Car}
+			label="Model"
+			required={true}
+			ariaLabel="Vehicle Model"
+		/>
+	</div>
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
+		<FormField
+			id="year"
+			type="number"
+			placeholder="Year"
+			bind:value={vehicle.year}
+			icon={Calendar1}
+			label="Year"
+			required={true}
+			ariaLabel="Vehicle Year"
+		/>
+		<FormField
+			id="color"
+			type="text"
+			placeholder="Color"
+			bind:value={vehicle.color}
+			icon={Paintbrush}
+			label="Color"
+			ariaLabel="Color"
+		/>
+	</div>
+
 	<FormField
 		id="licensePlate"
 		type="text"
 		placeholder="License Plate"
 		bind:value={vehicle.licensePlate}
 		icon={IdCard}
+		label="Licence Plate"
 		required={true}
 		ariaLabel="License Plate"
 	/>
 	<FormField
 		id="vin"
 		type="text"
-		placeholder="VIN (Optional)"
+		placeholder="VIN Number"
 		bind:value={vehicle.vin}
 		icon={Fingerprint}
-		ariaLabel="VIN (Optional)"
+		label="VIN Number"
+		ariaLabel="VIN Number"
 	/>
-	<FormField
-		id="color"
-		type="text"
-		placeholder="Color (Optional)"
-		bind:value={vehicle.color}
-		icon={Paintbrush}
-		ariaLabel="Color (Optional)"
-	/>
+
 	<FormField
 		id="odometer"
 		type="number"
-		placeholder="Odometer (Optional)"
+		placeholder="Odometer"
 		bind:value={vehicle.odometer}
 		icon={Gauge}
-		ariaLabel="Odometer (Optional)"
+		label="Odometer"
+		ariaLabel="Odometer"
 	/>
 	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
 
