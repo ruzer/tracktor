@@ -17,7 +17,7 @@
 	let log = $state({
 		date: '',
 		odometer: null,
-		service: '',
+		serviceCenter: '',
 		cost: null,
 		notes: ''
 	});
@@ -37,8 +37,8 @@
 	});
 
 	async function persistLog() {
-		if (!log.date || !log.odometer || !log.service || log.cost === null) {
-			status.message = 'Date, Odometer, Service, and Cost are required.';
+		if (!log.date || !log.odometer || !log.serviceCenter || log.cost === null) {
+			status.message = 'Date, Odometer, Service Center, and Cost are required.';
 			status.type = 'ERROR';
 			return;
 		}
@@ -62,7 +62,7 @@
 				Object.assign(log, {
 					date: '',
 					odometer: null,
-					service: '',
+					serviceCenter: '',
 					cost: null,
 					notes: ''
 				});
@@ -92,48 +92,57 @@
 	}}
 	class="space-y-6"
 >
-	<FormField
-		id="date"
-		type="date"
-		placeholder="Date"
-		bind:value={log.date}
-		icon={Calendar1}
-		required={true}
-		ariaLabel="Log Date"
-	/>
-	<FormField
-		id="odometer"
-		type="number"
-		placeholder="Odometer ( {getDistanceUnit()} )"
-		bind:value={log.odometer}
-		icon={Gauge}
-		required={true}
-		ariaLabel="Odometer Reading"
-	/>
-	<FormField
-		id="cost"
-		type="number"
-		placeholder="Cost ( {getCurrencySymbol()} )"
-		bind:value={log.cost}
-		icon={BadgeDollarSign}
-		required={true}
-		ariaLabel="Service Cost ( {getCurrencySymbol()} )"
-	/>
-	<FormField
-		id="service"
-		type="text"
-		placeholder="Service"
-		bind:value={log.service}
-		icon={Hammer}
-		required={true}
-		ariaLabel="Service Description"
-	/>
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
+		<FormField
+			id="date"
+			type="date"
+			placeholder="Date"
+			bind:value={log.date}
+			icon={Calendar1}
+			label="Date"
+			required={true}
+			ariaLabel="Log Date"
+		/>
+		<FormField
+			id="odometer"
+			type="number"
+			placeholder="Odometer ( {getDistanceUnit()} )"
+			bind:value={log.odometer}
+			icon={Gauge}
+			label="Odometer"
+			required={true}
+			ariaLabel="Odometer Reading"
+		/>
+	</div>
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
+		<FormField
+			id="cost"
+			type="number"
+			placeholder="Cost ( {getCurrencySymbol()} )"
+			bind:value={log.cost}
+			icon={BadgeDollarSign}
+			label="Cost"
+			required={true}
+			ariaLabel="Service Cost ( {getCurrencySymbol()} )"
+		/>
+		<FormField
+			id="service"
+			type="text"
+			placeholder="Service Center"
+			bind:value={log.serviceCenter}
+			icon={Hammer}
+			label="Service Center"
+			required={true}
+			ariaLabel="Service Description"
+		/>
+	</div>
 	<FormField
 		id="notes"
-		type="textarea"
+		type="text"
 		placeholder="Notes"
 		bind:value={log.notes}
 		icon={Notebook}
+		label="Notes"
 		required={false}
 		ariaLabel="Additional Notes"
 	/>

@@ -91,6 +91,7 @@
 </script>
 
 <form
+	class="space-y-6"
 	onsubmit={(e) => {
 		persistInsurance();
 		e.preventDefault();
@@ -102,6 +103,7 @@
 		placeholder="Provider"
 		bind:value={insurance.provider}
 		icon={Building2}
+		label="Provider"
 		required={true}
 		ariaLabel="Provider"
 	/>
@@ -111,33 +113,40 @@
 		placeholder="Policy Number"
 		bind:value={insurance.policyNumber}
 		icon={IdCard}
+		label="Policy Number"
 		required={true}
 		ariaLabel="Policy Number"
 	/>
-	<FormField
-		id="start-date"
-		type="date"
-		placeholder="Start Date"
-		bind:value={insurance.startDate}
-		icon={Calendar1}
-		required={true}
-		ariaLabel="Start Date"
-	/>
-	<FormField
-		id="end-date"
-		type="date"
-		placeholder="End Date"
-		bind:value={insurance.endDate}
-		icon={Calendar1}
-		required={true}
-		ariaLabel="End Date"
-	/>
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
+		<FormField
+			id="start-date"
+			type="date"
+			placeholder="Start Date"
+			bind:value={insurance.startDate}
+			icon={Calendar1}
+			required={true}
+			label="Start Date"
+			ariaLabel="Start Date"
+		/>
+
+		<FormField
+			id="end-date"
+			type="date"
+			placeholder="End Date"
+			bind:value={insurance.endDate}
+			icon={Calendar1}
+			label="End Date"
+			required={true}
+			ariaLabel="End Date"
+		/>
+	</div>
 	<FormField
 		id="cost"
 		type="number"
 		placeholder="Cost ( {getCurrencySymbol()} )"
 		bind:value={insurance.cost}
 		icon={BadgeDollarSign}
+		label="Cost"
 		required={true}
 		ariaLabel="Cost"
 	/>

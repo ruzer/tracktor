@@ -102,33 +102,39 @@
 		placeholder="Certificate Number"
 		bind:value={certificate.certificateNumber}
 		icon={IdCard}
+		label="Certificate Number"
 		required={true}
 		ariaLabel="Certificate Number"
 	/>
-	<FormField
-		id="issue-date"
-		type="date"
-		placeholder="Issue Date"
-		bind:value={certificate.issueDate}
-		icon={Calendar1}
-		required={true}
-		ariaLabel="Issue Date"
-	/>
-	<FormField
-		id="expiry-date"
-		type="date"
-		placeholder="Expiry Date"
-		bind:value={certificate.expiryDate}
-		icon={Calendar1}
-		required={true}
-		ariaLabel="Expiry Date"
-	/>
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
+		<FormField
+			id="issue-date"
+			type="date"
+			placeholder="Issue Date"
+			bind:value={certificate.issueDate}
+			icon={Calendar1}
+			label="Issue Date"
+			required={true}
+			ariaLabel="Issue Date"
+		/>
+		<FormField
+			id="expiry-date"
+			type="date"
+			placeholder="Expiry Date"
+			bind:value={certificate.expiryDate}
+			icon={Calendar1}
+			label="Expiry date"
+			required={true}
+			ariaLabel="Expiry Date"
+		/>
+	</div>
 	<FormField
 		id="testing-center"
 		type="text"
 		placeholder="Testing Center"
 		bind:value={certificate.testingCenter}
 		icon={TestTube2}
+		label="Testing Center"
 		required={true}
 		ariaLabel="Testing Center"
 	/>
@@ -138,6 +144,7 @@
 		placeholder="Notes"
 		bind:value={certificate.notes}
 		icon={Notebook}
+		label="Notes"
 		required={false}
 		ariaLabel="Notes"
 	/>
