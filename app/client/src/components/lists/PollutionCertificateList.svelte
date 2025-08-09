@@ -6,6 +6,7 @@
 	import { formatDate } from '$lib/utils/formatting';
 	import { puccModelStore } from '$lib/stores/pucc';
 	import { Jumper } from 'svelte-loading-spinners';
+	import IconButton from '$components/common/IconButton.svelte';
 
 	let { vehicleId } = $props();
 
@@ -110,30 +111,13 @@
 					>
 				</div>
 				<div class="flex gap-2">
-					<button
-						class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-						onclick={() => {
-							puccModelStore.show(vehicleId, pucc, true, (status: boolean) => {
-								if (status) {
-									fetchPollutionCertificateDetails();
-								}
-							});
-						}}
-					>
-						<Pencil
-							class="h-5 w-5 text-gray-500 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-						/>
-					</button>
-					<button
-						class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-						onclick={() => {
-							deletePollutionCertificate(pucc.id);
-						}}
-					>
-						<Trash2
-							class="h-5 w-5 text-gray-500 hover:text-red-600 dark:text-gray-300 dark:hover:text-red-400"
-						/>
-					</button>
+					<IconButton
+						buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
+						iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
+						icon={Trash2}
+						onclick={() => deletePollutionCertificate(pucc.id)}
+						ariaLabel="Delete"
+					/>
 				</div>
 			</div>
 			<div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">

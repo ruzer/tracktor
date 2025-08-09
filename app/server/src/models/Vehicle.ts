@@ -1,10 +1,8 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "../db/index.js";
-import {
-  VehicleExistsError,
-  VehicleServiceError,
-} from "../exceptions/VehicleErrors.js";
 import FuelLog from "./FuelLog.js";
+import { VehicleError } from "../exceptions/VehicleError.js";
+import { Status } from "../exceptions/ServiceError.js";
 
 interface VehicleAttributes {
   id: string;
@@ -108,7 +106,10 @@ Vehicle.init(
               },
             });
           if (existingVehicles.length > 0) {
-            throw new VehicleExistsError();
+            throw new VehicleError(
+              "VIN NUmber already exists.",
+              Status.CONFLICT,
+            );
           }
         },
       },
@@ -136,8 +137,9 @@ Vehicle.init(
           });
 
           if (minOdometer && value > minOdometer) {
-            throw new VehicleServiceError(
+            throw new VehicleError(
               "Initial Odometer Reading must be lesser than first fuel log odometer.",
+              Status.BAD_REQUEST,
             );
           }
         },

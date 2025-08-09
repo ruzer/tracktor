@@ -1,10 +1,7 @@
 import { Vehicle, PollutionCertificate } from "../models/index.js";
-import {
-  PollutionCertificateNotFoundError,
-  PollutionCertificateExistsError,
-  PollutionCertificateServiceError,
-} from "../exceptions/PollutionCertificateErrors.js";
+import { PollutionCertificateError } from "../exceptions/PollutionCertificateError.js";
 import { UniqueConstraintError } from "sequelize";
+import { Status, statusFromError } from "../exceptions/ServiceError.js";
 
 export const addPollutionCertificate = async (
   vehicleId: string,
@@ -13,9 +10,11 @@ export const addPollutionCertificate = async (
   try {
     const vehicle = await Vehicle.findByPk(vehicleId);
     if (!vehicle) {
-      throw new PollutionCertificateNotFoundError("Vehicle not found.");
+      throw new PollutionCertificateError(
+        `No vehicle found for id : ${vehicleId}`,
+        Status.NOT_FOUND,
+      );
     }
-
     const pollutionCertificate = await PollutionCertificate.create({
       ...pollutionCertificateData,
       vehicleId: vehicleId,
@@ -24,35 +23,27 @@ export const addPollutionCertificate = async (
       id: pollutionCertificate.id,
       message: "Pollution certificate added successfully.",
     };
-  } catch (error: unknown) {
-    if (error instanceof UniqueConstraintError) {
-      throw new PollutionCertificateExistsError();
-    }
-    if (error instanceof PollutionCertificateNotFoundError) {
-      throw error;
-    }
-    throw new PollutionCertificateServiceError(
-      "Error adding pollution certificate.",
-    );
+  } catch (error: any) {
+    console.error("Add PUCC: ", error);
+    throw new PollutionCertificateError(error.message, statusFromError(error));
   }
 };
 
 export const getPollutionCertificates = async (vehicleId: string) => {
   try {
-    const pollutionCertificate = await PollutionCertificate.findAll({
+    const pollutionCertificates = await PollutionCertificate.findAll({
       where: { vehicleId: vehicleId },
     });
-    if (!pollutionCertificate) {
-      throw new PollutionCertificateNotFoundError();
+    if (!pollutionCertificates) {
+      throw new PollutionCertificateError(
+        `No PUCC found for vehicle id : ${vehicleId}`,
+        Status.NOT_FOUND,
+      );
     }
-    return pollutionCertificate;
-  } catch (error: unknown) {
-    if (error instanceof PollutionCertificateNotFoundError) {
-      throw error;
-    }
-    throw new PollutionCertificateServiceError(
-      "Error fetching pollution certificate.",
-    );
+    return pollutionCertificates;
+  } catch (error: any) {
+    console.error("Get PUCCs: ", error);
+    throw new PollutionCertificateError(error.message, statusFromError(error));
   }
 };
 
@@ -66,37 +57,33 @@ export const updatePollutionCertificate = async (
       where: { vehicleId: vehicleId, id: id },
     });
     if (!pollutionCertificate) {
-      throw new PollutionCertificateNotFoundError();
+      throw new PollutionCertificateError(
+        `No PUCC found for id : ${id}`,
+        Status.NOT_FOUND,
+      );
     }
 
     await pollutionCertificate.update(pollutionCertificateData);
     return { message: "Pollution certificate updated successfully." };
-  } catch (error: unknown) {
-    console.error(error);
-    if (error instanceof PollutionCertificateNotFoundError) {
-      throw error;
-    }
-    throw new PollutionCertificateServiceError(
-      "Error updating pollution certificate.",
-    );
+  } catch (error: any) {
+    console.error("Update PUCC: ", error);
+    throw new PollutionCertificateError(error.message, statusFromError(error));
   }
 };
 
-export const deletePollutionCertificate = async (vehicleId: string) => {
+export const deletePollutionCertificate = async (id: string) => {
   try {
     const result = await PollutionCertificate.destroy({
-      where: { vehicleId: vehicleId },
+      where: { id },
     });
     if (result === 0) {
-      throw new PollutionCertificateNotFoundError();
+      throw new PollutionCertificateError(
+        `No PUCC found for id : ${id}`,
+        Status.NOT_FOUND,
+      );
     }
     return { message: "Pollution certificate deleted successfully." };
-  } catch (error: unknown) {
-    if (error instanceof PollutionCertificateNotFoundError) {
-      throw error;
-    }
-    throw new PollutionCertificateServiceError(
-      "Error deleting pollution certificate.",
-    );
+  } catch (error: any) {
+    throw new PollutionCertificateError(error.message, statusFromError(error));
   }
 };

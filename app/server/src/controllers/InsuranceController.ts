@@ -1,78 +1,59 @@
 import { Request, Response } from "express";
 import * as insuranceService from "../services/insuranceService.js";
-import {
-  InsuranceNotFoundError,
-  InsuranceExistsError,
-  InsuranceServiceError,
-} from "../exceptions/InsuranceError.js";
+import { InsuranceError } from "../exceptions/InsuranceError.js";
+import { Status } from "../exceptions/ServiceError.js";
 
 export const addInsurance = async (req: Request, res: Response) => {
-  const { vehicleId } = req.params;
-  const { provider, policyNumber, startDate, endDate, cost } = req.body;
-
-  if (!vehicleId) {
-    return res.status(400).json({ message: "Vehicle ID is required." });
-  }
-  if (!provider || !policyNumber || !startDate || !endDate || !cost) {
-    return res.status(400).json({
-      message:
-        "Provider, Policy Number, Start Date, End Date, and Cost are required.",
-    });
-  }
-
   try {
+    const { vehicleId } = req.params;
+    const { provider, policyNumber, startDate, endDate, cost } = req.body;
+
+    if (!vehicleId) {
+      throw new InsuranceError("Vehicle ID is required.", Status.BAD_REQUEST);
+    }
+    if (!provider || !policyNumber || !startDate || !endDate || !cost) {
+      throw new InsuranceError(
+        "Provider, Policy Number, Start Date, End Date, and Cost are required.",
+        Status.BAD_REQUEST,
+      );
+    }
     const result = await insuranceService.addInsurance(vehicleId, req.body);
     res.status(201).json(result);
   } catch (error: any) {
-    if (error instanceof InsuranceNotFoundError) {
-      return res.status(404).json({ message: error.message });
-    }
-    if (error instanceof InsuranceExistsError) {
-      return res.status(409).json({ message: error.message });
-    }
-    if (error instanceof InsuranceServiceError) {
-      return res.status(500).json({ message: error.message });
-    }
-    res.status(500).json({ message: error.message });
+    res.status(error.status.valueOf()).json({ message: error.message });
   }
 };
 
 export const getInsurances = async (req: Request, res: Response) => {
-  const { vehicleId } = req.params;
-  if (!vehicleId) {
-    return res.status(400).json({ message: "Vehicle ID is required." });
-  }
   try {
+    const { vehicleId } = req.params;
+    if (!vehicleId) {
+      throw new InsuranceError("Vehicle ID is required.", Status.BAD_REQUEST);
+    }
     const insurances = await insuranceService.getInsurances(vehicleId);
     res.status(200).json(insurances);
   } catch (error: any) {
-    if (error instanceof InsuranceNotFoundError) {
-      return res.status(404).json({ message: error.message });
-    }
-    if (error instanceof InsuranceServiceError) {
-      return res.status(500).json({ message: error.message });
-    }
-    res.status(500).json({ message: error.message });
+    res.status(error.status.valueOf()).json({ message: error.message });
   }
 };
 
 export const updateInsurance = async (req: Request, res: Response) => {
-  const { vehicleId, id } = req.params;
-  const { provider, policyNumber, startDate, endDate, cost } = req.body;
-
-  if (!vehicleId || !id) {
-    return res
-      .status(400)
-      .json({ message: "Vehicle ID and Insurance Id is required." });
-  }
-  if (!provider || !policyNumber || !startDate || !endDate || !cost) {
-    return res.status(400).json({
-      message:
-        "Provider, Policy Number, Start Date, End Date, and Cost are required.",
-    });
-  }
-
   try {
+    const { vehicleId, id } = req.params;
+    const { provider, policyNumber, startDate, endDate, cost } = req.body;
+
+    if (!vehicleId || !id) {
+      throw new InsuranceError(
+        "Vehicle ID and Insurance Id is required.",
+        Status.BAD_REQUEST,
+      );
+    }
+    if (!provider || !policyNumber || !startDate || !endDate || !cost) {
+      throw new InsuranceError(
+        "Provider, Policy Number, Start Date, End Date, and Cost are required.",
+        Status.BAD_REQUEST,
+      );
+    }
     const result = await insuranceService.updateInsurance(
       vehicleId,
       id,
@@ -80,31 +61,19 @@ export const updateInsurance = async (req: Request, res: Response) => {
     );
     res.status(200).json(result);
   } catch (error: any) {
-    if (error instanceof InsuranceNotFoundError) {
-      return res.status(404).json({ message: error.message });
-    }
-    if (error instanceof InsuranceServiceError) {
-      return res.status(500).json({ message: error.message });
-    }
-    res.status(500).json({ message: error.message });
+    res.status(error.status.valueOf()).json({ message: error.message });
   }
 };
 
 export const deleteInsurance = async (req: Request, res: Response) => {
-  const { vehicleId } = req.params;
-  if (!vehicleId) {
-    return res.status(400).json({ message: "Vehicle ID is required." });
-  }
   try {
-    const result = await insuranceService.deleteInsurance(vehicleId);
+    const { id } = req.params;
+    if (!id) {
+      throw new InsuranceError("Insurance ID is required.", Status.BAD_REQUEST);
+    }
+    const result = await insuranceService.deleteInsurance(id);
     res.status(200).json(result);
   } catch (error: any) {
-    if (error instanceof InsuranceNotFoundError) {
-      return res.status(404).json({ message: error.message });
-    }
-    if (error instanceof InsuranceServiceError) {
-      return res.status(500).json({ message: error.message });
-    }
-    res.status(500).json({ message: error.message });
+    res.status(error.status.valueOf()).json({ message: error.message });
   }
 };

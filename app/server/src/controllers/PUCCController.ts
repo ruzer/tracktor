@@ -1,63 +1,51 @@
 import { Request, Response } from "express";
 import * as pollutionCertificateService from "../services/pollutionCertificateService.js";
-import {
-  PollutionCertificateNotFoundError,
-  PollutionCertificateExistsError,
-  PollutionCertificateServiceError,
-} from "../exceptions/PollutionCertificateErrors.js";
+import { PollutionCertificateError } from "../exceptions/PollutionCertificateError.js";
+import { Status } from "../exceptions/ServiceError.js";
 
 export const addPollutionCertificate = async (req: Request, res: Response) => {
-  const { vehicleId } = req.params;
-  const { certificateNumber, issueDate, expiryDate, testingCenter, notes } =
-    req.body;
-
-  if (!vehicleId) {
-    return res.status(400).json({ message: "Vehicle ID is required." });
-  }
-  if (!certificateNumber || !issueDate || !expiryDate || !testingCenter) {
-    return res.status(400).json({
-      message:
-        "Certificate Number, Issue Date, Expiry Date, and Testing Center are required.",
-    });
-  }
-
   try {
+    const { vehicleId } = req.params;
+    const { certificateNumber, issueDate, expiryDate, testingCenter } =
+      req.body;
+
+    if (!vehicleId) {
+      throw new PollutionCertificateError(
+        "Vehicle ID is required.",
+        Status.BAD_REQUEST,
+      );
+    }
+    if (!certificateNumber || !issueDate || !expiryDate || !testingCenter) {
+      throw new PollutionCertificateError(
+        "Certificate Number, Issue Date, Expiry Date, and Testing Center are required.",
+        Status.BAD_REQUEST,
+      );
+    }
+
     const result = await pollutionCertificateService.addPollutionCertificate(
       vehicleId,
       req.body,
     );
     res.status(201).json(result);
   } catch (error: any) {
-    if (error instanceof PollutionCertificateNotFoundError) {
-      return res.status(404).json({ message: error.message });
-    }
-    if (error instanceof PollutionCertificateExistsError) {
-      return res.status(409).json({ message: error.message });
-    }
-    if (error instanceof PollutionCertificateServiceError) {
-      return res.status(500).json({ message: error.message });
-    }
-    res.status(500).json({ message: error.message });
+    res.status(error.status.valueOf()).json({ message: error.message });
   }
 };
 
 export const getPollutionCertificates = async (req: Request, res: Response) => {
-  const { vehicleId } = req.params;
-  if (!vehicleId) {
-    return res.status(400).json({ message: "Vehicle ID is required." });
-  }
   try {
+    const { vehicleId } = req.params;
+    if (!vehicleId) {
+      throw new PollutionCertificateError(
+        "Vehicle ID is required.",
+        Status.BAD_REQUEST,
+      );
+    }
     const pollutionCertificates =
       await pollutionCertificateService.getPollutionCertificates(vehicleId);
     res.status(200).json(pollutionCertificates);
   } catch (error: any) {
-    if (error instanceof PollutionCertificateNotFoundError) {
-      return res.status(404).json({ message: error.message });
-    }
-    if (error instanceof PollutionCertificateServiceError) {
-      return res.status(500).json({ message: error.message });
-    }
-    res.status(500).json({ message: error.message });
+    res.status(error.status.valueOf()).json({ message: error.message });
   }
 };
 
@@ -65,23 +53,23 @@ export const updatePollutionCertificate = async (
   req: Request,
   res: Response,
 ) => {
-  const { vehicleId, id } = req.params;
-  const { certificateNumber, issueDate, expiryDate, testingCenter, notes } =
-    req.body;
-
-  if (!vehicleId || !id) {
-    return res
-      .status(400)
-      .json({ message: "Vehicle ID and certificate ID are required." });
-  }
-  if (!certificateNumber || !issueDate || !expiryDate || !testingCenter) {
-    return res.status(400).json({
-      message:
-        "Certificate Number, Issue Date, Expiry Date, and Testing Center are required.",
-    });
-  }
-
   try {
+    const { vehicleId, id } = req.params;
+    const { certificateNumber, issueDate, expiryDate, testingCenter, notes } =
+      req.body;
+
+    if (!vehicleId || !id) {
+      throw new PollutionCertificateError(
+        "Vehicle ID and certificate ID are required.",
+        Status.BAD_REQUEST,
+      );
+    }
+    if (!certificateNumber || !issueDate || !expiryDate || !testingCenter) {
+      throw new PollutionCertificateError(
+        "Certificate Number, Issue Date, Expiry Date, and Testing Center are required.",
+        Status.BAD_REQUEST,
+      );
+    }
     const result = await pollutionCertificateService.updatePollutionCertificate(
       vehicleId,
       id,
@@ -89,13 +77,7 @@ export const updatePollutionCertificate = async (
     );
     res.status(200).json(result);
   } catch (error: any) {
-    if (error instanceof PollutionCertificateNotFoundError) {
-      return res.status(404).json({ message: error.message });
-    }
-    if (error instanceof PollutionCertificateServiceError) {
-      return res.status(500).json({ message: error.message });
-    }
-    res.status(500).json({ message: error.message });
+    res.status(error.status.valueOf()).json({ message: error.message });
   }
 };
 
@@ -103,21 +85,18 @@ export const deletePollutionCertificate = async (
   req: Request,
   res: Response,
 ) => {
-  const { vehicleId } = req.params;
-  if (!vehicleId) {
-    return res.status(400).json({ message: "Vehicle ID is required." });
-  }
   try {
+    const { vehicleId } = req.params;
+    if (!vehicleId) {
+      throw new PollutionCertificateError(
+        "Vehicle ID is required.",
+        Status.BAD_REQUEST,
+      );
+    }
     const result =
       await pollutionCertificateService.deletePollutionCertificate(vehicleId);
     res.status(200).json(result);
   } catch (error: any) {
-    if (error instanceof PollutionCertificateNotFoundError) {
-      return res.status(404).json({ message: error.message });
-    }
-    if (error instanceof PollutionCertificateServiceError) {
-      return res.status(500).json({ message: error.message });
-    }
-    res.status(500).json({ message: error.message });
+    res.status(error.status.valueOf()).json({ message: error.message });
   }
 };

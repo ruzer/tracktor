@@ -164,15 +164,17 @@ async function generateMaintenenceLogs(vehicle1: Vehicle, vehicle2: Vehicle) {
       vehicleId: vehicle1.id,
       date: "2023-06-01",
       odometer: 18000,
-      service: "Oil Change",
+      serviceCenter: "Test Center",
       cost: 50,
+      notes: "Oil Change",
     },
     {
       vehicleId: vehicle2.id,
       date: "2023-07-01",
       odometer: 28000,
-      service: "Tire Rotation",
+      serviceCenter: "Test Center",
       cost: 30,
+      notes: "Tire Rotation",
     },
   ]);
 

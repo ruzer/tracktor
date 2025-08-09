@@ -12,6 +12,7 @@
 
 	import { fuelLogModelStore } from '$lib/stores/fuel-log';
 	import { Jumper } from 'svelte-loading-spinners';
+	import IconButton from '$components/common/IconButton.svelte';
 
 	const { vehicleId } = $props();
 
@@ -138,27 +139,13 @@
 						>
 						<td class="px-4 py-2 text-gray-800 dark:text-gray-200">{log.notes || '-'}</td>
 						<td class="px-4 py-2 text-gray-800 dark:text-gray-200">
-							<button
-								class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-								onclick={() =>
-									fuelLogModelStore.show(vehicleId, log, true, (status: boolean) => {
-										if (status) {
-											fetchFuelLogs();
-										}
-									})}
-							>
-								<Pencil
-									class="h-5 w-5 text-gray-500 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-								/>
-							</button>
-							<button
-								class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+							<IconButton
+								buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
+								iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
+								icon={Trash2}
 								onclick={() => deleteFuelLog(log.id)}
-							>
-								<Trash2
-									class="h-5 w-5 text-gray-500 hover:text-red-600 dark:text-gray-300 dark:hover:text-red-400"
-								/>
-							</button>
+								ariaLabel="Delete"
+							/>
 						</td>
 					</tr>
 				{/each}
