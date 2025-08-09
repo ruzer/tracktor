@@ -1,5 +1,5 @@
 <script lang="ts">
-	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
+	import Button from '$components/common/Button.svelte';
 	import { env } from '$env/dynamic/public';
 	import { simulateNetworkDelay } from '$lib/utils/dev';
 	import { formatDate, getCurrencySymbol } from '$lib/utils/formatting';
@@ -145,7 +145,7 @@
 		icon={FileText}
 		ariaLabel="Notes"
 	/>
-	<FormSubmitButton text={editMode ? 'Save Log' : 'Add Log'} {loading} />
+	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
 </form>
 {#if status.message}
 	<p

@@ -1,6 +1,6 @@
 <script lang="ts">
+	import Button from '$components/common/Button.svelte';
 	import FormField from '$components/common/FormField.svelte';
-	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
 	import { env } from '$env/dynamic/public';
 	import { getCurrencySymbol, getDistanceUnit } from '$lib/utils/formatting';
 	import { BadgeDollarSign, Calendar1, Gauge, Hammer, Notebook } from '@lucide/svelte';
@@ -137,7 +137,7 @@
 		required={false}
 		ariaLabel="Additional Notes"
 	/>
-	<FormSubmitButton text={editMode ? 'Update Log' : 'Add Log'} {loading} />
+	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
 </form>
 {#if status.message}
 	<p

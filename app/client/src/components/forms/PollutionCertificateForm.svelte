@@ -1,6 +1,6 @@
 <script lang="ts">
+	import Button from '$components/common/Button.svelte';
 	import FormField from '$components/common/FormField.svelte';
-	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
 	import { env } from '$env/dynamic/public';
 	import { Calendar1, IdCard, Notebook, TestTube, TestTube2 } from '@lucide/svelte';
 
@@ -141,7 +141,7 @@
 		required={false}
 		ariaLabel="Notes"
 	/>
-	<FormSubmitButton text={editMode ? 'Update Certificate' : 'Add Certificate'} {loading} />
+	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
 </form>
 
 {#if status.message}
