@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "../db/index.js";
-import Vehicle from "./Vehicle.js";
 import { PollutionCertificateError } from "../exceptions/PollutionCertificateError.js";
 import { Status } from "../exceptions/ServiceError.js";
 
@@ -15,15 +14,14 @@ interface PollutionCertificateAttributes {
 }
 
 interface PollutionCertificateCreationAttributes
-  extends Optional<PollutionCertificateAttributes, "id"> {}
+  extends Optional<PollutionCertificateAttributes, "id"> { }
 
 class PollutionCertificate
   extends Model<
     PollutionCertificateAttributes,
     PollutionCertificateCreationAttributes
   >
-  implements PollutionCertificateAttributes
-{
+  implements PollutionCertificateAttributes {
   declare public id: string;
   declare public vehicleId: string;
   declare public certificateNumber: string;
@@ -44,7 +42,7 @@ PollutionCertificate.init(
     vehicleId: {
       type: DataTypes.UUIDV4,
       references: {
-        model: Vehicle,
+        model: "vehicles",
         key: "id",
       },
       allowNull: false,

@@ -16,12 +16,11 @@ interface InsuranceAttributes {
 }
 
 interface InsuranceCreationAttributes
-  extends Optional<InsuranceAttributes, "id"> {}
+  extends Optional<InsuranceAttributes, "id"> { }
 
 class Insurance
   extends Model<InsuranceAttributes, InsuranceCreationAttributes>
-  implements InsuranceAttributes
-{
+  implements InsuranceAttributes {
   declare public id: string;
   declare public vehicleId: string;
   declare public provider: string;
@@ -43,7 +42,7 @@ Insurance.init(
     vehicleId: {
       type: DataTypes.UUIDV4,
       references: {
-        model: Vehicle,
+        model: "vehicles",
         key: "id",
       },
       allowNull: false,

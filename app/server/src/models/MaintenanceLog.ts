@@ -13,12 +13,11 @@ interface MaintenanceLogAttributes {
 }
 
 interface MaintenanceLogCreationAttributes
-  extends Optional<MaintenanceLogAttributes, "id"> {}
+  extends Optional<MaintenanceLogAttributes, "id"> { }
 
 class MaintenanceLog
   extends Model<MaintenanceLogAttributes, MaintenanceLogCreationAttributes>
-  implements MaintenanceLogAttributes
-{
+  implements MaintenanceLogAttributes {
   declare public id: string;
   declare public vehicleId: string;
   declare public date: string;
@@ -39,7 +38,7 @@ MaintenanceLog.init(
     vehicleId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Vehicle,
+        model: "vehicles",
         key: "id",
       },
       allowNull: false,
