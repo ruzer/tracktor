@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { env } from '$env/dynamic/public';
-	import { Pencil, Trash2 } from '@lucide/svelte';
+	import { Trash2 } from '@lucide/svelte';
 	import {
 		formatCurrency,
 		formatDate,
@@ -9,15 +9,14 @@
 		formatMileage,
 		formatDistance
 	} from '$lib/utils/formatting';
-
-	import { fuelLogModelStore } from '$lib/stores/fuel-log';
 	import { Jumper } from 'svelte-loading-spinners';
 	import IconButton from '$components/common/IconButton.svelte';
+	import DeleteConfirmation from '$components/common/DeleteConfirmation.svelte';
 
 	const { vehicleId } = $props();
 
 	interface FuelLog {
-		id: number;
+		id: string;
 		date: string;
 		odometer: number;
 		fuelAmount: number;
@@ -29,6 +28,8 @@
 	let fuelLogs: FuelLog[] = $state([]);
 	let loading = $state(true);
 	let error = $state('');
+	let selectedFuelLog = $state<string>();
+	let deleteDialog = $state(false);
 
 	$effect(() => {
 		if (!vehicleId) {
@@ -64,8 +65,8 @@
 		loading = false;
 	}
 
-	async function deleteFuelLog(logId: number) {
-		if (!confirm('Are you sure you want to delete this Fuel log?')) {
+	async function deleteFuelLog(logId: string | undefined) {
+		if (!logId) {
 			return;
 		}
 		try {
@@ -143,7 +144,10 @@
 								buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
 								iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
 								icon={Trash2}
-								onclick={() => deleteFuelLog(log.id)}
+								onclick={() => {
+									selectedFuelLog = log.id;
+									deleteDialog = true;
+								}}
 								ariaLabel="Delete"
 							/>
 						</td>
@@ -152,4 +156,5 @@
 			</tbody>
 		</table>
 	</div>
+	<DeleteConfirmation onConfirm={() => deleteFuelLog(selectedFuelLog)} bind:open={deleteDialog} />
 {/if}

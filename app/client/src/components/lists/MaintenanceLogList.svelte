@@ -7,6 +7,7 @@
 	import { maintenanceModelStore } from '$lib/stores/maintenance';
 	import { Jumper } from 'svelte-loading-spinners';
 	import IconButton from '$components/common/IconButton.svelte';
+	import DeleteConfirmation from '$components/common/DeleteConfirmation.svelte';
 
 	let { vehicleId } = $props();
 
@@ -22,6 +23,8 @@
 	let maintenanceLogs: MaintenanceLog[] = $state([]);
 	let loading = $state(false);
 	let error = $state('');
+	let selectedMaintenanceLog = $state<string>();
+	let deleteDialog = $state(false);
 
 	$effect(() => {
 		if (!vehicleId) {
@@ -61,8 +64,8 @@
 		}
 	}
 
-	async function deleteMaintenenceLog(logId: string) {
-		if (!confirm('Are you sure you want to delete this maintenance log?')) {
+	async function deleteMaintenenceLog(logId: string | undefined) {
+		if (!logId) {
 			return;
 		}
 		try {
@@ -132,7 +135,10 @@
 								buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
 								iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
 								icon={Trash2}
-								onclick={() => deleteMaintenenceLog(log.id)}
+								onclick={() => {
+									selectedMaintenanceLog = log.id;
+									deleteDialog = true;
+								}}
 								ariaLabel="Delete"
 							/>
 						</td>
@@ -141,4 +147,8 @@
 			</tbody>
 		</table>
 	</div>
+	<DeleteConfirmation
+		onConfirm={() => deleteMaintenenceLog(selectedMaintenanceLog)}
+		bind:open={deleteDialog}
+	/>
 {/if}

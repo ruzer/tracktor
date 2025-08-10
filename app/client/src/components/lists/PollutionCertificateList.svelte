@@ -4,9 +4,9 @@
 	import { env } from '$env/dynamic/public';
 	import { FileText, Calendar, MapPin, Pencil, Trash2, BadgeCheck } from '@lucide/svelte';
 	import { formatDate } from '$lib/utils/formatting';
-	import { puccModelStore } from '$lib/stores/pucc';
 	import { Jumper } from 'svelte-loading-spinners';
 	import IconButton from '$components/common/IconButton.svelte';
+	import DeleteConfirmation from '$components/common/DeleteConfirmation.svelte';
 
 	let { vehicleId } = $props();
 
@@ -22,6 +22,8 @@
 	let pollutionCertificates: PollutionCertificateDetails[] = $state([]);
 	let loading = $state(false);
 	let error = $state('');
+	let selectedPucc = $state<string>();
+	let deleteDialog = $state(false);
 
 	$effect(() => {
 		if (!vehicleId) {
@@ -60,8 +62,8 @@
 		}
 	}
 
-	async function deletePollutionCertificate(puccId: string) {
-		if (!confirm('Are you sure you want to delete this pollution certificate?')) {
+	async function deletePollutionCertificate(puccId: string | undefined) {
+		if (!puccId) {
 			return;
 		}
 		try {
@@ -115,7 +117,10 @@
 						buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
 						iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
 						icon={Trash2}
-						onclick={() => deletePollutionCertificate(pucc.id)}
+						onclick={() => {
+							selectedPucc = pucc.id;
+							deleteDialog = true;
+						}}
 						ariaLabel="Delete"
 					/>
 				</div>
@@ -146,4 +151,8 @@
 			</div>
 		</div>
 	{/each}
+	<DeleteConfirmation
+		onConfirm={() => deletePollutionCertificate(selectedPucc)}
+		bind:open={deleteDialog}
+	/>
 {/if}
