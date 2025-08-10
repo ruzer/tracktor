@@ -7,6 +7,7 @@
 	import { insuranceModelStore } from '$lib/stores/insurance';
 	import { Jumper } from 'svelte-loading-spinners';
 	import IconButton from '$components/common/IconButton.svelte';
+	import DeleteConfirmation from '$components/common/DeleteConfirmation.svelte';
 
 	let { vehicleId } = $props();
 
@@ -23,6 +24,8 @@
 	let insurances: Insurance[] = $state([]);
 	let loading = $state(false);
 	let error = $state('');
+	let selectedInsurance = $state<string>();
+	let deleteDialog = $state(false);
 
 	$effect(() => {
 		if (!vehicleId) {
@@ -62,8 +65,8 @@
 		}
 	}
 
-	async function deleteInsurance(insuranceId: string) {
-		if (!confirm('Are you sure you want to delete this maintenance log?')) {
+	async function deleteInsurance(insuranceId: string | undefined) {
+		if (!insuranceId) {
 			return;
 		}
 		try {
@@ -115,7 +118,10 @@
 						buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
 						iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
 						icon={Trash2}
-						onclick={() => deleteInsurance(ins.id)}
+						onclick={() => {
+							selectedInsurance = ins.id;
+							deleteDialog = true;
+						}}
 						ariaLabel="Delete"
 					/>
 				</div>
@@ -141,12 +147,18 @@
 					<span class="font-semibold">End Date:</span>
 					<span>{formatDate(ins.endDate)}</span>
 				</div>
-				<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-					<Notebook class="h-5 w-5 " />
-					<span class="font-semibold">Notes:</span>
-					<span>{ins.notes}</span>
-				</div>
+				{#if ins.notes}
+					<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+						<Notebook class="h-5 w-5 " />
+						<span class="font-semibold">Notes:</span>
+						<span>{ins.notes}</span>
+					</div>
+				{/if}
 			</div>
 		</div>
 	{/each}
+	<DeleteConfirmation
+		onConfirm={() => deleteInsurance(selectedInsurance)}
+		bind:open={deleteDialog}
+	/>
 {/if}

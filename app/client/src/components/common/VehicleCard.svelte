@@ -21,13 +21,12 @@
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
 	import IconButton from './IconButton.svelte';
+	import DeleteConfirmation from './DeleteConfirmation.svelte';
 
 	const { vehicle, updateCallback } = $props();
+	let deleteDialog = $state(false);
 
 	async function deleteVehicle(vehicleId: string) {
-		if (!confirm('Are you sure you want to delete this vehicle?')) {
-			return;
-		}
 		try {
 			const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}`, {
 				method: 'DELETE',
@@ -167,9 +166,10 @@
 				buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
 				iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
 				icon={Trash2}
-				onclick={() => deleteVehicle(vehicle.id)}
+				onclick={() => (deleteDialog = true)}
 				ariaLabel="Delete"
 			/>
 		</div>
 	</div>
 </div>
+<DeleteConfirmation onConfirm={() => deleteVehicle(vehicle.id)} bind:open={deleteDialog} />
