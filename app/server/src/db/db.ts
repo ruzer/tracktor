@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 import { Sequelize } from "sequelize";
 
-config({ quiet: false, debug: true });
+config({ quiet: true, debug: false });
 
 const showSql = process.env.SHOW_SQL === "true" || false;
 

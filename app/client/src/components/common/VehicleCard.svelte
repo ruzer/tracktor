@@ -87,10 +87,16 @@
 		</p>
 
 		<p class="flex items-center gap-2">
-			<Paintbrush class="h-5 w-5 text-gray-400 dark:text-gray-500" /><span class="font-semibold"
-				>Color:</span
-			>
-			{vehicle.color ? vehicle.color : '-'}
+			<Paintbrush class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+			<span class="font-semibold">Color:</span>
+			{#if vehicle.color}
+				<span
+					class="m-1 h-4 w-8 rounded border-2 border-sky-500 p-2 dark:border-sky-800"
+					style={`background-color: ${vehicle.color}`}
+				></span>
+			{:else}
+				<span>-</span>
+			{/if}
 		</p>
 		<p class="flex items-center gap-2">
 			<Gauge class="h-5 w-5 text-gray-400 dark:text-gray-500" />
@@ -101,7 +107,7 @@
 			<p class="flex items-center gap-2">
 				<Shield class="h-5 w-5 text-gray-400 dark:text-gray-500" />
 				<span class="font-semibold">Insurance:</span>
-				<span class={vehicle.insuranceStatus === 'Active' ? 'text-green-500' : 'text-red-500'}>
+				<span class={vehicle.insuranceStatus === 'Active' ? 'text-green-600' : 'text-red-600'}>
 					{vehicle.insuranceStatus}
 				</span>
 			</p>
@@ -110,7 +116,7 @@
 			<p class="flex items-center gap-2">
 				<BadgeCheck class="h-5 w-5 text-gray-400 dark:text-gray-500" />
 				<span class="font-semibold">PUCC:</span>
-				<span class={vehicle.puccStatus === 'Active' ? 'text-green-500' : 'text-red-500'}>
+				<span class={vehicle.puccStatus === 'Active' ? 'text-green-600' : 'text-red-600'}>
 					{vehicle.puccStatus}
 				</span>
 			</p>

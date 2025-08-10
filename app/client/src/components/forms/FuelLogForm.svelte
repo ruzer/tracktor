@@ -1,6 +1,9 @@
 <script lang="ts">
 	import Button from '$components/common/Button.svelte';
+	import StatusBlock from '$components/common/StatusBlock.svelte';
 	import { env } from '$env/dynamic/public';
+	import { handleApiError } from '$lib/models/Error';
+	import type { Status } from '$lib/models/status';
 	import { getCurrencySymbol } from '$lib/utils/formatting';
 	import FormField from '../common/FormField.svelte';
 	import { Calendar1, Gauge, Fuel, FileText, BadgeDollarSign } from '@lucide/svelte';
@@ -15,39 +18,38 @@
 	} = $props();
 
 	let refill = $state({
-		date: '',
-		odometer: '',
-		fuelAmount: '',
-		cost: '',
-		notes: ''
+		date: null,
+		odometer: null,
+		fuelAmount: null,
+		cost: null,
+		notes: null
 	});
 
-	let status = $state<{
-		message: string | null;
-		type: 'ERROR' | 'SUCCESS' | null;
-	}>({
-		message: null,
-		type: null
+	let status = $state<Status>({
+		message: undefined,
+		type: 'INFO'
+	});
+
+	$effect(() => {
+		Object.assign(refill, logToEdit);
 	});
 
 	async function persistLog() {
-		status.message = '';
 		if (!vehicleId) {
-			status.message = 'No vehicle selected.';
-			status.type = 'ERROR';
+			status = {
+				message: 'No vehicle selected.',
+				type: 'ERROR'
+			};
 			return;
 		}
 		if (!refill.date || !refill.odometer || !refill.fuelAmount || !refill.cost) {
-			status.message = 'Please fill in all required fields.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Date, Odometer, Fuel Amount, and Cost are required.',
+				type: 'ERROR'
+			};
 			return;
 		}
 		try {
-			if (loading) return; // Prevent multiple submissions
-			loading = true;
-			status.message = null;
-			status.type = null;
-			// await simulateNetworkDelay(2000); // Simulate network delay for development
 			const response = await fetch(
 				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/fuel-logs/${editMode ? logToEdit.id : ''}`,
 				{
@@ -56,18 +58,14 @@
 						'Content-Type': 'application/json',
 						'X-User-PIN': localStorage.getItem('userPin') || ''
 					},
-					body: JSON.stringify({
-						date: refill.date,
-						odometer: parseFloat(refill.odometer),
-						fuelAmount: parseFloat(refill.fuelAmount),
-						cost: parseFloat(refill.cost),
-						notes: refill.notes
-					})
+					body: JSON.stringify(refill)
 				}
 			);
 			if (response.ok) {
-				status.message = 'Fuel refill logged successfully.';
-				status.type = 'SUCCESS';
+				status = {
+					message: `Fuel refill log ${editMode ? 'updated' : 'added'} successfully!`,
+					type: 'SUCCESS'
+				};
 				Object.assign(refill, {
 					date: '',
 					odometer: '',
@@ -77,23 +75,21 @@
 				});
 			} else {
 				const data = await response.json();
-				status.message = data?.message || 'Failed to log fuel refill.';
-				status.type = 'ERROR';
+				status = handleApiError(data, editMode);
 			}
 		} catch (err) {
-			status.message = 'Network error. Please try again.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Failed to connect to the server.',
+				type: 'ERROR'
+			};
 		} finally {
 			loading = false;
 			if (status.type === 'SUCCESS') {
-				modalVisibility = false; // Close modal on success
+				modalVisibility = false;
 				callback(true);
 			}
 		}
 	}
-	$effect(() => {
-		Object.assign(refill, logToEdit);
-	});
 </script>
 
 <form class="space-y-6" onsubmit={persistLog} aria-labelledby="fuel-refill-form-title">
@@ -156,14 +152,4 @@
 	/>
 	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
 </form>
-{#if status.message}
-	<p
-		class={`mt-4 text-center text-sm ${status.type === 'ERROR' ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'}`}
-	>
-		{#if status.type === 'ERROR'}
-			<span class="font-semibold">Error:</span> {status.message}
-		{:else}
-			{status.message}
-		{/if}
-	</p>
-{/if}
+<StatusBlock message={status.message} type={status.type} />

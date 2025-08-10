@@ -4,6 +4,7 @@ import pinRoutes from "./src/routes/pinRoutes.js";
 import vehicleRoutes from "./src/routes/vehicleRoutes.js";
 import configRoutes from "./src/routes/configRoutes.js";
 import { performDbMigrations, seedData } from "./src/db/index.js";
+import { errorHandler } from "./src/middleware/error-handler.js";
 
 const app = express();
 const PORT = Number(process.env.APP_PORT) || 3000;
@@ -26,6 +27,8 @@ if (process.env.NODE_ENV === "production") {
     res.redirect(`http://localhost:5173${req.originalUrl}`);
   });
 }
+
+app.use(errorHandler);
 
 performDbMigrations()
   .then(() => {

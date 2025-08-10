@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
-	import { Shield, Calendar, Hash, DollarSign, Pencil, Trash2 } from '@lucide/svelte';
+	import { Shield, Calendar, Hash, DollarSign, Pencil, Trash2, Notebook } from '@lucide/svelte';
 	import { formatCurrency, formatDate } from '$lib/utils/formatting';
 	import { insuranceModelStore } from '$lib/stores/insurance';
 	import { Jumper } from 'svelte-loading-spinners';
@@ -17,6 +17,7 @@
 		startDate: string;
 		endDate: string;
 		cost: number;
+		notes: string;
 	}
 
 	let insurances: Insurance[] = $state([]);
@@ -139,6 +140,11 @@
 					<Calendar class="h-5 w-5 " />
 					<span class="font-semibold">End Date:</span>
 					<span>{formatDate(ins.endDate)}</span>
+				</div>
+				<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+					<Notebook class="h-5 w-5 " />
+					<span class="font-semibold">Notes:</span>
+					<span>{ins.notes}</span>
 				</div>
 			</div>
 		</div>
