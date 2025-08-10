@@ -1,7 +1,10 @@
 <script lang="ts">
+	import Button from '$components/common/Button.svelte';
 	import FormField from '$components/common/FormField.svelte';
-	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
+	import StatusBlock from '$components/common/StatusBlock.svelte';
 	import { env } from '$env/dynamic/public';
+	import { handleApiError } from '$lib/models/Error';
+	import type { Status } from '$lib/models/status';
 	import { Calendar1, IdCard, Notebook, TestTube, TestTube2 } from '@lucide/svelte';
 
 	let {
@@ -14,19 +17,16 @@
 	} = $props();
 
 	let certificate = $state({
-		certificateNumber: '',
-		issueDate: '',
-		expiryDate: '',
-		testingCenter: '',
-		notes: ''
+		certificateNumber: null,
+		issueDate: null,
+		expiryDate: null,
+		testingCenter: null,
+		notes: null
 	});
 
-	let status = $state<{
-		message: string | null;
-		type: 'ERROR' | 'SUCCESS' | null;
-	}>({
-		message: null,
-		type: null
+	let status = $state<Status>({
+		message: undefined,
+		type: 'INFO'
 	});
 
 	$effect(() => {
@@ -42,8 +42,10 @@
 			!certificate.expiryDate ||
 			!certificate.testingCenter
 		) {
-			status.message = 'Certificate Number, Issue Date, Expiry Date, Testing Center are required.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Certificate Number, Issue Date, Expiry Date, Testing Center are required.',
+				type: 'ERROR'
+			};
 			return;
 		}
 
@@ -61,8 +63,10 @@
 			);
 
 			if (response.ok) {
-				status.message = `Pollution Certificate ${editMode ? 'updated' : 'added'} successfully!`;
-				status.type = 'SUCCESS';
+				status = {
+					message: `Pollution Certificate ${editMode ? 'updated' : 'added'} successfully!`,
+					type: 'SUCCESS'
+				};
 				Object.assign(certificate, {
 					certificateNumber: '',
 					issueDate: '',
@@ -73,13 +77,13 @@
 				modalVisibility = false;
 			} else {
 				const data = await response.json();
-				status.message =
-					data.message || `Failed to ${editMode ? 'update' : 'add'} pollution certificate.`;
-				status.type = 'ERROR';
+				status = handleApiError(data, editMode);
 			}
 		} catch (e) {
-			status.message = 'Failed to connect to the server.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Failed to connect to the server.',
+				type: 'ERROR'
+			};
 		}
 		loading = false;
 		if (status.type === 'SUCCESS') {
@@ -102,33 +106,39 @@
 		placeholder="Certificate Number"
 		bind:value={certificate.certificateNumber}
 		icon={IdCard}
+		label="Certificate Number"
 		required={true}
 		ariaLabel="Certificate Number"
 	/>
-	<FormField
-		id="issue-date"
-		type="date"
-		placeholder="Issue Date"
-		bind:value={certificate.issueDate}
-		icon={Calendar1}
-		required={true}
-		ariaLabel="Issue Date"
-	/>
-	<FormField
-		id="expiry-date"
-		type="date"
-		placeholder="Expiry Date"
-		bind:value={certificate.expiryDate}
-		icon={Calendar1}
-		required={true}
-		ariaLabel="Expiry Date"
-	/>
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
+		<FormField
+			id="issue-date"
+			type="date"
+			placeholder="Issue Date"
+			bind:value={certificate.issueDate}
+			icon={Calendar1}
+			label="Issue Date"
+			required={true}
+			ariaLabel="Issue Date"
+		/>
+		<FormField
+			id="expiry-date"
+			type="date"
+			placeholder="Expiry Date"
+			bind:value={certificate.expiryDate}
+			icon={Calendar1}
+			label="Expiry date"
+			required={true}
+			ariaLabel="Expiry Date"
+		/>
+	</div>
 	<FormField
 		id="testing-center"
 		type="text"
 		placeholder="Testing Center"
 		bind:value={certificate.testingCenter}
 		icon={TestTube2}
+		label="Testing Center"
 		required={true}
 		ariaLabel="Testing Center"
 	/>
@@ -138,20 +148,10 @@
 		placeholder="Notes"
 		bind:value={certificate.notes}
 		icon={Notebook}
+		label="Notes"
 		required={false}
 		ariaLabel="Notes"
 	/>
-	<FormSubmitButton text={editMode ? 'Update Certificate' : 'Add Certificate'} {loading} />
+	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
 </form>
-
-{#if status.message}
-	<p
-		class={`mt-4 text-center text-sm ${status.type === 'ERROR' ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'}`}
-	>
-		{#if status.type === 'ERROR'}
-			<span class="font-semibold">Error:</span> {status.message}
-		{:else}
-			{status.message}
-		{/if}
-	</p>
-{/if}
+<StatusBlock message={status.message} type={status.type} />

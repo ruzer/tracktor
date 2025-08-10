@@ -31,17 +31,17 @@
 	<div class="relative flex items-center">
 		<!-- Switch background -->
 		<span
-			class="inline-block h-5 w-10 rounded-full bg-gray-400 transition-colors duration-300 dark:bg-gray-800"
+			class="inline-block h-5 w-10 rounded-full bg-gray-400 transition-colors duration-300 dark:bg-gray-700"
 		></span>
 		<!-- Switch knob -->
 		<span
-			class="absolute top-0 left-0 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow transition-transform duration-300 dark:bg-black"
+			class="absolute top-0 left-0 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow transition-transform duration-300 dark:bg-gray-800"
 			style="transform: translateX({darkMode ? '20px' : '0px'});"
 		>
 			{#if darkMode}
-				<Moon class="h-3 w-3 text-white" />
+				<Moon class="h-4 w-4 text-yellow-500" />
 			{:else}
-				<Sun class="h-3 w-3 text-black" />
+				<Sun class="h-4 w-4 text-red-500" />
 			{/if}
 		</span>
 	</div>

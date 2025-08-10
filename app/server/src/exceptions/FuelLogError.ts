@@ -1,13 +1,7 @@
-export class FuelLogError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = "FuelLogError";
-    }
-}
+import { ServiceError, Status } from "./ServiceError.js";
 
-export class FuelLogNotFoundError extends Error {
-    constructor() {
-        super("Fuel log not found.");
-        this.name = "FuelLogNotFoundError";
-    }
+export class FuelLogError extends ServiceError {
+  constructor(message: string, status = Status.INTERNAL_SERVER_ERROR) {
+    super(FuelLogError.name, message, status);
+  }
 }

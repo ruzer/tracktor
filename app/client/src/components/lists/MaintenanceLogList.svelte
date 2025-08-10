@@ -6,6 +6,7 @@
 	import { Pencil, Trash2 } from '@lucide/svelte';
 	import { maintenanceModelStore } from '$lib/stores/maintenance';
 	import { Jumper } from 'svelte-loading-spinners';
+	import IconButton from '$components/common/IconButton.svelte';
 
 	let { vehicleId } = $props();
 
@@ -13,7 +14,7 @@
 		id: string;
 		date: string;
 		odometer: number;
-		service: string;
+		serviceCenter: string;
 		cost: number;
 		notes?: string;
 	}
@@ -107,7 +108,8 @@
 					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
 						>Odometer</th
 					>
-					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">Service</th
+					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
+						>Service Center</th
 					>
 					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">Cost</th>
 					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">Notes</th>
@@ -122,31 +124,17 @@
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100"
 							>{formatDistance(log.odometer)}</td
 						>
-						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{log.service}</td>
+						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{log.serviceCenter}</td>
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{formatCurrency(log.cost)}</td>
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{log.notes || '-'}</td>
 						<td class="px-4 py-2 text-gray-800 dark:text-gray-200">
-							<button
-								class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-								onclick={() =>
-									maintenanceModelStore.show(vehicleId, log, true, (status: boolean) => {
-										if (status) {
-											fetchMaintenanceLogs();
-										}
-									})}
-							>
-								<Pencil
-									class="h-5 w-5 text-gray-500 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-								/>
-							</button>
-							<button
-								class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+							<IconButton
+								buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
+								iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
+								icon={Trash2}
 								onclick={() => deleteMaintenenceLog(log.id)}
-							>
-								<Trash2
-									class="h-5 w-5 text-gray-500 hover:text-red-600 dark:text-gray-300 dark:hover:text-red-400"
-								/>
-							</button>
+								ariaLabel="Delete"
+							/>
 						</td>
 					</tr>
 				{/each}

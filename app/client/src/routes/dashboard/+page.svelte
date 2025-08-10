@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Plus } from '@lucide/svelte';
+	import { PlusCircle } from '@lucide/svelte';
 	import FuelLogModal from '$components/modals/FuelLogModal.svelte';
 	import VehicleModal from '$components/modals/VehicleModal.svelte';
 	import VehicleList from '$components/lists/VehicleList.svelte';
@@ -17,6 +17,7 @@
 	import InsuranceModal from '$components/modals/InsuranceModal.svelte';
 	import { browser } from '$app/environment';
 	import ConfigModal from '$components/modals/ConfigModal.svelte';
+	import Button from '$components/common/Button.svelte';
 
 	let vehicles = $state<Vehicle[]>([]);
 	let loading = $state(true);
@@ -27,13 +28,14 @@
 	let activeTab = $state('dashboard');
 
 	vehiclesStore.subscribe((data) => {
-		console.log(data);
 		vehicles = data.vehicles;
 		loading = data.loading;
 		error = data.error;
 		selectedVehicleId = data.selectedVehicleId;
 		if (vehicles.length > 0) {
 			selectedVehicleId = selectedVehicleId || vehicles[0].id;
+		} else {
+			selectedVehicleId = undefined;
 		}
 	});
 
@@ -56,14 +58,13 @@
 <div class="container mx-auto bg-gray-100 p-6 transition-colors dark:bg-gray-900">
 	<div class="mb-8 flex items-center justify-between">
 		<h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">Your Vehicles</h1>
-		<button
+		<Button
 			type="button"
-			class="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-blue-600 bg-transparent px-3 py-1 text-lg font-semibold text-blue-600 shadow-md dark:text-blue-200"
+			variant="hero"
+			text="Add Vehicle"
+			icon={PlusCircle}
 			onclick={() => vehicleModelStore.show()}
-		>
-			<Plus class="h-5 w-5 text-blue-600 dark:text-blue-200" />
-			Add Vehicle
-		</button>
+		/>
 	</div>
 	{#if loading}
 		<p class="flex items-center justify-center gap-5 text-lg text-gray-500 dark:text-gray-400">

@@ -2,10 +2,11 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
-	import { Shield, Calendar, Hash, DollarSign, Pencil, Trash2 } from '@lucide/svelte';
+	import { Shield, Calendar, Hash, DollarSign, Pencil, Trash2, Notebook } from '@lucide/svelte';
 	import { formatCurrency, formatDate } from '$lib/utils/formatting';
 	import { insuranceModelStore } from '$lib/stores/insurance';
 	import { Jumper } from 'svelte-loading-spinners';
+	import IconButton from '$components/common/IconButton.svelte';
 
 	let { vehicleId } = $props();
 
@@ -16,6 +17,7 @@
 		startDate: string;
 		endDate: string;
 		cost: number;
+		notes: string;
 	}
 
 	let insurances: Insurance[] = $state([]);
@@ -101,7 +103,7 @@
 {:else}
 	{#each insurances as ins (ins.id)}
 		<div
-			class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+			class="mt-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
 		>
 			<div class="flex items-center justify-between">
 				<div class="flex items-center gap-2">
@@ -109,30 +111,13 @@
 					<span class="text-xl font-bold text-gray-800 dark:text-gray-100">{ins.provider}</span>
 				</div>
 				<div class="flex gap-2">
-					<button
-						class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-						onclick={() => {
-							insuranceModelStore.show(vehicleId, ins, true, (status: boolean) => {
-								if (status) {
-									fetchInsuranceDetails();
-								}
-							});
-						}}
-					>
-						<Pencil
-							class="h-5 w-5 text-gray-500 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-						/>
-					</button>
-					<button
-						class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-						onclick={() => {
-							deleteInsurance(ins.id);
-						}}
-					>
-						<Trash2
-							class="h-5 w-5 text-gray-500 hover:text-red-600 dark:text-gray-300 dark:hover:text-red-400"
-						/>
-					</button>
+					<IconButton
+						buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
+						iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
+						icon={Trash2}
+						onclick={() => deleteInsurance(ins.id)}
+						ariaLabel="Delete"
+					/>
 				</div>
 			</div>
 			<div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -155,6 +140,11 @@
 					<Calendar class="h-5 w-5 " />
 					<span class="font-semibold">End Date:</span>
 					<span>{formatDate(ins.endDate)}</span>
+				</div>
+				<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+					<Notebook class="h-5 w-5 " />
+					<span class="font-semibold">Notes:</span>
+					<span>{ins.notes}</span>
 				</div>
 			</div>
 		</div>

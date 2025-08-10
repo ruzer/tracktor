@@ -12,11 +12,12 @@ interface FuelLogAttributes {
   notes?: string;
 }
 
-interface FuelLogCreationAttributes extends Optional<FuelLogAttributes, "id"> { }
+interface FuelLogCreationAttributes extends Optional<FuelLogAttributes, "id"> {}
 
 class FuelLog
   extends Model<FuelLogAttributes, FuelLogCreationAttributes>
-  implements FuelLogAttributes {
+  implements FuelLogAttributes
+{
   declare public id: string;
   declare public vehicleId: string;
   declare public date: string;
@@ -45,36 +46,45 @@ FuelLog.init(
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
-      validate: {
-        isDate: true,
-        notEmpty: true,
-      },
     },
     odometer: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        isInt: true,
-        min: 0,
+         min: {
+          args: [0],
+          msg: "Odometer reading must be greater than 0.",
+        },
       },
     },
     fuelAmount: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      validate: {
+        min: {
+          args: [0],
+          msg: "Fuel Amount must be greater than 0.",
+        },
+      },
     },
     cost: {
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        isFloat: true,
-        min: 0,
+        min: {
+          args: [0],
+          msg: "Fuel Amount must be greater than 0.",
+        },
       },
     },
     notes: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        len: [0, 500],
+        len: {
+          args: [0, 500],
+          msg: "Notes must be lesser than 500 length.",
+        },
       },
     },
   },

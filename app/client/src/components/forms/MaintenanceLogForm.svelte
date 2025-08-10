@@ -1,7 +1,10 @@
 <script lang="ts">
+	import Button from '$components/common/Button.svelte';
 	import FormField from '$components/common/FormField.svelte';
-	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
+	import StatusBlock from '$components/common/StatusBlock.svelte';
 	import { env } from '$env/dynamic/public';
+	import { handleApiError } from '$lib/models/Error';
+	import type { Status } from '$lib/models/status';
 	import { getCurrencySymbol, getDistanceUnit } from '$lib/utils/formatting';
 	import { BadgeDollarSign, Calendar1, Gauge, Hammer, Notebook } from '@lucide/svelte';
 
@@ -15,19 +18,16 @@
 	} = $props();
 
 	let log = $state({
-		date: '',
+		date: null,
 		odometer: null,
-		service: '',
+		serviceCenter: null,
 		cost: null,
-		notes: ''
+		notes: null
 	});
 
-	let status = $state<{
-		message: string | null;
-		type: 'ERROR' | 'SUCCESS' | null;
-	}>({
-		message: null,
-		type: null
+	let status = $state<Status>({
+		message: undefined,
+		type: 'INFO'
 	});
 
 	$effect(() => {
@@ -37,9 +37,11 @@
 	});
 
 	async function persistLog() {
-		if (!log.date || !log.odometer || !log.service || log.cost === null) {
-			status.message = 'Date, Odometer, Service, and Cost are required.';
-			status.type = 'ERROR';
+		if (!log.date || !log.odometer || !log.serviceCenter || log.cost === null) {
+			status = {
+				message: 'Date, Odometer, Service Center, and Cost are required.',
+				type: 'ERROR'
+			};
 			return;
 		}
 
@@ -57,25 +59,27 @@
 			);
 
 			if (response.ok) {
-				status.message = `Maintenance log ${editMode ? 'updated' : 'added'} successfully!`;
-				status.type = 'SUCCESS';
+				status = {
+					message: `Maintenance log  ${editMode ? 'updated' : 'added'} successfully!`,
+					type: 'SUCCESS'
+				};
 				Object.assign(log, {
 					date: '',
 					odometer: null,
-					service: '',
+					serviceCenter: '',
 					cost: null,
 					notes: ''
 				});
 				modalVisibility = false;
 			} else {
 				const data = await response.json();
-				status.message =
-					data.message || `Failed to ${editMode ? 'update' : 'add'} maintenance log.`;
-				status.type = 'ERROR';
+				status = handleApiError(data, editMode);
 			}
 		} catch (e) {
-			status.message = 'Failed to connect to the server.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Failed to connect to the server.',
+				type: 'ERROR'
+			};
 		}
 		loading = false;
 		if (status.type === 'SUCCESS') {
@@ -92,61 +96,60 @@
 	}}
 	class="space-y-6"
 >
-	<FormField
-		id="date"
-		type="date"
-		placeholder="Date"
-		bind:value={log.date}
-		icon={Calendar1}
-		required={true}
-		ariaLabel="Log Date"
-	/>
-	<FormField
-		id="odometer"
-		type="number"
-		placeholder="Odometer ( {getDistanceUnit()} )"
-		bind:value={log.odometer}
-		icon={Gauge}
-		required={true}
-		ariaLabel="Odometer Reading"
-	/>
-	<FormField
-		id="cost"
-		type="number"
-		placeholder="Cost ( {getCurrencySymbol()} )"
-		bind:value={log.cost}
-		icon={BadgeDollarSign}
-		required={true}
-		ariaLabel="Service Cost ( {getCurrencySymbol()} )"
-	/>
-	<FormField
-		id="service"
-		type="text"
-		placeholder="Service"
-		bind:value={log.service}
-		icon={Hammer}
-		required={true}
-		ariaLabel="Service Description"
-	/>
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
+		<FormField
+			id="date"
+			type="date"
+			placeholder="Date"
+			bind:value={log.date}
+			icon={Calendar1}
+			label="Date"
+			required={true}
+			ariaLabel="Log Date"
+		/>
+		<FormField
+			id="odometer"
+			type="number"
+			placeholder="Odometer ( {getDistanceUnit()} )"
+			bind:value={log.odometer}
+			icon={Gauge}
+			label="Odometer"
+			required={true}
+			ariaLabel="Odometer Reading"
+		/>
+	</div>
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
+		<FormField
+			id="cost"
+			type="number"
+			placeholder="Cost ( {getCurrencySymbol()} )"
+			bind:value={log.cost}
+			icon={BadgeDollarSign}
+			label="Cost"
+			required={true}
+			ariaLabel="Service Cost ( {getCurrencySymbol()} )"
+		/>
+		<FormField
+			id="service"
+			type="text"
+			placeholder="Service Center"
+			bind:value={log.serviceCenter}
+			icon={Hammer}
+			label="Service Center"
+			required={true}
+			ariaLabel="Service Description"
+		/>
+	</div>
 	<FormField
 		id="notes"
-		type="textarea"
+		type="text"
 		placeholder="Notes"
 		bind:value={log.notes}
 		icon={Notebook}
+		label="Notes"
 		required={false}
 		ariaLabel="Additional Notes"
 	/>
-	<FormSubmitButton text={editMode ? 'Update Log' : 'Add Log'} {loading} />
+	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
 </form>
-{#if status.message}
-	<p
-		class={`mt-4 text-center text-sm ${status.type === 'ERROR' ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'}`}
-	>
-		{#if status.type === 'ERROR'}
-			<span class="font-semibold">Error:</span> {status.message}
-		{:else}
-			{status.message}
-		{/if}
-	</p>
-{/if}
+<StatusBlock message={status.message} type={status.type} />

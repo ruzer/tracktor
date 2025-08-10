@@ -1,14 +1,22 @@
 import { Umzug, SequelizeStorage } from "umzug";
 import bcrypt from "bcrypt";
-import { Auth, Config, FuelLog, Insurance, MaintenanceLog, PollutionCertificate, Vehicle } from "../models/index.js";
+import {
+  Auth,
+  Config,
+  FuelLog,
+  Insurance,
+  MaintenanceLog,
+  PollutionCertificate,
+  Vehicle,
+} from "../models/index.js";
 import { db } from "./db.js";
 
 const umzug = new Umzug({
-  migrations: { glob: 'migrations/*.ts' },
+  migrations: { glob: "migrations/*.ts" },
   context: db.getQueryInterface(),
   storage: new SequelizeStorage({
     tableName: "migrations",
-    sequelize: db
+    sequelize: db,
   }),
   logger: console,
 });
@@ -17,12 +25,12 @@ const umzug = new Umzug({
 type Migration = typeof umzug._types.migration;
 
 const performDbMigrations = async () => {
-  await db.sync({ alter: true })
+  await db.sync({ alter: false });
   return umzug.up({});
-}
+};
 
 const seedData = async () => {
-  const demoMode = process.env.DEMO_MODE === 'true'
+  const demoMode = process.env.DEMO_MODE === "true";
 
   if (demoMode) {
     await db.dropAllSchemas({});
@@ -30,21 +38,20 @@ const seedData = async () => {
   } else {
     await setupPinAndConfigs();
   }
-
-}
+};
 
 const setupPinAndConfigs = async () => {
-  const pin = process.env.AUTH_PIN
+  const pin = process.env.AUTH_PIN;
   if (pin) await generatePin(pin);
   await generateConfigs();
-}
+};
 
 const insertDummyData = async () => {
   try {
     await db.sync({ force: true });
     console.log("Database synchronized!");
 
-    await generatePin('123456');
+    await generatePin("123456");
     await generateConfigs();
     const { vehicle1, vehicle2 } = await generateVehicles();
     await generateInsurances(vehicle1, vehicle2);
@@ -55,7 +62,7 @@ const insertDummyData = async () => {
   } catch (error) {
     console.error("Error populating database:", error);
   }
-}
+};
 
 async function generateFuelLogData(vehicle1: Vehicle, vehicle2: Vehicle) {
   const vehicle1FuelLogs: any = [
@@ -157,15 +164,17 @@ async function generateMaintenenceLogs(vehicle1: Vehicle, vehicle2: Vehicle) {
       vehicleId: vehicle1.id,
       date: "2023-06-01",
       odometer: 18000,
-      service: "Oil Change",
+      serviceCenter: "Test Center",
       cost: 50,
+      notes: "Oil Change",
     },
     {
       vehicleId: vehicle2.id,
       date: "2023-07-01",
       odometer: 28000,
-      service: "Tire Rotation",
+      serviceCenter: "Test Center",
       cost: 30,
+      notes: "Tire Rotation",
     },
   ]);
 
@@ -200,9 +209,9 @@ async function generateVehicles() {
     make: "Honda",
     model: "Civic",
     year: 2022,
-    licensePlate: "TS-07-JA-1997",
+    licensePlate: "TS07JA1997",
     vin: "1HGFC1F7XNA000001",
-    color: "Black",
+    color: "#000",
     odometer: 15000,
   });
 
@@ -210,9 +219,9 @@ async function generateVehicles() {
     make: "Toyota",
     model: "Corolla",
     year: 2021,
-    licensePlate: "AP-28-DX-2000",
+    licensePlate: "AP28DX2000",
     vin: "1NXBU4EE4AZ000002",
-    color: "White",
+    color: "#FFF",
     odometer: 25000,
   });
 
@@ -239,7 +248,7 @@ async function generateConfigs() {
     },
   ];
   await Config.bulkCreate(configData, {
-    ignoreDuplicates: true
+    ignoreDuplicates: true,
   });
   console.log("Configuration data created.");
 }
@@ -251,4 +260,4 @@ async function generatePin(pin: string) {
   console.log(`User created with PIN: ${pin}`);
 }
 
-export { Migration, performDbMigrations, seedData, db }
+export { Migration, performDbMigrations, seedData, db };

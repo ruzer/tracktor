@@ -1,5 +1,5 @@
 <script lang="ts">
-	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
+	import Button from '$components/common/Button.svelte';
 
 	let { modalVisibility = $bindable(), loading = false, callback } = $props();
 
@@ -41,7 +41,7 @@
 	async function saveConfig() {
 		await config.save(localConfig);
 		callback(true);
-		modalVisibility=false;
+		modalVisibility = false;
 	}
 </script>
 
@@ -105,7 +105,7 @@
 			{/if}
 		</div>
 	{/each}
-	<FormSubmitButton text="Save" {loading} />
+	<Button type="submit" variant="primary" text="Update" />
 </form>
 {#if status.message}
 	<p

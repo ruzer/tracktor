@@ -5,6 +5,6 @@
 	const { vehicleId } = $props();
 </script>
 
-<TabContainer title="Fuel Cost & Mileage Trends">
+<TabContainer title="Vehicle Trends">
 	<DashboardCharts {vehicleId} />
 </TabContainer>

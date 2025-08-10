@@ -1,103 +1,86 @@
 import { MaintenanceLog, Vehicle } from "../models/index.js";
-import {
-  MaintenanceLogNotFoundError,
-  MaintenanceLogServiceError
-} from "../exceptions/MaintenanceLogErrors.js";
+import { MaintenanceLogError } from "../exceptions/MaintenanceLogError.js";
+import { Status, statusFromError } from "../exceptions/ServiceError.js";
 
 export const addMaintenanceLog = async (
   vehicleId: string,
-  maintenanceLogData: any
+  maintenanceLogData: any,
 ) => {
-  try {
-    const vehicle = await Vehicle.findByPk(vehicleId);
-    if (!vehicle) {
-      throw new MaintenanceLogNotFoundError("Vehicle not found.");
-    }
 
-    const maintenanceLog = await MaintenanceLog.create({
-      ...maintenanceLogData,
-      vehicleId: vehicleId,
-    });
-    return {
-      id: maintenanceLog.id,
-      message: "Maintenance log added successfully.",
-    };
-  } catch (error: unknown) {
-    console.error("Error adding maintenance log: ", error);
-    if (error instanceof MaintenanceLogNotFoundError) {
-      throw error;
-    }
-    throw new MaintenanceLogServiceError("Error adding maintenance log.");
+  const vehicle = await Vehicle.findByPk(vehicleId);
+  if (!vehicle) {
+    throw new MaintenanceLogError(
+      `No vehicle found for id ${vehicleId}`,
+      Status.NOT_FOUND,
+    );
   }
+
+  const maintenanceLog = await MaintenanceLog.create({
+    ...maintenanceLogData,
+    vehicleId: vehicleId,
+  });
+  return {
+    id: maintenanceLog.id,
+    message: "Maintenance log added successfully.",
+  };
+
 };
 
 export const getMaintenanceLogs = async (vehicleId: string) => {
-  try {
-    const maintenanceLogs = await MaintenanceLog.findAll({
-      where: { vehicleId: vehicleId },
-      order: [
-        ["date", "ASC"],
-        ["odometer", "ASC"],
-      ],
-    });
-    return maintenanceLogs;
-  } catch (error: unknown) {
-    console.error("Error fetching maintenance logs: ", error);
-    throw new MaintenanceLogServiceError("Error fetching maintenance logs.");
-  }
+
+  const maintenanceLogs = await MaintenanceLog.findAll({
+    where: { vehicleId: vehicleId },
+    order: [
+      ["date", "ASC"],
+      ["odometer", "ASC"],
+    ],
+  });
+  return maintenanceLogs;
+
 };
 
 export const getMaintenanceLogById = async (id: string) => {
-  try {
-    const maintenanceLog = await MaintenanceLog.findByPk(id);
-    if (!maintenanceLog) {
-      throw new MaintenanceLogNotFoundError();
-    }
-    return maintenanceLog;
-  } catch (error: unknown) {
-    console.error("Error fetching maintenance log: ", error);
-    if (error instanceof MaintenanceLogNotFoundError) {
-      throw error;
-    }
-    throw new MaintenanceLogServiceError("Error fetching maintenance log.");
+
+  const maintenanceLog = await MaintenanceLog.findByPk(id);
+  if (!maintenanceLog) {
+    throw new MaintenanceLogError(
+      `No Maintenence log found for id : ${id}`,
+      Status.NOT_FOUND,
+    );
   }
+  return maintenanceLog;
+
 };
 
 export const updateMaintenanceLog = async (
   id: string,
-  maintenanceLogData: any
+  maintenanceLogData: any,
 ) => {
-  try {
-    const maintenanceLog = await MaintenanceLog.findByPk(id);
-    if (!maintenanceLog) {
-      throw new MaintenanceLogNotFoundError();
-    }
 
-    await maintenanceLog.update(maintenanceLogData);
-    return { message: "Maintenance log updated successfully." };
-  } catch (error: unknown) {
-    console.error("Error updating maintenance log: ", error);
-    if (error instanceof MaintenanceLogNotFoundError) {
-      throw error;
-    }
-    throw new MaintenanceLogServiceError("Error updating maintenance log.");
+  const maintenanceLog = await MaintenanceLog.findByPk(id);
+  if (!maintenanceLog) {
+    throw new MaintenanceLogError(
+      `No Maintenence log found for id : ${id}`,
+      Status.NOT_FOUND,
+    );
   }
+
+  await maintenanceLog.update(maintenanceLogData);
+  return { message: "Maintenance log updated successfully." };
+
 };
 
 export const deleteMaintenanceLog = async (id: string) => {
-  try {
-    const result = await MaintenanceLog.destroy({
-      where: { id: id },
-    });
-    if (result === 0) {
-      throw new MaintenanceLogNotFoundError();
-    }
-    return { message: "Maintenance log deleted successfully." };
-  } catch (error: unknown) {
-    console.error("Error deleting maintenance log: ", error);
-    if (error instanceof MaintenanceLogNotFoundError) {
-      throw error;
-    }
-    throw new MaintenanceLogServiceError("Error deleting maintenance log.");
+
+  const result = await MaintenanceLog.destroy({
+    where: { id: id },
+  });
+  if (result === 0) {
+    throw new MaintenanceLogError(
+      `No Maintenence log found for id : ${id}`,
+      Status.NOT_FOUND,
+    );
   }
+  return { message: "Maintenance log deleted successfully." };
+
 };

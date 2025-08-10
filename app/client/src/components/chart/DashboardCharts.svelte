@@ -85,7 +85,7 @@
 						{
 							label: `Total Fuel Cost (${getCurrencySymbol()})`,
 							data: costData,
-							fill: false,
+							fill: true,
 							borderColor: 'rgb(75, 192, 192)',
 							tension: 0.3,
 							borderWidth: 2,
@@ -102,9 +102,13 @@
 						{
 							label: `Mileage (${getMileageUnit()})`,
 							data: mileageDataPoints,
-							fill: true,
 							borderColor: 'rgb(255, 99, 132)',
-							tension: 0.1
+							fill: true,
+							tension: 0.3,
+							borderWidth: 2,
+							borderCapStyle: 'round',
+							pointStyle: 'circle',
+							pointRadius: 2
 						}
 					]
 				};
