@@ -1,9 +1,12 @@
 <script lang="ts">
 	import Button from '$components/common/Button.svelte';
 	import FormField from '$components/common/FormField.svelte';
+	import StatusBlock from '$components/common/StatusBlock.svelte';
 	import { env } from '$env/dynamic/public';
+	import { handleApiError } from '$lib/models/Error';
+	import type { Status } from '$lib/models/status';
 	import { getCurrencySymbol } from '$lib/utils/formatting';
-	import { BadgeDollarSign, Building2, Calendar1, IdCard } from '@lucide/svelte';
+	import { BadgeDollarSign, Building2, Calendar1, IdCard, Notebook } from '@lucide/svelte';
 
 	let {
 		vehicleId,
@@ -15,19 +18,17 @@
 	} = $props();
 
 	let insurance = $state({
-		provider: '',
-		policyNumber: '',
-		startDate: '',
-		endDate: '',
-		cost: null
+		provider: null,
+		policyNumber: null,
+		startDate: null,
+		endDate: null,
+		cost: null,
+		notes: null
 	});
 
-	let status = $state<{
-		message: string | null;
-		type: 'ERROR' | 'SUCCESS' | null;
-	}>({
-		message: null,
-		type: null
+	let status = $state<Status>({
+		message: undefined,
+		type: 'INFO'
 	});
 
 	$effect(() => {
@@ -44,8 +45,10 @@
 			!insurance.endDate ||
 			!insurance.cost
 		) {
-			status.message = 'Provider, Policy Number, Start Date, End Date, Cost are required.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Provider, Policy Number, Start Date, End Date, Cost are required.',
+				type: 'ERROR'
+			};
 			return;
 		}
 
@@ -63,8 +66,10 @@
 			);
 
 			if (response.ok) {
-				status.message = `Insurance details ${editMode ? 'updated' : 'added'} successfully!`;
-				status.type = 'SUCCESS';
+				status = {
+					message: `Insurance details ${editMode ? 'updated' : 'added'} successfully!`,
+					type: 'SUCCESS'
+				};
 				Object.assign(insurance, {
 					provider: '',
 					policyNumber: '',
@@ -75,12 +80,13 @@
 				modalVisibility = false;
 			} else {
 				const data = await response.json();
-				status.message = data.message || 'Failed to save insurance details.';
-				status.type = 'ERROR';
+				status = handleApiError(data, editMode);
 			}
 		} catch (e) {
-			status.message = 'Failed to connect to the server.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Failed to connect to the server.',
+				type: 'ERROR'
+			};
 		}
 		loading = false;
 		if (status.type === 'SUCCESS') {
@@ -150,26 +156,16 @@
 		required={true}
 		ariaLabel="Cost"
 	/>
-	<!-- <FormField
+	<FormField
 		id="notes"
 		type="text"
 		placeholder="Notes"
 		bind:value={insurance.notes}
 		icon={Notebook}
+		label="Notes"
 		required={false}
 		ariaLabel="Notes"
-	/> -->
+	/>
 	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
 </form>
-
-{#if status.message}
-	<p
-		class={`mt-4 text-center text-sm ${status.type === 'ERROR' ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'}`}
-	>
-		{#if status.type === 'ERROR'}
-			<span class="font-semibold">Error:</span> {status.message}
-		{:else}
-			{status.message}
-		{/if}
-	</p>
-{/if}
+<StatusBlock message={status.message} type={status.type} />

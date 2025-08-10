@@ -25,7 +25,7 @@ const umzug = new Umzug({
 type Migration = typeof umzug._types.migration;
 
 const performDbMigrations = async () => {
-  await db.sync({ alter: true });
+  await db.sync({ alter: false });
   return umzug.up({});
 };
 

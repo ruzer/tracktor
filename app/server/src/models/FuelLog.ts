@@ -1,8 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "../db/index.js";
 import Vehicle from "./Vehicle.js";
-import { FuelLogError } from "../exceptions/FuelLogError.js";
-import { Status } from "../exceptions/ServiceError.js";
 
 interface FuelLogAttributes {
   id: string;
@@ -53,28 +51,9 @@ FuelLog.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        async validateOdometer(value: number) {
-          const maxOdometer: number = await FuelLog.max("odometer", {
-            where: {
-              vehicleId: this.vehicleId as string,
-            },
-          });
-
-          const vehicle = await Vehicle.findOne({
-            where: {
-              id: this.vehicleId as string,
-            },
-            attributes: ["odometer"],
-          });
-
-          const vehicleOdometer = vehicle?.odometer || 0;
-
-          if (value <= maxOdometer || value <= vehicleOdometer) {
-            throw new FuelLogError(
-              "Odometer Reading must be greater than current vehicle odometer.",
-              Status.BAD_REQUEST,
-            );
-          }
+         min: {
+          args: [0],
+          msg: "Odometer reading must be greater than 0.",
         },
       },
     },

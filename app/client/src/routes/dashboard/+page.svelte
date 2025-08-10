@@ -28,7 +28,6 @@
 	let activeTab = $state('dashboard');
 
 	vehiclesStore.subscribe((data) => {
-		console.log(data);
 		vehicles = data.vehicles;
 		loading = data.loading;
 		error = data.error;

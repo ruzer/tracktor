@@ -14,7 +14,7 @@
 		id: string;
 		date: string;
 		odometer: number;
-		service: string;
+		serviceCenter: string;
 		cost: number;
 		notes?: string;
 	}
@@ -108,7 +108,8 @@
 					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
 						>Odometer</th
 					>
-					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">Service</th
+					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
+						>Service Center</th
 					>
 					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">Cost</th>
 					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">Notes</th>
@@ -123,7 +124,7 @@
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100"
 							>{formatDistance(log.odometer)}</td
 						>
-						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{log.service}</td>
+						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{log.serviceCenter}</td>
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{formatCurrency(log.cost)}</td>
 						<td class="px-4 py-2 text-gray-900 dark:text-gray-100">{log.notes || '-'}</td>
 						<td class="px-4 py-2 text-gray-800 dark:text-gray-200">

@@ -1,7 +1,10 @@
 <script lang="ts">
 	import Button from '$components/common/Button.svelte';
 	import FormField from '$components/common/FormField.svelte';
+	import StatusBlock from '$components/common/StatusBlock.svelte';
 	import { env } from '$env/dynamic/public';
+	import { handleApiError } from '$lib/models/Error';
+	import type { Status } from '$lib/models/status';
 	import { Calendar1, IdCard, Notebook, TestTube, TestTube2 } from '@lucide/svelte';
 
 	let {
@@ -14,19 +17,16 @@
 	} = $props();
 
 	let certificate = $state({
-		certificateNumber: '',
-		issueDate: '',
-		expiryDate: '',
-		testingCenter: '',
-		notes: ''
+		certificateNumber: null,
+		issueDate: null,
+		expiryDate: null,
+		testingCenter: null,
+		notes: null
 	});
 
-	let status = $state<{
-		message: string | null;
-		type: 'ERROR' | 'SUCCESS' | null;
-	}>({
-		message: null,
-		type: null
+	let status = $state<Status>({
+		message: undefined,
+		type: 'INFO'
 	});
 
 	$effect(() => {
@@ -42,8 +42,10 @@
 			!certificate.expiryDate ||
 			!certificate.testingCenter
 		) {
-			status.message = 'Certificate Number, Issue Date, Expiry Date, Testing Center are required.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Certificate Number, Issue Date, Expiry Date, Testing Center are required.',
+				type: 'ERROR'
+			};
 			return;
 		}
 
@@ -61,8 +63,10 @@
 			);
 
 			if (response.ok) {
-				status.message = `Pollution Certificate ${editMode ? 'updated' : 'added'} successfully!`;
-				status.type = 'SUCCESS';
+				status = {
+					message: `Pollution Certificate ${editMode ? 'updated' : 'added'} successfully!`,
+					type: 'SUCCESS'
+				};
 				Object.assign(certificate, {
 					certificateNumber: '',
 					issueDate: '',
@@ -73,13 +77,13 @@
 				modalVisibility = false;
 			} else {
 				const data = await response.json();
-				status.message =
-					data.message || `Failed to ${editMode ? 'update' : 'add'} pollution certificate.`;
-				status.type = 'ERROR';
+				status = handleApiError(data, editMode);
 			}
 		} catch (e) {
-			status.message = 'Failed to connect to the server.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Failed to connect to the server.',
+				type: 'ERROR'
+			};
 		}
 		loading = false;
 		if (status.type === 'SUCCESS') {
@@ -150,15 +154,4 @@
 	/>
 	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
 </form>
-
-{#if status.message}
-	<p
-		class={`mt-4 text-center text-sm ${status.type === 'ERROR' ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'}`}
-	>
-		{#if status.type === 'ERROR'}
-			<span class="font-semibold">Error:</span> {status.message}
-		{:else}
-			{status.message}
-		{/if}
-	</p>
-{/if}
+<StatusBlock message={status.message} type={status.type} />

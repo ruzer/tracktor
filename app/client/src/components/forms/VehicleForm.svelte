@@ -14,6 +14,9 @@
 	import { vehiclesStore } from '$lib/stores/vehicle';
 	import { browser } from '$app/environment';
 	import Button from '$components/common/Button.svelte';
+	import StatusBlock from '$components/common/StatusBlock.svelte';
+	import type { Status } from '$lib/models/status';
+	import { handleApiError, type ApiError } from '$lib/models/Error';
 
 	let { vehicleToEdit = null, editMode = false, modalVisibility = $bindable(), loading } = $props();
 
@@ -27,12 +30,9 @@
 		odometer: null
 	});
 
-	let status = $state<{
-		message: string | null;
-		type: 'ERROR' | 'SUCCESS' | null;
-	}>({
-		message: null,
-		type: null
+	let status = $state<Status>({
+		message: undefined,
+		type: 'INFO'
 	});
 
 	$effect(() => {
@@ -43,15 +43,19 @@
 
 	async function persistVehicle() {
 		if (!vehicle.make || !vehicle.model || !vehicle.year || !vehicle.licensePlate) {
-			status.message = 'Please fill in all required fields.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Please fill in all required fields.',
+				type: 'ERROR'
+			};
 			return;
 		}
 		try {
 			if (loading) return; // Prevent multiple submissions
 			loading = true;
-			status.message = null;
-			status.type = null;
+			status = {
+				message: undefined,
+				type: 'INFO'
+			};
 			// await simulateNetworkDelay(2000); // Simulate network delay for development
 			const response = await fetch(
 				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${editMode ? vehicleToEdit.id : ''}`,
@@ -66,8 +70,10 @@
 			);
 
 			if (response.ok) {
-				status.message = `Vehicle ${editMode ? 'updated' : 'added'} successfully!`;
-				status.type = 'SUCCESS';
+				status = {
+					message: `Vehicle ${editMode ? 'updated' : 'added'} successfully!`,
+					type: 'SUCCESS'
+				};
 				Object.assign(vehicle, {
 					make: '',
 					model: '',
@@ -80,13 +86,14 @@
 				modalVisibility = false;
 				fetchVehicles(); // Refresh the vehicle list after closing the modal
 			} else {
-				const data = await response.json();
-				status.message = data.message || `Failed to ${editMode ? 'update' : 'add'} vehicle.`;
-				status.type = 'ERROR';
+				const data: ApiError = await response.json();
+				status = handleApiError(data, editMode);
 			}
 		} catch (e) {
-			status.message = 'Failed to connect to the server.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Failed to connect to the server.',
+				type: 'ERROR'
+			};
 		}
 		loading = false;
 	}
@@ -185,14 +192,4 @@
 		<input type="hidden" name="id" value={vehicleToEdit?.id || ''} />
 	{/if}
 </form>
-{#if status.message}
-	<p
-		class={`mt-4 text-center text-sm ${status.type === 'ERROR' ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'}`}
-	>
-		{#if status.type === 'ERROR'}
-			<span class="font-semibold">Error:</span> {status.message}
-		{:else}
-			{status.message}
-		{/if}
-	</p>
-{/if}
+<StatusBlock message={status.message} type={status.type} />

@@ -137,7 +137,7 @@
 					<span>{pucc.testingCenter}</span>
 				</div>
 				{#if pucc.notes}
-					<div class="flex items-center gap-2 text-gray-900 md:col-span-2 dark:text-gray-100">
+					<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
 						<FileText class="h-5 w-5" />
 						<span class="font-semibold">Notes:</span>
 						<span>{pucc.notes}</span>
