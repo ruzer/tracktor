@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "../db/index.js";
-import Vehicle from "./Vehicle.js";
 
 interface FuelLogAttributes {
   id: string;
@@ -12,12 +11,11 @@ interface FuelLogAttributes {
   notes?: string;
 }
 
-interface FuelLogCreationAttributes extends Optional<FuelLogAttributes, "id"> {}
+interface FuelLogCreationAttributes extends Optional<FuelLogAttributes, "id"> { }
 
 class FuelLog
   extends Model<FuelLogAttributes, FuelLogCreationAttributes>
-  implements FuelLogAttributes
-{
+  implements FuelLogAttributes {
   declare public id: string;
   declare public vehicleId: string;
   declare public date: string;
@@ -39,7 +37,7 @@ FuelLog.init(
       type: DataTypes.UUIDV4,
       allowNull: false,
       references: {
-        model: Vehicle,
+        model: "vehicles",
         key: "id",
       },
     },
@@ -51,7 +49,7 @@ FuelLog.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-         min: {
+        min: {
           args: [0],
           msg: "Odometer reading must be greater than 0.",
         },
