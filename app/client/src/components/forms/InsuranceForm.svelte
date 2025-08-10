@@ -1,9 +1,12 @@
 <script lang="ts">
+	import Button from '$components/common/Button.svelte';
 	import FormField from '$components/common/FormField.svelte';
-	import FormSubmitButton from '$components/common/FormSubmitButton.svelte';
+	import StatusBlock from '$components/common/StatusBlock.svelte';
 	import { env } from '$env/dynamic/public';
+	import { handleApiError } from '$lib/models/Error';
+	import type { Status } from '$lib/models/status';
 	import { getCurrencySymbol } from '$lib/utils/formatting';
-	import { BadgeDollarSign, Building2, Calendar1, IdCard } from '@lucide/svelte';
+	import { BadgeDollarSign, Building2, Calendar1, IdCard, Notebook } from '@lucide/svelte';
 
 	let {
 		vehicleId,
@@ -15,19 +18,17 @@
 	} = $props();
 
 	let insurance = $state({
-		provider: '',
-		policyNumber: '',
-		startDate: '',
-		endDate: '',
-		cost: null
+		provider: null,
+		policyNumber: null,
+		startDate: null,
+		endDate: null,
+		cost: null,
+		notes: null
 	});
 
-	let status = $state<{
-		message: string | null;
-		type: 'ERROR' | 'SUCCESS' | null;
-	}>({
-		message: null,
-		type: null
+	let status = $state<Status>({
+		message: undefined,
+		type: 'INFO'
 	});
 
 	$effect(() => {
@@ -44,8 +45,10 @@
 			!insurance.endDate ||
 			!insurance.cost
 		) {
-			status.message = 'Provider, Policy Number, Start Date, End Date, Cost are required.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Provider, Policy Number, Start Date, End Date, Cost are required.',
+				type: 'ERROR'
+			};
 			return;
 		}
 
@@ -63,8 +66,10 @@
 			);
 
 			if (response.ok) {
-				status.message = `Insurance details ${editMode ? 'updated' : 'added'} successfully!`;
-				status.type = 'SUCCESS';
+				status = {
+					message: `Insurance details ${editMode ? 'updated' : 'added'} successfully!`,
+					type: 'SUCCESS'
+				};
 				Object.assign(insurance, {
 					provider: '',
 					policyNumber: '',
@@ -75,12 +80,13 @@
 				modalVisibility = false;
 			} else {
 				const data = await response.json();
-				status.message = data.message || 'Failed to save insurance details.';
-				status.type = 'ERROR';
+				status = handleApiError(data, editMode);
 			}
 		} catch (e) {
-			status.message = 'Failed to connect to the server.';
-			status.type = 'ERROR';
+			status = {
+				message: 'Failed to connect to the server.',
+				type: 'ERROR'
+			};
 		}
 		loading = false;
 		if (status.type === 'SUCCESS') {
@@ -91,6 +97,7 @@
 </script>
 
 <form
+	class="space-y-6"
 	onsubmit={(e) => {
 		persistInsurance();
 		e.preventDefault();
@@ -102,6 +109,7 @@
 		placeholder="Provider"
 		bind:value={insurance.provider}
 		icon={Building2}
+		label="Provider"
 		required={true}
 		ariaLabel="Provider"
 	/>
@@ -111,56 +119,53 @@
 		placeholder="Policy Number"
 		bind:value={insurance.policyNumber}
 		icon={IdCard}
+		label="Policy Number"
 		required={true}
 		ariaLabel="Policy Number"
 	/>
-	<FormField
-		id="start-date"
-		type="date"
-		placeholder="Start Date"
-		bind:value={insurance.startDate}
-		icon={Calendar1}
-		required={true}
-		ariaLabel="Start Date"
-	/>
-	<FormField
-		id="end-date"
-		type="date"
-		placeholder="End Date"
-		bind:value={insurance.endDate}
-		icon={Calendar1}
-		required={true}
-		ariaLabel="End Date"
-	/>
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
+		<FormField
+			id="start-date"
+			type="date"
+			placeholder="Start Date"
+			bind:value={insurance.startDate}
+			icon={Calendar1}
+			required={true}
+			label="Start Date"
+			ariaLabel="Start Date"
+		/>
+
+		<FormField
+			id="end-date"
+			type="date"
+			placeholder="End Date"
+			bind:value={insurance.endDate}
+			icon={Calendar1}
+			label="End Date"
+			required={true}
+			ariaLabel="End Date"
+		/>
+	</div>
 	<FormField
 		id="cost"
 		type="number"
 		placeholder="Cost ( {getCurrencySymbol()} )"
 		bind:value={insurance.cost}
 		icon={BadgeDollarSign}
+		label="Cost"
 		required={true}
 		ariaLabel="Cost"
 	/>
-	<!-- <FormField
+	<FormField
 		id="notes"
 		type="text"
 		placeholder="Notes"
 		bind:value={insurance.notes}
 		icon={Notebook}
+		label="Notes"
 		required={false}
 		ariaLabel="Notes"
-	/> -->
-	<FormSubmitButton text={editMode ? 'Update Insurance' : 'Add Insurance'} {loading} />
+	/>
+	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
 </form>
-
-{#if status.message}
-	<p
-		class={`mt-4 text-center text-sm ${status.type === 'ERROR' ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'}`}
-	>
-		{#if status.type === 'ERROR'}
-			<span class="font-semibold">Error:</span> {status.message}
-		{:else}
-			{status.message}
-		{/if}
-	</p>
-{/if}
+<StatusBlock message={status.message} type={status.type} />

@@ -11,6 +11,7 @@
 	import { configModelStore } from '$lib/stores/config';
 	import { vehiclesStore } from '$lib/stores/vehicle';
 	import { darkModeStore } from '$lib/stores/dark-mode';
+	import IconButton from '$components/common/IconButton.svelte';
 
 	let { children } = $props();
 
@@ -52,11 +53,12 @@
 <!-- Dark mode toggle, scrolls with screen -->
 {#if demoMode}
 	<div
-		class="w-full border-b border-yellow-300 bg-yellow-100 py-2 text-center text-base font-semibold text-yellow-900 shadow-sm"
+		class="w-full border-b border-yellow-300 bg-yellow-100 py-2 text-center text-base font-semibold text-yellow-900 shadow-sm dark:border-yellow-700 dark:bg-yellow-900 dark:text-yellow-100"
 	>
-		<span
-			>🚜 Demo Mode: This is a demo instance. Data will be reset periodically and is not saved
-			permanently. Please avoid adding any persoanl info.</span
+		<span>
+			⚠️ NOTICE: This is a demo instance. Data will be reset periodically and is not saved
+			permanently.<br />
+			Please avoid adding any persoanl info.</span
 		>
 		<br />
 		<strong>Default PIN : 123456</strong>
@@ -78,28 +80,26 @@
 					<Tractor class="h-8 w-8" />
 					Tracktor
 				</a>
-				<div class="flex items-center justify-center gap-4 align-middle">
+				<div class="flex items-center justify-center gap-2 align-middle">
 					<ThemeToggle />
-					<div
-						class="flex items-center gap-1 text-gray-600 transition-colors duration-300 hover:text-blue-500 dark:text-gray-300"
-					>
-						<Settings
-							class="h-5 w-5"
-							onclick={() => {
-								configModelStore.show((status: boolean) => {
-									fetchVehicles();
-								});
-							}}
-						/>
-					</div>
-					<div class="flex items-center gap-2">
-						<button
-							onclick={logout}
-							class="flex items-center gap-1 text-gray-600 transition-colors duration-300 hover:text-red-500 dark:text-gray-300"
-						>
-							<LogOut class="h-5 w-5" />
-						</button>
-					</div>
+					<IconButton
+						buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
+						iconStyles="text-gray-600 dark:text-gray-100 hover:text-sky-500"
+						icon={Settings}
+						onclick={() => {
+							configModelStore.show((status: boolean) => {
+								fetchVehicles();
+							});
+						}}
+						ariaLabel="Settings"
+					/>
+					<IconButton
+						buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
+						iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
+						icon={LogOut}
+						onclick={logout}
+						ariaLabel="Logout"
+					/>
 				</div>
 			</nav>
 		</header>

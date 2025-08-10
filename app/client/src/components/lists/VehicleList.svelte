@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { vehiclesStore } from '$lib/stores/vehicle';
 	import VehicleCard from '$components/common/VehicleCard.svelte';
-	import { Jumper } from 'svelte-loading-spinners';
 
 	let { vehicles, selectedVehicleId, updateCallback } = $props();
 

@@ -6,6 +6,7 @@
 	import { formatDate } from '$lib/utils/formatting';
 	import { puccModelStore } from '$lib/stores/pucc';
 	import { Jumper } from 'svelte-loading-spinners';
+	import IconButton from '$components/common/IconButton.svelte';
 
 	let { vehicleId } = $props();
 
@@ -100,7 +101,7 @@
 {:else}
 	{#each pollutionCertificates as pucc (pucc.id)}
 		<div
-			class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+			class="mt-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
 		>
 			<div class="flex items-center justify-between">
 				<div class="flex items-center gap-2">
@@ -110,30 +111,13 @@
 					>
 				</div>
 				<div class="flex gap-2">
-					<button
-						class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-						onclick={() => {
-							puccModelStore.show(vehicleId, pucc, true, (status: boolean) => {
-								if (status) {
-									fetchPollutionCertificateDetails();
-								}
-							});
-						}}
-					>
-						<Pencil
-							class="h-5 w-5 text-gray-500 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-						/>
-					</button>
-					<button
-						class="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-						onclick={() => {
-							deletePollutionCertificate(pucc.id);
-						}}
-					>
-						<Trash2
-							class="h-5 w-5 text-gray-500 hover:text-red-600 dark:text-gray-300 dark:hover:text-red-400"
-						/>
-					</button>
+					<IconButton
+						buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
+						iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
+						icon={Trash2}
+						onclick={() => deletePollutionCertificate(pucc.id)}
+						ariaLabel="Delete"
+					/>
 				</div>
 			</div>
 			<div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -153,7 +137,7 @@
 					<span>{pucc.testingCenter}</span>
 				</div>
 				{#if pucc.notes}
-					<div class="flex items-center gap-2 text-gray-900 md:col-span-2 dark:text-gray-100">
+					<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
 						<FileText class="h-5 w-5" />
 						<span class="font-semibold">Notes:</span>
 						<span>{pucc.notes}</span>
