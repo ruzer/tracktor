@@ -19,7 +19,7 @@ app.use("/api/config", configRoutes);
 
 if (process.env.NODE_ENV === "production") {
   // @ts-ignore
-  const { handler } = await import("../client/build/handler.js");
+  const { handler } = await import("../frontend/build/handler.js");
   app.use(handler);
 } else {
   // In dev, redirect to SvelteKit dev server
