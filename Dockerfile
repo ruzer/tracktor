@@ -1,9 +1,9 @@
 # Stage 1: Build the SvelteKit frontend
 FROM node:22-alpine AS frontend-builder
-WORKDIR /app/client
-COPY app/client/package*.json ./
+WORKDIR /app/frontend
+COPY app/frontend/package*.json ./
 RUN npm install
-COPY app/client/ ./
+COPY app/frontend/ ./
 ENV PUBLIC_API_BASE_URL=/
 ENV PUBLIC_DEMO_MODE=false
 ENV NODE_ENV=production
@@ -11,10 +11,10 @@ RUN npm run build
 
 # Stage 2: Build the Node.js backend
 FROM node:22-alpine AS backend-builder
-WORKDIR /app/server
-COPY app/server/package*.json ./
+WORKDIR /app/backend
+COPY app/backend/package*.json ./
 RUN npm install
-COPY app/server/ ./
+COPY app/backend/ ./
 ENV NODE_ENV=production
 ENV DB_PATH=./vehicles.db
 RUN npm run build
@@ -24,14 +24,14 @@ FROM node:22-alpine
 WORKDIR /app
 
 # Copy built backend from backend-builder stage
-COPY --from=backend-builder /app/server/dist ./server/dist
-COPY --from=backend-builder /app/server/node_modules ./server/node_modules
-COPY --from=backend-builder /app/server/package.json ./server/package.json
+COPY --from=backend-builder /app/backend/dist ./backend/dist
+COPY --from=backend-builder /app/backend/node_modules ./backend/node_modules
+COPY --from=backend-builder /app/backend/package.json ./backend/package.json
 
 # Copy built frontend from frontend-builder stage
-COPY --from=frontend-builder /app/client/build ./server/client/build
+COPY --from=frontend-builder /app/frontend/build ./backend/frontend/build
 
-WORKDIR /app/server
+WORKDIR /app/backend
 
 EXPOSE 3000
 
