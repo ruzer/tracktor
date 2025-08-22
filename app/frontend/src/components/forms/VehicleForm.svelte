@@ -8,7 +8,7 @@
 		Gauge,
 		Building2
 	} from '@lucide/svelte';
-	import FormField from '@common/FormField.svelte';
+	import FormField from '../common/FormField.svelte';
 	import type { NewVehicle } from '$lib/models/vehicle';
 	import { env } from '$env/dynamic/public';
 	import { vehiclesStore } from '$lib/stores/vehicle';
@@ -58,7 +58,7 @@
 			};
 			// await simulateNetworkDelay(2000); // Simulate network delay for development
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${editMode ? vehicleToEdit.id : ''}`,
+				`${env.PUBLIC_API_BASE_URL || 'http://localhost:3000'}/api/vehicles/${editMode ? vehicleToEdit.id : ''}`,
 				{
 					method: editMode ? 'PUT' : 'POST',
 					headers: {

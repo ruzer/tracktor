@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
-	import '@styles/app.css';
+	import '../styles/app.css';
 	import { onMount, tick } from 'svelte';
 	import { LogOut, Tractor, Settings } from '@lucide/svelte';
 	import ThemeToggle from '$components/common/ThemeToggle.svelte';

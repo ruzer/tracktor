@@ -5,7 +5,7 @@
 	import { handleApiError } from '$lib/models/Error';
 	import type { Status } from '$lib/models/status';
 	import { getCurrencySymbol } from '$lib/utils/formatting';
-	import FormField from '@common/FormField.svelte';
+	import FormField from '../common/FormField.svelte';
 	import { Calendar1, Gauge, Fuel, FileText, BadgeDollarSign } from '@lucide/svelte';
 
 	let {
@@ -51,7 +51,7 @@
 		}
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}/fuel-logs/${editMode ? logToEdit.id : ''}`,
+				`${env.PUBLIC_API_BASE_URL || 'http://localhost:3000'}/api/vehicles/${vehicleId}/fuel-logs/${editMode ? logToEdit.id : ''}`,
 				{
 					method: `${editMode ? 'PUT' : 'POST'}`,
 					headers: {
