@@ -8,7 +8,9 @@
     "build": "tsc",
     "start": "tsx --watch index.ts",
     "dev": "nodemon",
-    "seed": "tsx seed.ts",
+    "db:migrate": "tsx src/db/migrate.ts migrate",
+    "db:seed": "tsx src/db/migrate.ts seed",
+    "db:status": "tsx src/db/status.ts",
     "preview": "npm run build && node dist/index.js"
   },
   "keywords": [],

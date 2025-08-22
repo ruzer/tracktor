@@ -5,7 +5,7 @@
 	import { handleApiError } from '$lib/models/Error';
 	import type { Status } from '$lib/models/status';
 	import { getCurrencySymbol } from '$lib/utils/formatting';
-	import FormField from '../common/FormField.svelte';
+	import FormField from '@common/FormField.svelte';
 	import { Calendar1, Gauge, Fuel, FileText, BadgeDollarSign } from '@lucide/svelte';
 
 	let {
