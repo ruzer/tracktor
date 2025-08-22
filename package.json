@@ -5,5 +5,7 @@
     "app/*"
   ],
   "scripts": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
 }
