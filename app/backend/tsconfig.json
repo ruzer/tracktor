@@ -15,7 +15,21 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "nodenext",
     "noUncheckedIndexedAccess": true,
-    "declaration": true
+    "declaration": true,
+    "paths": {
+      "@controllers": ["./src/controllers"],
+      "@controllers/*": ["./src/controllers/*"],
+      "@db": ["./src/db"],
+      "@db/*": ["./src/db/*"],
+      "@exceptions": ["./src/exceptions"],
+      "@exceptions/*": ["./src/exceptions/*"],
+      "@models": ["./src/models"],
+      "@models/*": ["./src/models/*"],
+      "@routes": ["./src/routes"],
+      "@routes/*": ["./src/routes/*"],
+      "@services": ["./src/services"],
+      "@services/*": ["./src/services/*"]
+    }
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "./dist"]

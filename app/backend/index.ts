@@ -1,10 +1,10 @@
 import express from "express";
 import cors from "cors";
-import pinRoutes from "./src/routes/pinRoutes.js";
-import vehicleRoutes from "./src/routes/vehicleRoutes.js";
-import configRoutes from "./src/routes/configRoutes.js";
-import { performDbMigrations, seedData } from "./src/db/index.js";
-import { errorHandler } from "./src/middleware/error-handler.js";
+import pinRoutes from "@routes/pinRoutes.js";
+import vehicleRoutes from "@routes/vehicleRoutes.js";
+import configRoutes from "@routes/configRoutes.js";
+import { initializeDatabase } from "@db/init.js";
+import { errorHandler } from "@middleware/error-handler.js";
 
 const app = express();
 const PORT = Number(process.env.APP_PORT) || 3000;
@@ -19,7 +19,7 @@ app.use("/api/config", configRoutes);
 
 if (process.env.NODE_ENV === "production") {
   // @ts-ignore
-  const { handler } = await import("../frontend/build/handler.js");
+  const { handler } = await import("@frontend/build/handler.js");
   app.use(handler);
 } else {
   // In dev, redirect to SvelteKit dev server
@@ -30,23 +30,15 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(errorHandler);
 
-performDbMigrations()
+initializeDatabase()
   .then(() => {
-    console.log("DB Migration is Successfull!!!");
-    seedData()
-      .then(() => {
-        console.log("Data Seeded Successfully!!!");
-        app.listen(PORT, HOST, () => {
-          console.log(
-            "---------------------------------------------------------------------------",
-          );
-          console.log(`Server started -> http://${HOST}:${PORT}`);
-        });
-      })
-      .catch((err) => {
-        console.error("Error while seeding : ", err);
-      });
+    app.listen(PORT, HOST, () => {
+      console.log("─".repeat(75));
+      console.log(`🚀 Server running at http://${HOST}:${PORT}`);
+      console.log("─".repeat(75));
+    });
   })
   .catch((err) => {
-    console.error("Error while running db migrations : ", err);
+    console.error("❌ Failed to initialize database:", err);
+    process.exit(1);
   });

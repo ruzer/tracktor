@@ -8,7 +8,7 @@
 		Gauge,
 		Building2
 	} from '@lucide/svelte';
-	import FormField from '../common/FormField.svelte';
+	import FormField from '@common/FormField.svelte';
 	import type { NewVehicle } from '$lib/models/vehicle';
 	import { env } from '$env/dynamic/public';
 	import { vehiclesStore } from '$lib/stores/vehicle';
