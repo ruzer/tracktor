@@ -7,6 +7,7 @@
 	import type { Status } from '$lib/models/status';
 	import { cleanup, getCurrencySymbol } from '$lib/utils/formatting';
 	import { BadgeDollarSign, Building2, Calendar1, IdCard, Notebook } from '@lucide/svelte';
+	import { t } from '$lib/stores/i18n';
 
 	let {
 		vehicleId,
@@ -46,7 +47,7 @@
 			!insurance.cost
 		) {
 			status = {
-				message: 'Provider, Policy Number, Start Date, End Date, Cost are required.',
+				message: $t('forms.validation.insuranceRequired'),
 				type: 'ERROR'
 			};
 			return;
@@ -67,7 +68,7 @@
 
 			if (response.ok) {
 				status = {
-					message: `Insurance details ${editMode ? 'updated' : 'added'} successfully!`,
+					message: editMode ? $t('forms.success.insuranceUpdated') : $t('forms.success.insuranceAdded'),
 					type: 'SUCCESS'
 				};
 				Object.assign(insurance, {
@@ -85,7 +86,7 @@
 		} catch (e) {
 			console.error(e);
 			status = {
-				message: 'Failed to connect to the server.',
+				message: $t('forms.errors.connectionFailed'),
 				type: 'ERROR'
 			};
 		}
@@ -107,20 +108,20 @@
 	<FormField
 		id="provider"
 		type="text"
-		placeholder="Provider"
+		placeholder={$t('forms.placeholders.provider')}
 		bind:value={insurance.provider}
 		icon={Building2}
-		label="Provider"
+		label={$t('forms.labels.provider')}
 		required={true}
 		ariaLabel="Provider"
 	/>
 	<FormField
 		id="policy-number"
 		type="text"
-		placeholder="Policy Number"
+		placeholder={$t('forms.placeholders.policyNumber')}
 		bind:value={insurance.policyNumber}
 		icon={IdCard}
-		label="Policy Number"
+		label={$t('forms.labels.policyNumber')}
 		required={true}
 		ariaLabel="Policy Number"
 	/>
@@ -128,21 +129,21 @@
 		<FormField
 			id="start-date"
 			type="date"
-			placeholder="Start Date"
+			placeholder={$t('forms.placeholders.startDate')}
 			bind:value={insurance.startDate}
 			icon={Calendar1}
 			required={true}
-			label="Start Date"
+			label={$t('forms.labels.startDate')}
 			ariaLabel="Start Date"
 		/>
 
 		<FormField
 			id="end-date"
 			type="date"
-			placeholder="End Date"
+			placeholder={$t('forms.placeholders.endDate')}
 			bind:value={insurance.endDate}
 			icon={Calendar1}
-			label="End Date"
+			label={$t('forms.labels.endDate')}
 			required={true}
 			ariaLabel="End Date"
 		/>
@@ -150,23 +151,23 @@
 	<FormField
 		id="cost"
 		type="number"
-		placeholder="Cost ( {getCurrencySymbol()} )"
+		placeholder="{$t('forms.placeholders.costCurrency')} ( {getCurrencySymbol()} )"
 		bind:value={insurance.cost}
 		icon={BadgeDollarSign}
-		label="Cost"
+		label={$t('forms.labels.cost')}
 		required={true}
 		ariaLabel="Cost"
 	/>
 	<FormField
 		id="notes"
 		type="text"
-		placeholder="Notes"
+		placeholder={$t('forms.placeholders.notes')}
 		bind:value={insurance.notes}
 		icon={Notebook}
-		label="Notes"
+		label={$t('forms.labels.notes')}
 		required={false}
 		ariaLabel="Notes"
 	/>
-	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} {loading} />
+	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
 </form>
 <StatusBlock message={status.message} type={status.type} />

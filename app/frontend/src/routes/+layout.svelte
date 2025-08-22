@@ -11,6 +11,7 @@
 	import { configModelStore } from '$lib/stores/config';
 	import { vehiclesStore } from '$lib/stores/vehicle';
 	import IconButton from '$components/common/IconButton.svelte';
+	import { initializeI18n, t } from '$lib/stores/i18n';
 
 	let { children } = $props();
 
@@ -48,6 +49,11 @@
 			if (pin) vehiclesStore.fetchVehicles(pin);
 		}
 	};
+
+	onMount(async () => {
+		// Inicializar sistema i18n
+		await initializeI18n();
+	});
 </script>
 
 <!-- Dark mode toggle, scrolls with screen -->
@@ -66,7 +72,7 @@
 {#if checkingAuth}
 	<div class="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
 		<Jumper size="64" color="#155dfc" duration="2s" />
-		<p class="text-lg text-gray-600">Validating Auth...</p>
+		<p class="text-lg text-gray-600">{$t('app.validatingAuth')}</p>
 	</div>
 {:else if isAuthenticated}
 	<div class="min-h-screen bg-gray-100 transition-colors dark:bg-gray-900">
@@ -77,7 +83,7 @@
 					class="flex items-center gap-2 text-2xl font-bold text-blue-700 transition-colors hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-400"
 				>
 					<Tractor class="h-8 w-8" />
-					Tracktor
+					{$t('app.title')}
 				</a>
 				<div class="flex items-center justify-center gap-2 align-middle">
 					<ThemeToggle />
@@ -90,14 +96,14 @@
 								status && fetchVehicles();
 							});
 						}}
-						ariaLabel="Settings"
+						ariaLabel={$t('app.settings')}
 					/>
 					<IconButton
 						buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
 						iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
 						icon={LogOut}
 						onclick={logout}
-						ariaLabel="Logout"
+						ariaLabel={$t('app.logout')}
 					/>
 				</div>
 			</nav>

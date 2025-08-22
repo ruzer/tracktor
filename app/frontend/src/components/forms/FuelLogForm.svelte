@@ -21,6 +21,7 @@
 		CircleSlash,
 		ArrowBigLeftDash
 	} from '@lucide/svelte';
+	import { t } from '$lib/stores/i18n';
 
 	let {
 		vehicleId,
@@ -60,7 +61,7 @@
 		}
 		if (!refill.date || !refill.odometer || !refill.fuelAmount || !refill.cost) {
 			status = {
-				message: 'Date, Odometer, Fuel Amount, and Cost are required.',
+				message: $t('forms.validation.requiredFields'),
 				type: 'ERROR'
 			};
 			return;
@@ -79,7 +80,7 @@
 			);
 			if (response.ok) {
 				status = {
-					message: `Fuel refill log ${editMode ? 'updated' : 'added'} successfully!`,
+					message: editMode ? $t('forms.success.fuelLogUpdated') : $t('forms.success.fuelLogAdded'),
 					type: 'SUCCESS'
 				};
 				Object.assign(refill, {
@@ -98,7 +99,7 @@
 		} catch (e) {
 			console.error(e);
 			status = {
-				message: 'Failed to connect to the server.',
+				message: $t('forms.errors.connectionFailed'),
 				type: 'ERROR'
 			};
 		} finally {
@@ -116,18 +117,23 @@
 		<FormField
 			id="date"
 			type="date"
-			placeholder="Date"
+			placeholder={$t('forms.placeholders.date')}
 			bind:value={refill.date}
 			icon={Calendar1}
 			required={true}
-			label="Date"
+			label={$t('forms.labels.date')}
 			ariaLabel="Refill Date"
 		/>
 		<FormField
 			id="odometer"
 			type="number"
-			label="Odometer"
-			placeholder={`Odometer Reading (${getDistanceUnit()})`}
+<<<<<<< HEAD
+				label={$t('forms.labels.odometer')}
+				placeholder={$t('forms.placeholders.odometerReading')}
+=======
+			label={$t('forms.labels.odometer')}
+			placeholder={$t('forms.placeholders.odometerReading')}
+>>>>>>> c9d7687 (feat: implement i18n system and advanced ColorPicker)
 			bind:value={refill.odometer}
 			icon={Gauge}
 			required={true}
@@ -139,21 +145,28 @@
 		<FormField
 			id="fuelAmount"
 			type="number"
-			placeholder={`Fuel Amount (${getVolumeUnit()})`}
+<<<<<<< HEAD
+				placeholder={$t('forms.placeholders.fuelAmountLitres')}
+=======
+			placeholder={$t('forms.placeholders.fuelAmountLitres')}
+>>>>>>> c9d7687 (feat: implement i18n system and advanced ColorPicker)
 			bind:value={refill.fuelAmount}
 			icon={Fuel}
-			label="Fuel Amount"
-			required={true}
+			label={$t('forms.labels.fuelAmount')}
 			ariaLabel="Fuel Amount"
 			inputClass="step-0.01"
 		/>
 		<FormField
 			id="cost"
 			type="number"
-			placeholder={`Cost (${getCurrencySymbol()})`}
+<<<<<<< HEAD
+				placeholder={`${$t('forms.placeholders.costCurrency')} ( ${getCurrencySymbol()} )`}
+=======
+			placeholder={`${$t('forms.placeholders.costCurrency')} ( ${getCurrencySymbol()} )`}
+>>>>>>> c9d7687 (feat: implement i18n system and advanced ColorPicker)
 			bind:value={refill.cost}
 			icon={BadgeDollarSign}
-			label="Cost"
+			label={$t('forms.labels.cost')}
 			required={true}
 			ariaLabel="Fuel Cost"
 			inputClass="step-0.01"
@@ -180,12 +193,16 @@
 	<FormField
 		id="notes"
 		type="text"
-		placeholder="Notes"
+		placeholder={$t('forms.placeholders.notes')}
 		bind:value={refill.notes}
 		icon={FileText}
-		label="Notes"
+		label={$t('forms.labels.notes')}
 		ariaLabel="Notes"
 	/>
-	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} {loading} />
+<<<<<<< HEAD
+		<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
+=======
+	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
+>>>>>>> c9d7687 (feat: implement i18n system and advanced ColorPicker)
 </form>
 <StatusBlock message={status.message} type={status.type} />
