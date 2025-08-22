@@ -6,7 +6,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
 
   try {
     await queryInterface.createTable(
-      "Auths",
+      "auth",
       {
         id: {
           type: DataTypes.INTEGER,
@@ -17,12 +17,12 @@ export const up: Migration = async ({ context: queryInterface }) => {
           type: DataTypes.STRING,
           allowNull: false,
         },
-        createdAt: {
+        created_at: {
           type: DataTypes.DATE,
           allowNull: false,
           defaultValue: DataTypes.NOW,
         },
-        updatedAt: {
+        updated_at: {
           type: DataTypes.DATE,
           allowNull: false,
           defaultValue: DataTypes.NOW,
@@ -32,7 +32,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
     );
 
     await queryInterface.createTable(
-      "Configs",
+      "config",
       {
         key: {
           type: DataTypes.STRING,
@@ -40,18 +40,18 @@ export const up: Migration = async ({ context: queryInterface }) => {
         },
         value: {
           type: DataTypes.STRING,
-          allowNull: true,
+          allowNull: false,
         },
         description: {
           type: DataTypes.STRING,
           allowNull: true,
         },
-        createdAt: {
+        created_at: {
           type: DataTypes.DATE,
           allowNull: false,
           defaultValue: DataTypes.NOW,
         },
-        updatedAt: {
+        updated_at: {
           type: DataTypes.DATE,
           allowNull: false,
           defaultValue: DataTypes.NOW,
@@ -61,7 +61,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
     );
 
     await queryInterface.createTable(
-      "Vehicles",
+      "vehicles",
       {
         id: {
           type: DataTypes.UUID,
@@ -80,7 +80,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
           type: DataTypes.INTEGER,
           allowNull: false,
         },
-        licensePlate: {
+        license_plate: {
           type: DataTypes.STRING,
           allowNull: false,
           unique: true,
@@ -98,12 +98,12 @@ export const up: Migration = async ({ context: queryInterface }) => {
           type: DataTypes.INTEGER,
           allowNull: true,
         },
-        createdAt: {
+        created_at: {
           type: DataTypes.DATE,
           allowNull: false,
           defaultValue: DataTypes.NOW,
         },
-        updatedAt: {
+        updated_at: {
           type: DataTypes.DATE,
           allowNull: false,
           defaultValue: DataTypes.NOW,
@@ -113,18 +113,18 @@ export const up: Migration = async ({ context: queryInterface }) => {
     );
 
     await queryInterface.createTable(
-      "Insurances",
+      "insurances",
       {
         id: {
           type: DataTypes.UUID,
           primaryKey: true,
           defaultValue: DataTypes.UUIDV4,
         },
-        vehicleId: {
+        vehicle_id: {
           type: DataTypes.UUID,
           allowNull: false,
           references: {
-            model: "Vehicles",
+            model: "vehicles",
             key: "id",
           },
           onUpdate: "CASCADE",
@@ -134,189 +134,190 @@ export const up: Migration = async ({ context: queryInterface }) => {
           type: DataTypes.STRING,
           allowNull: false,
         },
-        policyNumber: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
-        startDate: {
-          type: DataTypes.DATEONLY,
-          allowNull: false,
-        },
-        endDate: {
-          type: DataTypes.DATEONLY,
-          allowNull: false,
-        },
-        cost: {
-          type: DataTypes.DECIMAL(10, 2),
-          allowNull: false,
-        },
-        notes: {
-          type: DataTypes.TEXT,
-          allowNull: true,
-        },
-        createdAt: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: DataTypes.NOW,
-        },
-        updatedAt: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: DataTypes.NOW,
-        },
-      },
-      { transaction }
-    );
-
-    await queryInterface.createTable(
-      "MaintenanceLogs",
-      {
-        id: {
-          type: DataTypes.UUID,
-          primaryKey: true,
-          defaultValue: DataTypes.UUIDV4,
-        },
-        vehicleId: {
-          type: DataTypes.UUID,
-          allowNull: false,
-          references: {
-            model: "Vehicles",
-            key: "id",
-          },
-          onUpdate: "CASCADE",
-          onDelete: "CASCADE",
-        },
-        date: {
-          type: DataTypes.DATEONLY,
-          allowNull: false,
-        },
-        odometer: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        serviceCenter: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
-        cost: {
-          type: DataTypes.DECIMAL(10, 2),
-          allowNull: false,
-        },
-        notes: {
-          type: DataTypes.TEXT,
-          allowNull: true,
-        },
-        createdAt: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: DataTypes.NOW,
-        },
-        updatedAt: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: DataTypes.NOW,
-        },
-      },
-      { transaction }
-    );
-
-    await queryInterface.createTable(
-      "FuelLogs",
-      {
-        id: {
-          type: DataTypes.UUID,
-          primaryKey: true,
-          defaultValue: DataTypes.UUIDV4,
-        },
-        vehicleId: {
-          type: DataTypes.UUID,
-          allowNull: false,
-          references: {
-            model: "Vehicles",
-            key: "id",
-          },
-          onUpdate: "CASCADE",
-          onDelete: "CASCADE",
-        },
-        date: {
-          type: DataTypes.DATEONLY,
-          allowNull: false,
-        },
-        odometer: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        fuelAmount: {
-          type: DataTypes.DECIMAL(8, 2),
-          allowNull: false,
-        },
-        cost: {
-          type: DataTypes.DECIMAL(10, 2),
-          allowNull: false,
-        },
-        notes: {
-          type: DataTypes.TEXT,
-          allowNull: true,
-        },
-        createdAt: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: DataTypes.NOW,
-        },
-        updatedAt: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: DataTypes.NOW,
-        },
-      },
-      { transaction }
-    );
-
-    await queryInterface.createTable(
-      "PollutionCertificates",
-      {
-        id: {
-          type: DataTypes.UUID,
-          primaryKey: true,
-          defaultValue: DataTypes.UUIDV4,
-        },
-        vehicleId: {
-          type: DataTypes.UUID,
-          allowNull: false,
-          references: {
-            model: "Vehicles",
-            key: "id",
-          },
-          onUpdate: "CASCADE",
-          onDelete: "CASCADE",
-        },
-        certificateNumber: {
+        policy_number: {
           type: DataTypes.STRING,
           allowNull: false,
           unique: true,
         },
-        issueDate: {
+        start_date: {
           type: DataTypes.DATEONLY,
           allowNull: false,
         },
-        expiryDate: {
+        end_date: {
           type: DataTypes.DATEONLY,
           allowNull: false,
         },
-        testingCenter: {
-          type: DataTypes.STRING,
+        cost: {
+          type: DataTypes.FLOAT,
           allowNull: false,
         },
         notes: {
-          type: DataTypes.TEXT,
+          type: DataTypes.STRING,
           allowNull: true,
         },
-        createdAt: {
+        created_at: {
           type: DataTypes.DATE,
           allowNull: false,
           defaultValue: DataTypes.NOW,
         },
-        updatedAt: {
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW,
+        },
+      },
+      { transaction }
+    );
+
+    await queryInterface.createTable(
+      "maintenance_logs",
+      {
+        id: {
+          type: DataTypes.UUID,
+          primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
+        },
+        vehicle_id: {
+          type: DataTypes.UUID,
+          allowNull: false,
+          references: {
+            model: "vehicles",
+            key: "id",
+          },
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+        },
+        date: {
+          type: DataTypes.DATEONLY,
+          allowNull: false,
+        },
+        odometer: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        service_center: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        cost: {
+          type: DataTypes.FLOAT,
+          allowNull: false,
+        },
+        notes: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW,
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW,
+        },
+      },
+      { transaction }
+    );
+
+    await queryInterface.createTable(
+      "fuel_logs",
+      {
+        id: {
+          type: DataTypes.UUID,
+          primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
+        },
+        vehicle_id: {
+          type: DataTypes.UUID,
+          allowNull: false,
+          references: {
+            model: "vehicles",
+            key: "id",
+          },
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+        },
+        date: {
+          type: DataTypes.DATEONLY,
+          allowNull: false,
+        },
+        odometer: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        fuel_amount: {
+          type: DataTypes.FLOAT,
+          allowNull: false,
+        },
+        cost: {
+          type: DataTypes.FLOAT,
+          allowNull: false,
+        },
+        notes: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW,
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW,
+        },
+      },
+      { transaction }
+    );
+
+    await queryInterface.createTable(
+      "pollution_certificates",
+      {
+        id: {
+          type: DataTypes.UUID,
+          primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
+        },
+        vehicle_id: {
+          type: DataTypes.UUID,
+          allowNull: false,
+          references: {
+            model: "vehicles",
+            key: "id",
+          },
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+        },
+        certificate_number: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          unique: true,
+        },
+        issue_date: {
+          type: DataTypes.DATEONLY,
+          allowNull: false,
+        },
+        expiry_date: {
+          type: DataTypes.DATEONLY,
+          allowNull: false,
+        },
+        testing_center: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        notes: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW,
+        },
+        updated_at: {
           type: DataTypes.DATE,
           allowNull: false,
           defaultValue: DataTypes.NOW,
@@ -336,13 +337,13 @@ export const down: Migration = async ({ context: queryInterface }) => {
   const transaction = await queryInterface.sequelize.transaction();
 
   try {
-    await queryInterface.dropTable("PollutionCertificates", { transaction });
-    await queryInterface.dropTable("FuelLogs", { transaction });
-    await queryInterface.dropTable("MaintenanceLogs", { transaction });
-    await queryInterface.dropTable("Insurances", { transaction });
-    await queryInterface.dropTable("Vehicles", { transaction });
-    await queryInterface.dropTable("Configs", { transaction });
-    await queryInterface.dropTable("Auths", { transaction });
+    await queryInterface.dropTable("pollution_certificates", { transaction });
+    await queryInterface.dropTable("fuel_logs", { transaction });
+    await queryInterface.dropTable("maintenance_logs", { transaction });
+    await queryInterface.dropTable("insurances", { transaction });
+    await queryInterface.dropTable("vehicles", { transaction });
+    await queryInterface.dropTable("config", { transaction });
+    await queryInterface.dropTable("auth", { transaction });
 
     await transaction.commit();
   } catch (error) {

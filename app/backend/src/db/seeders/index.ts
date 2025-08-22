@@ -7,7 +7,7 @@ import {
   MaintenanceLog,
   PollutionCertificate,
   Vehicle,
-} from "../@models/index.js";
+} from "@models/index.js";
 
 export const seedInitialConfig = async () => {
   const configData = [
