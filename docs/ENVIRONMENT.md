@@ -23,7 +23,7 @@ Both backend and frontend applications load their configuration from the root `.
 
 | Variable   | Default       | Description                                             |
 | ---------- | ------------- | ------------------------------------------------------- |
-| `ENVIRONMENT` | `development` | Application environment (development, production, test) |
+| `NODE_ENV` | `development` | Application environment (development, production, test) |
 
 ### Server Configuration
 
@@ -72,7 +72,7 @@ Both backend and frontend applications load their configuration from the root `.
 ### Development
 
 ```bash
-ENVIRONMENT=development
+NODE_ENV=development
 SERVER_PORT=3000
 CLIENT_PORT=5173
 API_BASE_URL=http://localhost:3000
@@ -83,7 +83,7 @@ DEMO_MODE=false
 ### Production
 
 ```bash
-ENVIRONMENT=production
+NODE_ENV=production
 SERVER_PORT=3000
 SERVER_HOST=0.0.0.0
 DATABASE_PATH=/data/tracktor.db
@@ -98,7 +98,7 @@ The Docker configuration automatically sets production-appropriate values:
 
 ```yaml
 environment:
-  - ENVIRONMENT=production
+  - NODE_ENV=production
   - SERVER_PORT=3000
   - SERVER_HOST=0.0.0.0
   - DATABASE_PATH=/data/tracktor.db

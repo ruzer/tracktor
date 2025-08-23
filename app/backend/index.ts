@@ -63,7 +63,7 @@ initializeDatabase()
       console.log(
         `🚀 Server running at http://${env.SERVER_HOST}:${env.SERVER_PORT}`
       );
-      console.log(`Environment: ${env.ENVIRONMENT}`);
+      console.log(`Environment: ${env.NODE_ENV}`);
       console.log(`Database: ${env.DATABASE_PATH}`);
       console.log(`Demo Mode: ${env.DEMO_MODE ? "Enabled" : "Disabled"}`);
       console.log(

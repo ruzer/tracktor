@@ -13,7 +13,7 @@ const getOrigins = (): string[] => {
   const origins = process.env.CORS_ORIGINS;
   if (!origins) {
     // Allow localhost by default in development
-    if (process.env.ENVIRONMENT === "development") {
+    if (process.env.NODE_ENV === "development") {
       return ["*"];
     } else {
       return [
@@ -30,7 +30,7 @@ const getOrigins = (): string[] => {
 
 export const env = {
   // Application Environment
-  ENVIRONMENT: process.env.NODE_ENV || "development",
+  NODE_ENV: process.env.NODE_ENV || "development",
 
   // Server Configuration
   SERVER_HOST: process.env.SERVER_HOST || "0.0.0.0",
@@ -50,9 +50,9 @@ export const env = {
   LOG_REQUESTS: process.env.LOG_REQUESTS === "true",
 
   // Helper methods
-  isDevelopment: () => !process.env.ENVIRONMENT || process.env.ENVIRONMENT === "development",
-  isProduction: () => process.env.ENVIRONMENT === "production",
-  isTest: () => process.env.ENVIRONMENT === "test",
+  isDevelopment: () => !process.env.NODE_ENV || process.env.NODE_ENV === "development",
+  isProduction: () => process.env.NODE_ENV === "production",
+  isTest: () => process.env.NODE_ENV === "test",
 } as const;
 
 export default env;

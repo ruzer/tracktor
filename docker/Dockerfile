@@ -6,7 +6,7 @@ RUN npm install
 COPY app/frontend/ ./
 ENV API_BASE_URL=/
 ENV PUBLIC_DEMO_MODE=false
-ENV ENVIRONMENT=production
+ENV NODE_ENV=production
 RUN npm run build
 
 # Stage 2: Build the Node.js backend
