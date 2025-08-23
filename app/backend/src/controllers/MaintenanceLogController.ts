@@ -54,7 +54,7 @@ export const getMaintenanceLogById = async (req: Request, res: Response) => {
 
 export const updateMaintenanceLog = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { date, odometer, service, cost, notes } = req.body;
+  const { date, odometer, service, cost } = req.body;
 
   if (!id) {
     throw new MaintenanceLogError(

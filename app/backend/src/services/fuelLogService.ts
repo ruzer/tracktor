@@ -1,5 +1,5 @@
 import { FuelLogError } from "@exceptions/FuelLogError.js";
-import { Status, statusFromError } from "@exceptions/ServiceError.js";
+import { Status } from "@exceptions/ServiceError.js";
 import { VehicleError } from "@exceptions/VehicleError.js";
 import { Vehicle, FuelLog } from "@models/index.js";
 

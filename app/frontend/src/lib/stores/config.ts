@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import { env } from '$env/dynamic/public';
+import { getApiUrl } from '$lib/utils/api';
 
 export interface Config {
 	key: string;
@@ -13,14 +13,11 @@ const createConfigStore = () => {
 	async function fetchConfig() {
 		if (browser) {
 			try {
-				const response = await fetch(
-					`${env.PUBLIC_API_BASE_URL || 'http://localhost:3000'}/api/config`,
-					{
-						headers: {
-							'X-User-PIN': localStorage.getItem('userPin') || ''
-						}
+				const response = await fetch(getApiUrl('/api/config'), {
+					headers: {
+						'X-User-PIN': localStorage.getItem('userPin') || ''
 					}
-				);
+				});
 				if (response.ok) {
 					const data: Config[] = await response.json();
 					set(data);
@@ -36,17 +33,14 @@ const createConfigStore = () => {
 	async function updateConfig(configs: Config[]) {
 		if (browser) {
 			try {
-				const response = await fetch(
-					`${env.PUBLIC_API_BASE_URL || 'http://localhost:3000'}/api/config`,
-					{
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json',
-							'X-User-PIN': localStorage.getItem('userPin') || ''
-						},
-						body: JSON.stringify(configs)
-					}
-				);
+				const response = await fetch(getApiUrl('/api/config'), {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-User-PIN': localStorage.getItem('userPin') || ''
+					},
+					body: JSON.stringify(configs)
+				});
 				if (response.ok) {
 					fetchConfig(); // Refresh the config after updating
 				} else {

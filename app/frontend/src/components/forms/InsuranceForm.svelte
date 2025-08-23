@@ -5,7 +5,7 @@
 	import { env } from '$env/dynamic/public';
 	import { handleApiError } from '$lib/models/Error';
 	import type { Status } from '$lib/models/status';
-	import { getCurrencySymbol } from '$lib/utils/formatting';
+	import { cleanup, getCurrencySymbol } from '$lib/utils/formatting';
 	import { BadgeDollarSign, Building2, Calendar1, IdCard, Notebook } from '@lucide/svelte';
 
 	let {
@@ -61,7 +61,7 @@
 						'Content-Type': 'application/json',
 						'X-User-PIN': localStorage.getItem('userPin') || ''
 					},
-					body: JSON.stringify(insurance)
+					body: JSON.stringify(cleanup(insurance))
 				}
 			);
 
@@ -83,6 +83,7 @@
 				status = handleApiError(data, editMode);
 			}
 		} catch (e) {
+			console.error(e);
 			status = {
 				message: 'Failed to connect to the server.',
 				type: 'ERROR'
@@ -166,6 +167,6 @@
 		required={false}
 		ariaLabel="Notes"
 	/>
-	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
+	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} {loading} />
 </form>
 <StatusBlock message={status.message} type={status.type} />

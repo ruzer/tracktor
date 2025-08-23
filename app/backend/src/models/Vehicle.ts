@@ -80,7 +80,7 @@ Vehicle.init(
       unique: true,
       validate: {
         is: {
-          args: "^[A-Z0-9\- ]{2,10}$",
+          args: "^[A-Z0-9- ]{2,25}$",
           msg: "Licence Plate format is incorrect.",
         },
       },
@@ -93,7 +93,7 @@ Vehicle.init(
           msg: "VIN number can't be an empty string.",
         },
         is: {
-          args: "^[A-HJ-NPR-Z0-9]{17}$",
+          args: "^[A-HJ-NPR-Z0-9]{3,}$",
           msg: "VIN number format is incorrect.",
         },
         async isUnique(value: string) {

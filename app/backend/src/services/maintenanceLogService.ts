@@ -1,6 +1,6 @@
 import { MaintenanceLog, Vehicle } from "@models/index.js";
 import { MaintenanceLogError } from "@exceptions/MaintenanceLogError.js";
-import { Status, statusFromError } from "@exceptions/ServiceError.js";
+import { Status } from "@exceptions/ServiceError.js";
 
 export const addMaintenanceLog = async (
   vehicleId: string,
