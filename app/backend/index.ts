@@ -15,21 +15,21 @@ const app = express();
 // Configure CORS - simplified for development
 const corsOptions = env.isDevelopment()
   ? {
-      // In development, allow all origins for easier debugging
-      origin: true,
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization", "X-User-PIN"],
-      optionsSuccessStatus: 200,
-    }
+    // In development, allow all origins for easier debugging
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-User-PIN"],
+    optionsSuccessStatus: 200,
+  }
   : {
-      // In production, use strict origin checking
-      origin: env.CORS_ORIGINS,
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization", "X-User-PIN"],
-      optionsSuccessStatus: 200,
-    };
+    // In production, use strict origin checking
+    origin: env.CORS_ORIGINS,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-User-PIN"],
+    optionsSuccessStatus: 200,
+  };
 
 app.use(cors(corsOptions));
 
@@ -46,6 +46,10 @@ if (env.isProduction()) {
   // @ts-expect-error -- Ignore import error for dynamic import
   const { handler } = await import("../frontend/build/handler.js");
   app.use(handler);
+} else {
+  app.get("/", (req, res) => {
+    res.redirect("http://localhost:5173");
+  });
 }
 
 app.use(errorHandler);
