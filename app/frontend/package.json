@@ -11,7 +11,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
 		"lint": "prettier --check .",
-		"clean": "rm -rf build .svelte-kit"
+		"clean": "rm -rf build .svelte-kit",
+		"reset": "npm run clean && rm -rf node_modules && npm install"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "^5.2.13",

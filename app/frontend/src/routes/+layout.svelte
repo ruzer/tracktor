@@ -58,8 +58,7 @@
 	>
 		<span>
 			⚠️ NOTICE: This is a demo instance. Data will be reset periodically and is not saved
-			permanently.<br />
-			Please avoid adding any persoanl info.</span
+			permanently. Please avoid adding any persoanl info.</span
 		>
 		<br />
 		<strong>Default PIN : 123456</strong>

@@ -18,7 +18,7 @@
 </script>
 
 {#if message}
-	<p class={`mt-4 rounded-md p-2 text-start text-sm ${getStatusTypeClasses()}`}>
+	<p class={`mt-4 rounded-md p-2 text-center text-sm ${getStatusTypeClasses()}`}>
 		{#each message.split('\n') as error}
 			{error}<br />
 		{/each}

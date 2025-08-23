@@ -37,7 +37,7 @@ export const env = {
   SERVER_PORT: Number(process.env.SERVER_PORT) || 3000,
 
   // Database Configuration
-  DATABASE_PATH: process.env.DATABASE_PATH || "./vehicles.db",
+  DATABASE_PATH: process.env.DATABASE_PATH || "./tracktor.db",
 
   // Application Features
   DEMO_MODE: process.env.PUBLIC_DEMO_MODE === "true",

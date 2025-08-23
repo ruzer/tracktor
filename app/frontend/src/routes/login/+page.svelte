@@ -54,7 +54,7 @@
 	async function handlePinComplete(pin: string) {
 		loading = true;
 		status.message = '';
-		await simulateNetworkDelay(1000); // Simulate network delay for development
+		// await simulateNetworkDelay(1000); // Simulate network delay for development
 		try {
 			await endpointCall(pin, pinExists);
 		} catch (e) {

@@ -15,12 +15,11 @@ interface VehicleAttributes {
   odometer?: number;
 }
 
-interface VehicleCreationAttributes extends Optional<VehicleAttributes, "id"> {}
+interface VehicleCreationAttributes extends Optional<VehicleAttributes, "id"> { }
 
 class Vehicle
   extends Model<VehicleAttributes, VehicleCreationAttributes>
-  implements VehicleAttributes
-{
+  implements VehicleAttributes {
   declare public id: string;
   declare public make: string;
   declare public model: string;
@@ -93,7 +92,7 @@ Vehicle.init(
           msg: "VIN number can't be an empty string.",
         },
         is: {
-          args: "^[A-HJ-NPR-Z0-9]{17}$",
+          args: "^[A-HJ-NPR-Z0-9]{3,}$",
           msg: "VIN number format is incorrect.",
         },
         async isUnique(value: string) {
