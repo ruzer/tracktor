@@ -7,6 +7,7 @@
 	import { Jumper } from 'svelte-loading-spinners';
 	import IconButton from '$components/common/IconButton.svelte';
 	import DeleteConfirmation from '$components/common/DeleteConfirmation.svelte';
+	import { getApiUrl } from '$lib/utils/api';
 
 	let { vehicleId } = $props();
 
@@ -42,14 +43,11 @@
 		loading = true;
 		error = '';
 		try {
-			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL || 'http://localhost:3000'}/api/vehicles/${vehicleId}/pucc`,
-				{
-					headers: {
-						'X-User-PIN': browser ? localStorage.getItem('userPin') || '' : ''
-					}
+			const response = await fetch(getApiUrl(`/api/vehicles/${vehicleId}/pucc`), {
+				headers: {
+					'X-User-PIN': browser ? localStorage.getItem('userPin') || '' : ''
 				}
-			);
+			});
 			if (response.ok) {
 				pollutionCertificates = await response.json();
 			} else {
