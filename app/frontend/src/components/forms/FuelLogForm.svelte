@@ -4,7 +4,7 @@
 	import { env } from '$env/dynamic/public';
 	import { handleApiError } from '$lib/models/Error';
 	import type { Status } from '$lib/models/status';
-	import { getCurrencySymbol } from '$lib/utils/formatting';
+	import { cleanup, getCurrencySymbol } from '$lib/utils/formatting';
 	import FormField from '../common/FormField.svelte';
 	import { Calendar1, Gauge, Fuel, FileText, BadgeDollarSign } from '@lucide/svelte';
 
@@ -58,7 +58,7 @@
 						'Content-Type': 'application/json',
 						'X-User-PIN': localStorage.getItem('userPin') || ''
 					},
-					body: JSON.stringify(refill)
+					body: JSON.stringify(cleanup(refill))
 				}
 			);
 			if (response.ok) {

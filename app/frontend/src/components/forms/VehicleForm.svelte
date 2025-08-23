@@ -17,6 +17,7 @@
 	import StatusBlock from '$components/common/StatusBlock.svelte';
 	import type { Status } from '$lib/models/status';
 	import { handleApiError, type ApiError } from '$lib/models/Error';
+	import { cleanup } from '$lib/utils/formatting';
 
 	let { vehicleToEdit = null, editMode = false, modalVisibility = $bindable(), loading } = $props();
 
@@ -65,7 +66,7 @@
 						'Content-Type': 'application/json',
 						'X-User-PIN': localStorage.getItem('userPin') || ''
 					},
-					body: JSON.stringify(vehicle)
+					body: JSON.stringify(cleanup(vehicle))
 				}
 			);
 
@@ -90,6 +91,7 @@
 				status = handleApiError(data, editMode);
 			}
 		} catch (e) {
+			console.error('Error persisting vehicle:', e);
 			status = {
 				message: 'Failed to connect to the server.',
 				type: 'ERROR'

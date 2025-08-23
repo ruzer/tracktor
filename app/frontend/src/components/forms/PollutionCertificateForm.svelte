@@ -5,6 +5,7 @@
 	import { env } from '$env/dynamic/public';
 	import { handleApiError } from '$lib/models/Error';
 	import type { Status } from '$lib/models/status';
+	import { cleanup } from '$lib/utils/formatting';
 	import { Calendar1, IdCard, Notebook, TestTube, TestTube2 } from '@lucide/svelte';
 
 	let {
@@ -58,7 +59,7 @@
 						'Content-Type': 'application/json',
 						'X-User-PIN': localStorage.getItem('userPin') || ''
 					},
-					body: JSON.stringify(certificate)
+					body: JSON.stringify(cleanup(certificate))
 				}
 			);
 
