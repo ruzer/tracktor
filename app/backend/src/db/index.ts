@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 const umzug = new Umzug({
   migrations: {
-    glob: path.join(__dirname, "migrations/*.ts"),
+    glob: path.join(__dirname, "migrations/*.js"),
     resolve: ({ name, path: migrationPath }) => {
       return {
         name,
