@@ -1,6 +1,5 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import { env } from '$env/dynamic/public';
 import { getApiUrl } from '$lib/utils/api';
 
 export interface Config {

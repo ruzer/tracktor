@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "@db/index.js";
-import Vehicle from "./Vehicle.js";
 import { InsuranceError } from "@exceptions/InsuranceError.js";
 import { Status } from "@exceptions/ServiceError.js";
 
@@ -68,7 +67,7 @@ Insurance.init(
           msg: "Policy Number must be between length 3 to 50.",
         },
         is: {
-          args: "^[0-9A-Za-z\s\-]*$",
+          args: "^[0-9A-Za-z- ]*$",
           msg: "Only number and characters with space and hyphen are allowed in policy number.",
         },
       },

@@ -2,9 +2,8 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
-	import { Shield, Calendar, Hash, DollarSign, Pencil, Trash2, Notebook } from '@lucide/svelte';
+	import { Shield, Calendar, Hash, DollarSign, Trash2, Notebook } from '@lucide/svelte';
 	import { formatCurrency, formatDate } from '$lib/utils/formatting';
-	import { insuranceModelStore } from '$lib/stores/insurance';
 	import { Jumper } from 'svelte-loading-spinners';
 	import IconButton from '$components/common/IconButton.svelte';
 	import DeleteConfirmation from '$components/common/DeleteConfirmation.svelte';
@@ -56,7 +55,8 @@
 			} else {
 				error = 'Failed to fetch insurance data.';
 			}
-		} catch (err) {
+		} catch (e) {
+			console.error(e);
 			error = 'Network error. Please try again.';
 		} finally {
 			loading = false;
@@ -81,10 +81,11 @@
 				await fetchInsuranceDetails();
 			} else {
 				const data = await response.json();
-				alert(data.message || 'Failed to delete insurance details.');
+				error = data.message || 'Failed to delete insurance details.';
 			}
-		} catch (err) {
-			alert('Network error. Failed to delete insurance details.');
+		} catch (e) {
+			console.error(e);
+			error = 'Network error. Failed to delete insurance details.';
 		}
 	}
 

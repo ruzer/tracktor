@@ -1,7 +1,6 @@
 import { Vehicle, PollutionCertificate } from "@models/index.js";
 import { PollutionCertificateError } from "@exceptions/PollutionCertificateError.js";
-import { UniqueConstraintError } from "sequelize";
-import { Status, statusFromError } from "@exceptions/ServiceError.js";
+import { Status } from "@exceptions/ServiceError.js";
 
 export const addPollutionCertificate = async (
   vehicleId: string,

@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "@db/index.js";
-import Vehicle from "./Vehicle.js";
 
 interface MaintenanceLogAttributes {
   id: string;
