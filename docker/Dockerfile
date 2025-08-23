@@ -4,9 +4,9 @@ WORKDIR /app/frontend
 COPY app/frontend/package*.json ./
 RUN npm install
 COPY app/frontend/ ./
-ENV PUBLIC_API_BASE_URL=/
+ENV API_BASE_URL=/
 ENV PUBLIC_DEMO_MODE=false
-ENV NODE_ENV=production
+ENV ENVIRONMENT=production
 RUN npm run build
 
 # Stage 2: Build the Node.js backend
@@ -15,7 +15,7 @@ WORKDIR /app/backend
 COPY app/backend/package*.json ./
 RUN npm install
 COPY app/backend/ ./
-ENV NODE_ENV=production
+ENV ENVIRONMENT=production
 ENV DB_PATH=./vehicles.db
 RUN npm run build
 
@@ -39,7 +39,7 @@ WORKDIR /app/backend
 
 EXPOSE 3000
 
-ENV NODE_ENV=production
+ENV ENVIRONMENT=production
 ENV PORT=3000
 ENV DB_PATH=/data/vehicles.db
 ENTRYPOINT ["/app/entrypoint.sh"]

@@ -1,9 +1,3 @@
-import { config } from "dotenv";
-import { resolve } from "path";
-
-// Load environment variables from root directory
-config({ path: resolve(process.cwd(), "../../.env") });
-
 import express from "express";
 import cors from "cors";
 import pinRoutes from "@routes/pinRoutes.js";
@@ -21,21 +15,21 @@ const app = express();
 // Configure CORS - simplified for development
 const corsOptions = env.isDevelopment()
   ? {
-      // In development, allow all origins for easier debugging
-      origin: true,
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization", "X-User-PIN"],
-      optionsSuccessStatus: 200,
-    }
+    // In development, allow all origins for easier debugging
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-User-PIN"],
+    optionsSuccessStatus: 200,
+  }
   : {
-      // In production, use strict origin checking
-      origin: env.CORS_ORIGINS,
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization", "X-User-PIN"],
-      optionsSuccessStatus: 200,
-    };
+    // In production, use strict origin checking
+    origin: env.CORS_ORIGINS,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-User-PIN"],
+    optionsSuccessStatus: 200,
+  };
 
 app.use(cors(corsOptions));
 
@@ -69,14 +63,14 @@ initializeDatabase()
       console.log(
         `🚀 Server running at http://${env.SERVER_HOST}:${env.SERVER_PORT}`
       );
-      console.log(`📊 Environment: ${env.NODE_ENV}`);
-      console.log(`🗄️ Database: ${env.DATABASE_PATH}`);
-      console.log(`🎭 Demo Mode: ${env.DEMO_MODE ? "Enabled" : "Disabled"}`);
+      console.log(`Environment: ${env.ENVIRONMENT}`);
+      console.log(`Database: ${env.DATABASE_PATH}`);
+      console.log(`Demo Mode: ${env.DEMO_MODE ? "Enabled" : "Disabled"}`);
       console.log(
-        `🌐 CORS: ${env.isDevelopment() ? "Permissive (Development)" : "Strict (Production)"}`
+        `CORS: ${env.isDevelopment() ? "Permissive (Development)" : "Strict (Production)"}`
       );
       if (!env.isDevelopment()) {
-        console.log(`📋 Allowed origins: ${env.CORS_ORIGINS.join(", ")}`);
+        console.log(`Allowed origins: ${env.CORS_ORIGINS.join(", ")}`);
       }
       console.log("─".repeat(75));
     });

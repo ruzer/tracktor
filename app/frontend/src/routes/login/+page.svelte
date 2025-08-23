@@ -4,6 +4,7 @@
 	import PinInput from '$components/auth/PinInput.svelte';
 	import ThemeToggle from '$components/common/ThemeToggle.svelte';
 	import { env } from '$env/dynamic/public';
+	import { getApiUrl } from '$lib/utils/api';
 	import { ShieldEllipsis, ShieldPlus, Tractor } from '@lucide/svelte';
 	import { Jumper } from 'svelte-loading-spinners';
 	import { simulateNetworkDelay } from '$lib/utils/dev';
@@ -22,9 +23,7 @@
 		if (browser) {
 			async function checkPinStatus() {
 				try {
-					const response = await fetch(
-						`${env.PUBLIC_API_BASE_URL || 'http://localhost:3000'}/api/pin/status`
-					);
+					const response = await fetch(getApiUrl('/api/pin/status'));
 					if (response.ok) {
 						const data = await response.json();
 						pinExists = data.exists;
@@ -70,16 +69,13 @@
 
 	const endpointCall = async (pin: string, verify = true) => {
 		const endpoint = verify ? '/api/pin/verify' : '/api/pin';
-		const response = await fetch(
-			`${env.PUBLIC_API_BASE_URL || 'http://localhost:3000'}${endpoint}`,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ pin })
-			}
-		);
+		const response = await fetch(getApiUrl(endpoint), {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ pin })
+		});
 
 		if (response.ok) {
 			// Store PIN and redirect
