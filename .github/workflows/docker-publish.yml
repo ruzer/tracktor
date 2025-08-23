@@ -58,7 +58,7 @@ jobs:
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern=latest
 
       - name: Extract docs metadata
         id: docs-meta
@@ -70,7 +70,7 @@ jobs:
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern=latest
 
       - name: Build and push app
         uses: docker/build-push-action@v5

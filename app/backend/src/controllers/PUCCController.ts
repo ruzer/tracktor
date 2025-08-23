@@ -45,8 +45,7 @@ export const updatePollutionCertificate = async (
   res: Response,
 ) => {
   const { vehicleId, id } = req.params;
-  const { certificateNumber, issueDate, expiryDate, testingCenter, notes } =
-    req.body;
+  const { certificateNumber, issueDate, expiryDate, testingCenter } = req.body;
 
   if (!vehicleId || !id) {
     throw new PollutionCertificateError(

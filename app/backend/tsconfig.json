@@ -32,7 +32,9 @@
       "@services": ["./src/services"],
       "@services/*": ["./src/services/*"],
       "@middleware": ["./src/middleware"],
-      "@middleware/*": ["./src/middleware/*"]
+      "@middleware/*": ["./src/middleware/*"],
+      "@frontend": ["./frontend"],
+      "@frontend/*": ["./frontend/*"]
     }
   },
   "include": ["**/*.ts"],
