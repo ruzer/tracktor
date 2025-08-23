@@ -31,7 +31,8 @@
     "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "umzug": "^3.8.2"
+    "umzug": "^3.8.2",
+    "express-rate-limit": "^8.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.34.0",
