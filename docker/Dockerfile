@@ -16,7 +16,7 @@ COPY app/backend/package*.json ./
 RUN npm install
 COPY app/backend/ ./
 ENV ENVIRONMENT=production
-ENV DB_PATH=./vehicles.db
+ENV DB_PATH=./tracktor.db
 RUN npm run build
 
 # Stage 3: Final production image
@@ -41,5 +41,5 @@ EXPOSE 3000
 
 ENV ENVIRONMENT=production
 ENV PORT=3000
-ENV DB_PATH=/data/vehicles.db
+ENV DB_PATH=/data/tracktor.db
 ENTRYPOINT ["/app/entrypoint.sh"]

@@ -13,7 +13,8 @@
     "db:seed": "tsx src/db/migrate.ts seed",
     "db:status": "tsx src/db/status.ts",
     "format": "prettier --write .",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "reset": "npm run clean && rm -rf tracktor.db node_modules && npm install"
   },
   "keywords": [],
   "author": "",

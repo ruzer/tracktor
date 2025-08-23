@@ -45,7 +45,7 @@ Both backend and frontend applications load their configuration from the root `.
 
 | Variable        | Default         | Description               |
 | --------------- | --------------- | ------------------------- |
-| `DATABASE_PATH` | `./vehicles.db` | SQLite database file path |
+| `DATABASE_PATH` | `./tracktor.db` | SQLite database file path |
 
 ### Application Features
 
@@ -86,7 +86,7 @@ DEMO_MODE=false
 ENVIRONMENT=production
 SERVER_PORT=3000
 SERVER_HOST=0.0.0.0
-DATABASE_PATH=/data/vehicles.db
+DATABASE_PATH=/data/tracktor.db
 API_BASE_URL=https://your-domain.com
 DEMO_MODE=false
 LOG_LEVEL=warn
@@ -101,7 +101,7 @@ environment:
   - ENVIRONMENT=production
   - SERVER_PORT=3000
   - SERVER_HOST=0.0.0.0
-  - DATABASE_PATH=/data/vehicles.db
+  - DATABASE_PATH=/data/tracktor.db
   - PUBLIC_DEMO_MODE=false
   - LOG_LEVEL=info
 ```
