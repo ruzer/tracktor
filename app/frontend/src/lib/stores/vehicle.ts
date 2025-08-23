@@ -2,6 +2,7 @@ import { goto, replaceState } from '$app/navigation';
 import { env } from '$env/dynamic/public';
 import type { Vehicle } from '$lib/models/vehicle';
 import { simulateNetworkDelay } from '$lib/utils/dev';
+import { getApiUrl } from '$lib/utils/api';
 import { redirect } from '@sveltejs/kit';
 import { writable } from 'svelte/store';
 
@@ -66,14 +67,11 @@ const createVehiclesStore = () => {
 		});
 		// await simulateNetworkDelay(2000); // Simulate network delay for development
 		try {
-			const response = await fetch(
-				`${env.PUBLIC_API_BASE_URL || 'http://localhost:3000'}/api/vehicles`,
-				{
-					headers: {
-						'X-User-PIN': pin || ''
-					}
+			const response = await fetch(getApiUrl('/api/vehicles'), {
+				headers: {
+					'X-User-PIN': pin || ''
 				}
-			);
+			});
 			if (response.ok) {
 				const vehicles = await response.json();
 				if (Array.isArray(vehicles)) {

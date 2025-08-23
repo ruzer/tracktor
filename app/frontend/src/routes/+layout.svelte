@@ -22,6 +22,7 @@
 
 	$effect(() => {
 		demoMode = env.PUBLIC_DEMO_MODE === 'true';
+		console.log('env', env);
 		if (browser) {
 			const pin = localStorage.getItem('userPin');
 			isAuthenticated = !!pin;

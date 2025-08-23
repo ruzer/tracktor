@@ -23,7 +23,7 @@ Both backend and frontend applications load their configuration from the root `.
 
 | Variable   | Default       | Description                                             |
 | ---------- | ------------- | ------------------------------------------------------- |
-| `NODE_ENV` | `development` | Application environment (development, production, test) |
+| `ENVIRONMENT` | `development` | Application environment (development, production, test) |
 
 ### Server Configuration
 
@@ -39,7 +39,7 @@ Both backend and frontend applications load their configuration from the root `.
 | Variable              | Default                 | Description                |
 | --------------------- | ----------------------- | -------------------------- |
 | `API_BASE_URL`        | `http://localhost:3000` | Base URL for API calls     |
-| `PUBLIC_API_BASE_URL` | `http://localhost:3000` | Public API URL (SvelteKit) |
+| `API_BASE_URL` | `http://localhost:3000` | Public API URL (SvelteKit) |
 
 ### Database Configuration
 
@@ -72,22 +72,22 @@ Both backend and frontend applications load their configuration from the root `.
 ### Development
 
 ```bash
-NODE_ENV=development
+ENVIRONMENT=development
 SERVER_PORT=3000
 CLIENT_PORT=5173
 API_BASE_URL=http://localhost:3000
-PUBLIC_API_BASE_URL=http://localhost:3000
+API_BASE_URL=http://localhost:3000
 DEMO_MODE=false
 ```
 
 ### Production
 
 ```bash
-NODE_ENV=production
+ENVIRONMENT=production
 SERVER_PORT=3000
 SERVER_HOST=0.0.0.0
 DATABASE_PATH=/data/vehicles.db
-PUBLIC_API_BASE_URL=https://your-domain.com
+API_BASE_URL=https://your-domain.com
 DEMO_MODE=false
 LOG_LEVEL=warn
 ```
@@ -98,7 +98,7 @@ The Docker configuration automatically sets production-appropriate values:
 
 ```yaml
 environment:
-  - NODE_ENV=production
+  - ENVIRONMENT=production
   - SERVER_PORT=3000
   - SERVER_HOST=0.0.0.0
   - DATABASE_PATH=/data/vehicles.db
@@ -144,7 +144,7 @@ environment:
 SvelteKit requires the `PUBLIC_` prefix for environment variables that need to be available in the browser. This is why we have both:
 
 - `API_BASE_URL` (backend only)
-- `PUBLIC_API_BASE_URL` (frontend/browser accessible)
+- `API_BASE_URL` (frontend/browser accessible)
 
 ## Troubleshooting
 
@@ -152,7 +152,7 @@ SvelteKit requires the `PUBLIC_` prefix for environment variables that need to b
 
 1. **Port conflicts**: Change `SERVER_PORT` or `CLIENT_PORT` if ports are in use
 2. **CORS errors**: Add your domain to `CORS_ORIGINS`
-3. **API connection issues**: Verify `PUBLIC_API_BASE_URL` matches your backend URL
+3. **API connection issues**: Verify `API_BASE_URL` matches your backend URL
 4. **Database issues**: Check `DATABASE_PATH` permissions and directory existence
 
 ### Debugging
