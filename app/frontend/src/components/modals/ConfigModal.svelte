@@ -22,15 +22,7 @@
 </script>
 
 {#if showModal}
-	<ModalContainer
-		onclose={() => closeModal()}
-		title='Configurations'
-		{loading}
-	>
-		<ConfigForm
-			bind:modalVisibility={showModal}
-			{callback}
-			{loading}
-		/>
+	<ModalContainer onclose={() => closeModal()} title="Configurations" {loading}>
+		<ConfigForm bind:modalVisibility={showModal} {callback} {loading} />
 	</ModalContainer>
 {/if}
