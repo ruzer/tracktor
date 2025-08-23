@@ -15,7 +15,7 @@ WORKDIR /app/backend
 COPY app/backend/package*.json ./
 RUN npm install
 COPY app/backend/ ./
-ENV ENVIRONMENT=production
+ENV NODE_ENV=production
 ENV DB_PATH=./tracktor.db
 RUN npm run build
 
@@ -39,7 +39,7 @@ WORKDIR /app/backend
 
 EXPOSE 3000
 
-ENV ENVIRONMENT=production
+ENV NODE_ENV=production
 ENV PORT=3000
 ENV DB_PATH=/data/tracktor.db
 ENTRYPOINT ["/app/entrypoint.sh"]
