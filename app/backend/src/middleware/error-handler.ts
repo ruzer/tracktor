@@ -7,7 +7,7 @@ export const errorHandler = (
   _: NextFunction,
 ) => {
   // Log the error for debugging
-  console.error(`Error in ${req.method} ${req.path}:`, err);
+  console.error("Error in %s %s:", req.method, req.path, err);
 
   res.setHeader("Content-Type", "application/json");
 
