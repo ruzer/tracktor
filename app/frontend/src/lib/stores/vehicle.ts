@@ -1,9 +1,6 @@
-import { goto, replaceState } from '$app/navigation';
-import { env } from '$env/dynamic/public';
+import { goto } from '$app/navigation';
 import type { Vehicle } from '$lib/models/vehicle';
-import { simulateNetworkDelay } from '$lib/utils/dev';
 import { getApiUrl } from '$lib/utils/api';
-import { redirect } from '@sveltejs/kit';
 import { writable } from 'svelte/store';
 
 const createVehicleModalStore = () => {

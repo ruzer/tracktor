@@ -15,11 +15,12 @@ interface VehicleAttributes {
   odometer?: number;
 }
 
-interface VehicleCreationAttributes extends Optional<VehicleAttributes, "id"> { }
+interface VehicleCreationAttributes extends Optional<VehicleAttributes, "id"> {}
 
 class Vehicle
   extends Model<VehicleAttributes, VehicleCreationAttributes>
-  implements VehicleAttributes {
+  implements VehicleAttributes
+{
   declare public id: string;
   declare public make: string;
   declare public model: string;
@@ -79,7 +80,7 @@ Vehicle.init(
       unique: true,
       validate: {
         is: {
-          args: "^[A-Z0-9\- ]{2,10}$",
+          args: "^[A-Z0-9- ]{2,25}$",
           msg: "Licence Plate format is incorrect.",
         },
       },

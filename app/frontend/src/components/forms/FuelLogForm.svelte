@@ -77,7 +77,8 @@
 				const data = await response.json();
 				status = handleApiError(data, editMode);
 			}
-		} catch (err) {
+		} catch (e) {
+			console.error(e);
 			status = {
 				message: 'Failed to connect to the server.',
 				type: 'ERROR'
@@ -150,6 +151,6 @@
 		label="Notes"
 		ariaLabel="Notes"
 	/>
-	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} />
+	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} {loading} />
 </form>
 <StatusBlock message={status.message} type={status.type} />

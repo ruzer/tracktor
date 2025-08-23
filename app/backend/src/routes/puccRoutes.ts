@@ -16,7 +16,7 @@ router.put("/:id", authenticatePin, asyncHandler(updatePollutionCertificate));
 router.delete(
   "/:id",
   authenticatePin,
-  asyncHandler(deletePollutionCertificate)
+  asyncHandler(deletePollutionCertificate),
 );
 
 export default router;

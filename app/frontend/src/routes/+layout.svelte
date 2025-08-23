@@ -3,14 +3,13 @@
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import '../styles/app.css';
-	import { onMount, tick } from 'svelte';
+	import { tick } from 'svelte';
 	import { LogOut, Tractor, Settings } from '@lucide/svelte';
 	import ThemeToggle from '$components/common/ThemeToggle.svelte';
 	import { env } from '$env/dynamic/public';
 	import { Jumper } from 'svelte-loading-spinners';
 	import { configModelStore } from '$lib/stores/config';
 	import { vehiclesStore } from '$lib/stores/vehicle';
-	import { darkModeStore } from '$lib/stores/dark-mode';
 	import IconButton from '$components/common/IconButton.svelte';
 
 	let { children } = $props();
@@ -88,7 +87,7 @@
 						icon={Settings}
 						onclick={() => {
 							configModelStore.show((status: boolean) => {
-								fetchVehicles();
+								status && fetchVehicles();
 							});
 						}}
 						ariaLabel="Settings"

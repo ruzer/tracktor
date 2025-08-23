@@ -8,7 +8,6 @@ config({
   quiet: true,
 });
 
-
 const getOrigins = (): string[] => {
   const origins = process.env.CORS_ORIGINS;
   if (!origins) {
@@ -21,12 +20,15 @@ const getOrigins = (): string[] => {
         "http://localhost:3000",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:3000",
-      ]
+      ];
     }
   }
 
-  return origins.split(",").map(origin => origin.trim()).filter(Boolean);
-}
+  return origins
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+};
 
 export const env = {
   // Application Environment
@@ -50,7 +52,8 @@ export const env = {
   LOG_REQUESTS: process.env.LOG_REQUESTS === "true",
 
   // Helper methods
-  isDevelopment: () => !process.env.NODE_ENV || process.env.NODE_ENV === "development",
+  isDevelopment: () =>
+    !process.env.NODE_ENV || process.env.NODE_ENV === "development",
   isProduction: () => process.env.NODE_ENV === "production",
   isTest: () => process.env.NODE_ENV === "test",
 } as const;

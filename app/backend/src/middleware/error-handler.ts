@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { ValidationError } from "sequelize";
 
 export const errorHandler = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  _: NextFunction,
 ) => {
   // Log the error for debugging
   console.error(`Error in ${req.method} ${req.path}:`, err);

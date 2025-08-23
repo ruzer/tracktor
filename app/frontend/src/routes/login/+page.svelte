@@ -3,7 +3,6 @@
 	import { browser } from '$app/environment';
 	import PinInput from '$components/auth/PinInput.svelte';
 	import ThemeToggle from '$components/common/ThemeToggle.svelte';
-	import { env } from '$env/dynamic/public';
 	import { getApiUrl } from '$lib/utils/api';
 	import { ShieldEllipsis, ShieldPlus, Tractor } from '@lucide/svelte';
 	import { Jumper } from 'svelte-loading-spinners';
@@ -34,6 +33,7 @@
 						};
 					}
 				} catch (e) {
+					console.error(e);
 					status = {
 						message: 'Unknown Server Error Occurred.',
 						type: 'ERROR'
@@ -58,6 +58,7 @@
 		try {
 			await endpointCall(pin, pinExists);
 		} catch (e) {
+			console.error(e);
 			status = {
 				message: 'Failed to connect to the server. Please check your connection.',
 				type: 'ERROR'

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import ChartCard from '$components/chart/ChartCard.svelte';
-
 	let {
 		message,
 		type = 'INFO'

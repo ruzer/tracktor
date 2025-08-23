@@ -3,8 +3,7 @@
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
 	import { formatCurrency, formatDate, formatDistance } from '$lib/utils/formatting';
-	import { Pencil, Trash2 } from '@lucide/svelte';
-	import { maintenanceModelStore } from '$lib/stores/maintenance';
+	import { Trash2 } from '@lucide/svelte';
 	import { Jumper } from 'svelte-loading-spinners';
 	import IconButton from '$components/common/IconButton.svelte';
 	import DeleteConfirmation from '$components/common/DeleteConfirmation.svelte';
@@ -55,7 +54,8 @@
 			} else {
 				error = 'Failed to fetch maintenance logs.';
 			}
-		} catch (err) {
+		} catch (e) {
+			console.error(e);
 			error = 'Network error. Please try again.';
 		} finally {
 			loading = false;
@@ -80,10 +80,11 @@
 				await fetchMaintenanceLogs();
 			} else {
 				const data = await response.json();
-				alert(data.message || 'Failed to delete maintenance log.');
+				error = data.message || 'Failed to delete maintenance log.';
 			}
-		} catch (err) {
-			alert('Network error. Failed to delete maintenance log.');
+		} catch (e) {
+			console.error(e);
+			error = 'Network error. Failed to delete maintenance log.';
 		}
 	}
 

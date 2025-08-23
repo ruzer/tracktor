@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
-	import { FileText, Calendar, MapPin, Pencil, Trash2, BadgeCheck } from '@lucide/svelte';
+	import { FileText, Calendar, MapPin, Trash2, BadgeCheck } from '@lucide/svelte';
 	import { formatDate } from '$lib/utils/formatting';
 	import { Jumper } from 'svelte-loading-spinners';
 	import IconButton from '$components/common/IconButton.svelte';
@@ -53,7 +53,8 @@
 			} else {
 				error = 'Failed to fetch Pollution Certificates.';
 			}
-		} catch (err) {
+		} catch (e) {
+			console.error(e);
 			error = 'Network error. Please try again.';
 		} finally {
 			loading = false;
@@ -78,10 +79,11 @@
 				await fetchPollutionCertificateDetails();
 			} else {
 				const data = await response.json();
-				alert(data.message || 'Failed to delete pollution certificate.');
+				error = data.message || 'Failed to delete pollution certificate.';
 			}
-		} catch (err) {
-			alert('Network error. Failed to delete pollution certificate.');
+		} catch (e) {
+			console.error(e);
+			error = 'Network error. Failed to delete pollution certificate.';
 		}
 	}
 

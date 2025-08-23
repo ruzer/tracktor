@@ -1,5 +1,5 @@
 import { ConfigError } from "@exceptions/ConfigError.js";
-import { Status, statusFromError } from "@exceptions/ServiceError.js";
+import { Status } from "@exceptions/ServiceError.js";
 import Config from "@models/Config.js";
 
 export const getAppConfig = async () => {

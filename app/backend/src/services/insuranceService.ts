@@ -1,7 +1,6 @@
 import { InsuranceError } from "@exceptions/InsuranceError.js";
-import { Status, statusFromError } from "@exceptions/ServiceError.js";
+import { Status } from "@exceptions/ServiceError.js";
 import { Insurance, Vehicle } from "@models/index.js";
-import { UniqueConstraintError } from "sequelize";
 
 export const addInsurance = async (vehicleId: string, insuranceData: any) => {
   const vehicle = await Vehicle.findByPk(vehicleId);
