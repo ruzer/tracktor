@@ -1,59 +1,26 @@
 # Insurance API
 
-This section documents the API endpoints for managing insurance policies.
+> **📍 Documentation Moved**
+>
+> This API documentation has been moved to the Developer Guide for better organization.
+>
+> **New Location:** [Developer Guide > API > Insurance](/developer-guide/api/insurance.md)
 
-## Add Insurance
+## Quick Links
 
-Adds a new insurance policy for a vehicle.
+- **[Complete API Documentation](/developer-guide/api/)** - Full API reference
+- **[Insurance API Guide](/developer-guide/api/insurance.md)** - Complete insurance management documentation
+- **[Interactive API Docs](/developer-guide/api/swagger-ui.md)** - Test endpoints in your browser
+- **[OpenAPI Specification](/api-specs/openapi.yaml)** - Complete API specification
 
-*   **Method:** `POST`
-*   **Endpoint:** `/api/vehicles/:vehicleId/insurance`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-*   **Request Body:**
-    ```json
-    {
-      "provider": "ABC Insurance",
-      "policyNumber": "POL123456",
-      "startDate": "2025-01-01",
-      "endDate": "2026-01-01",
-      "cost": 5000
-    }
-    ```
+## Quick Reference
 
-## Get Insurance for Vehicle
+The Insurance API provides insurance management endpoints:
 
-Retrieves the insurance policy for a specific vehicle.
+- `GET /api/insurance` - List all insurance policies
+- `POST /api/insurance` - Create new insurance policy
+- `GET /api/insurance/:id` - Get insurance by ID
+- `PUT /api/insurance/:id` - Update insurance
+- `DELETE /api/insurance/:id` - Delete insurance
 
-*   **Method:** `GET`
-*   **Endpoint:** `/api/vehicles/:vehicleId/insurance`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-
-## Update Insurance
-
-Updates an insurance policy's information.
-
-*   **Method:** `PUT`
-*   **Endpoint:** `/api/vehicles/:vehicleId/insurance`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-*   **Request Body:**
-    ```json
-    {
-      "provider": "XYZ Insurance",
-      "policyNumber": "POL654321",
-      "startDate": "2025-02-01",
-      "endDate": "2026-02-01",
-      "cost": 5200
-    }
-    ```
-
-## Delete Insurance
-
-Deletes an insurance policy.
-
-*   **Method:** `DELETE`
-*   **Endpoint:** `/api/vehicles/:vehicleId/insurance`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
+For complete documentation, examples, and interactive testing, visit the [Developer Guide](/developer-guide/api/).

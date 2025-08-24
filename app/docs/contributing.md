@@ -1,65 +1,60 @@
-# Contributing
+# Contributing to Tracktor
 
-We welcome contributions to the Tracktor project! This guide will help you get started with setting up your development environment and understanding our technology stack.
+We welcome contributions to the Tracktor project! This document provides a quick overview for getting started.
+
+## Quick Start for Contributors
+
+1. **Read the [Developer Guide](/developer-guide/)** - Comprehensive technical documentation
+2. **Set up your [Development Environment](/developer-guide/development/setup.md)** - Get your local environment ready
+3. **Review [Contributing Guidelines](/developer-guide/contributing/guidelines.md)** - Understand our development process
+4. **Explore the [API Documentation](/developer-guide/api/)** - Learn about the REST API
+
+## Development Process
+
+1. **Fork and clone** the repository
+2. **Create a feature branch** for your changes
+3. **Follow our coding standards** and best practices
+4. **Test your changes** thoroughly
+5. **Submit a pull request** following our [PR guidelines](/developer-guide/contributing/pull-requests.md)
 
 ## Technology Stack
 
-Tracktor is built with a modern and robust technology stack:
+Tracktor is built with:
 
-*   **Frontend:**
-    *   **SvelteKit:** A powerful framework for building fast and resilient web applications.
-    *   **Tailwind CSS:** A utility-first CSS framework for creating modern and responsive designs.
-*   **Backend:**
-    *   **Node.js with Express.js:** A fast and minimalist web framework for building the API.
-    *   **TypeScript:** For type safety and improved code quality.
-*   **Database:**
-    *   **SQLite:** A lightweight, serverless SQL database.
-    *   **Sequelize:** A promise-based Node.js ORM for SQLite.
+- **Frontend:** SvelteKit with TypeScript and Tailwind CSS
+- **Backend:** Express.js with TypeScript and Sequelize ORM
+- **Database:** SQLite for lightweight, serverless data storage
 
-## Development Environment Setup
+## Getting Help
 
-### Prerequisites
+- **[Developer Guide](/developer-guide/)** - Complete technical documentation
+- **[Architecture Overview](/developer-guide/architecture/overview.md)** - Understand the system design
+- **[Development Setup](/developer-guide/development/setup.md)** - Environment configuration
+- **[API Reference](/developer-guide/api/)** - Complete endpoint documentation
 
-*   Node.js (v18 or higher)
-*   npm
+## Quick Setup
 
-### Steps
+```bash
+# Clone your fork
+git clone https://github.com/your-username/tracktor.git
+cd tracktor
 
-1.  **Fork and clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/tracktor.git
-    cd tracktor
-    ```
+# Install dependencies
+npm install
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+# Start development servers
+npm run dev
+```
 
-3.  **Start the development servers:**
-    This command will start both the frontend and backend development servers concurrently.
-    ```bash
-    npm run dev
-    ```
+For detailed setup instructions, see the [Development Environment Setup](/developer-guide/development/setup.md) guide.
 
-4.  **Access the application:**
-    *   The frontend will be available at `http://localhost:5173`.
-    *   The backend API will be available at `http://localhost:3000`.
+## Documentation
 
-## Project Structure
+This contributing guide has been moved to the Developer Guide for better organization:
 
-The project is organized into two main packages:
+- **[Contributing Guidelines](/developer-guide/contributing/guidelines.md)** - Detailed contribution process
+- **[Development Setup](/developer-guide/development/setup.md)** - Environment configuration
+- **[Coding Standards](/developer-guide/development/coding-standards.md)** - Code quality guidelines
+- **[Pull Request Process](/developer-guide/contributing/pull-requests.md)** - PR submission guidelines
 
-*   `app/client`: The SvelteKit frontend application.
-*   `app/server`: The Express.js backend API.
-
-When making changes, please adhere to the existing code style and conventions. We use Prettier for code formatting, which should be run automatically if you have the appropriate editor extensions installed.
-
-## Submitting Changes
-
-1.  Create a new branch for your feature or bug fix.
-2.  Make your changes and commit them with a clear and descriptive message.
-3.  Push your branch to your fork.
-4.  Open a pull request to the main Tracktor repository.
-
-We appreciate your contributions to making Tracktor a better application!
+We appreciate your contributions to making Tracktor better!
