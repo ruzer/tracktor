@@ -2,7 +2,13 @@
  * Customize default theme styling by overriding CSS variables:
  * https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
  */
+ 
+@import url('https://fonts.googleapis.com/css2?family=Finlandica:ital,wght@0,400..700;1,400..700&display=swap');
 
+* {
+  font-family: 'Finlandica', sans-serif;
+}
+ 
 :root {
   --vp-c-brand-1: #3c82f6;
   --vp-c-brand-2: #2563eb;

@@ -2,7 +2,7 @@
   <Layout>
     <template #doc-before>
       <!-- Skip to content link for accessibility -->
-      <a href="#VPContent" class="skip-to-content">Skip to main content</a>
+      <!-- <a href="#VPContent" class="skip-to-content">Skip to main content</a> -->
 
       <!-- Breadcrumb navigation -->
       <div class="breadcrumb-container">
