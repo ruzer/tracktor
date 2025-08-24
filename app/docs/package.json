@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "docs:dev": "npx vitepress dev . --host",
-    "docs:build": "npm run validate && npx vitepress build .",
-    "docs:preview": "npx vitepress preview . --host",
+    "dev": "npx vitepress dev . --host",
+    "build": "npm run validate && npx vitepress build .",
+    "preview": "npx vitepress preview . --host",
     "validate": "node .vitepress/scripts/validate.js",
     "validate:links": "node .vitepress/scripts/validate.js --links",
     "validate:images": "node .vitepress/scripts/validate.js --images",
@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "glob": "^10.3.10",
+    "mermaid": "^11.10.1",
     "vitepress": "1.6.3",
     "vitepress-openapi": "^0.1.8"
   },
@@ -23,6 +24,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "vitepress-mermaid-renderer": "^1.0.14"
   }
 }

@@ -279,7 +279,7 @@ export default {
       light: "github-light",
       dark: "github-dark",
     },
-    lineNumbers: true,
+    lineNumbers: false,
   },
   vite: {
     assetsInclude: ["**/*.yaml", "**/*.yml"],

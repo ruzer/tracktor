@@ -1,6 +1,6 @@
 # User Guide
 
-Welcome to the Tracktor User Guide. This comprehensive guide will help you get the most out of your vehicle tracking and management experience.
+Welcome to the **Tracktor** User Guide. This comprehensive guide will help you get the most out of your vehicle tracking and management experience.
 
 ## Quick Navigation
 
@@ -22,7 +22,7 @@ At its core, Tracktor is a centralized dashboard for all your vehicle-related in
 
 ## Key Features
 
-- **User Management:** Secure registration and PIN-based authentication, with hashed credentials and profile management.
+- **User Management:** Secure registration and PIN-based authentication, with hashed credentials.
 - **Vehicle Management:** Add and manage multiple vehicles with detailed profiles, including unique identifiers and odometer tracking.
 - **Fuel Tracking:** Log fuel refills, track expenses, and automatically calculate mileage and efficiency.
 - **Maintenance Tracking:** Record service history, schedule upcoming maintenance, and receive reminders (future enhancement).
@@ -41,7 +41,7 @@ Tracktor is designed to save you time, money, and stress by:
 
 ### Dashboard Overview
 
-<img src="/screenshots/dashboard.png" alt="Dashboard" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+<img src="/screenshots/homepage.png" alt="Dashboard" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 
 ### Charts and Analytics
 
