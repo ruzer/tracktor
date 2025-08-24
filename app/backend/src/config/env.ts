@@ -38,6 +38,7 @@ export const env = {
 
   // Application Features
   DEMO_MODE: process.env.PUBLIC_DEMO_MODE === "true",
+  FORCE_DEMO_SEED_DATA: process.env.FORCE_DEMO_SEED_DATA === "true",
 
   // CORS Configuration
   CORS_ORIGINS: getOrigins(),

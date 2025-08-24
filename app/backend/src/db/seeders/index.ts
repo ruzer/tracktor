@@ -8,6 +8,7 @@ import {
   PollutionCertificate,
   Vehicle,
 } from "@models/index.js";
+import env from "@config/env.js";
 
 export const seedInitialConfig = async () => {
   const configData = [
@@ -41,10 +42,15 @@ export const seedAuthPin = async (pin: string) => {
 };
 
 export const seedDemoData = async () => {
-  const existingVehicles = await Vehicle.count();
-  if (existingVehicles > 0) {
-    console.log("Demo data already exists, skipping");
-    return;
+  if (!env.FORCE_DEMO_SEED_DATA) {
+    const existingVehicles = await Vehicle.count();
+    if (existingVehicles > 0) {
+      console.log("Demo data already exists, skipping");
+      return;
+    }
+  } else {
+    console.log("Forcing demo data seed");
+    await Vehicle.destroy({ truncate: true });
   }
 
   const vehicle1 = await Vehicle.create({
