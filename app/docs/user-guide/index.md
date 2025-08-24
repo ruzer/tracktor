@@ -39,17 +39,17 @@ Tracktor is designed to save you time, money, and stress by:
 
 ## Screenshots
 
-### Dashboard Overview
+### Vehicles List
 
-<img src="/screenshots/homepage.png" alt="Dashboard" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+<img src="/screenshots/vehicles.png" alt="Dashboard" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 
-### Charts and Analytics
+### Vehicle Trends
 
-<img src="/screenshots/charts.png" alt="Charts" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+<img src="/screenshots/vehicle-trends.png" alt="Charts" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 
 ### Fuel Tracking
 
-<img src="/screenshots/fuel.png" alt="Fuel Log" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+<img src="/screenshots/fuel-log.png" alt="Fuel Log" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 
 ### Maintenance Management
 
