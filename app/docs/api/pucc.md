@@ -1,59 +1,26 @@
 # PUCC API
 
-This section documents the API endpoints for managing Pollution Under Control Certificates (PUCC).
+> **📍 Documentation Moved**
+>
+> This API documentation has been moved to the Developer Guide for better organization.
+>
+> **New Location:** [Developer Guide > API > PUCC](/developer-guide/api/pucc.md)
 
-## Add Pollution Certificate
+## Quick Links
 
-Adds a new PUCC for a vehicle.
+- **[Complete API Documentation](/developer-guide/api/)** - Full API reference
+- **[PUCC API Guide](/developer-guide/api/pucc.md)** - Complete pollution certificate documentation
+- **[Interactive API Docs](/developer-guide/api/swagger-ui.md)** - Test endpoints in your browser
+- **[OpenAPI Specification](/api-specs/openapi.yaml)** - Complete API specification
 
-*   **Method:** `POST`
-*   **Endpoint:** `/api/vehicles/:vehicleId/pucc`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-*   **Request Body:**
-    ```json
-    {
-      "certificateNumber": "PUCC123456",
-      "issueDate": "2025-01-01",
-      "expiryDate": "2026-01-01",
-      "testingCenter": "Test Center",
-      "notes": "All clear"
-    }
-    ```
+## Quick Reference
 
-## Get Pollution Certificate for Vehicle
+The PUCC API provides pollution certificate management endpoints:
 
-Retrieves the PUCC for a specific vehicle.
+- `GET /api/pucc` - List all pollution certificates
+- `POST /api/pucc` - Create new pollution certificate
+- `GET /api/pucc/:id` - Get PUCC by ID
+- `PUT /api/pucc/:id` - Update PUCC
+- `DELETE /api/pucc/:id` - Delete PUCC
 
-*   **Method:** `GET`
-*   **Endpoint:** `/api/vehicles/:vehicleId/pucc`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-
-## Update Pollution Certificate
-
-Updates a PUCC's information.
-
-*   **Method:** `PUT`
-*   **Endpoint:** `/api/vehicles/:vehicleId/pucc`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-*   **Request Body:**
-    ```json
-    {
-      "certificateNumber": "PUCC654321",
-      "issueDate": "2025-02-01",
-      "expiryDate": "2026-02-01",
-      "testingCenter": "New Center",
-      "notes": "Renewed"
-    }
-    ```
-
-## Delete Pollution Certificate
-
-Deletes a PUCC.
-
-*   **Method:** `DELETE`
-*   **Endpoint:** `/api/vehicles/:vehicleId/pucc`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
+For complete documentation, examples, and interactive testing, visit the [Developer Guide](/developer-guide/api/).

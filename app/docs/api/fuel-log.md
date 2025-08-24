@@ -1,68 +1,26 @@
 # Fuel Log API
 
-This section documents the API endpoints for managing fuel logs.
+> **📍 Documentation Moved**
+>
+> This API documentation has been moved to the Developer Guide for better organization.
+>
+> **New Location:** [Developer Guide > API > Fuel Logs](/developer-guide/api/fuel-logs.md)
 
-## Add Fuel Log
+## Quick Links
 
-Adds a new fuel log for a vehicle.
+- **[Complete API Documentation](/developer-guide/api/)** - Full API reference
+- **[Fuel Logs API Guide](/developer-guide/api/fuel-logs.md)** - Complete fuel tracking documentation
+- **[Interactive API Docs](/developer-guide/api/swagger-ui.md)** - Test endpoints in your browser
+- **[OpenAPI Specification](/api-specs/openapi.yaml)** - Complete API specification
 
-*   **Method:** `POST`
-*   **Endpoint:** `/api/vehicles/:vehicleId/fuel-logs`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-*   **Request Body:**
-    ```json
-    {
-      "date": "2025-07-24",
-      "odometer": 12345,
-      "fuelAmount": 40,
-      "cost": 4000,
-      "notes": "Full tank"
-    }
-    ```
+## Quick Reference
 
-## Get All Fuel Logs for Vehicle
+The Fuel Log API provides fuel tracking endpoints:
 
-Retrieves all fuel logs for a specific vehicle.
+- `GET /api/fuel-logs` - List all fuel logs
+- `POST /api/fuel-logs` - Create new fuel log
+- `GET /api/fuel-logs/:id` - Get fuel log by ID
+- `PUT /api/fuel-logs/:id` - Update fuel log
+- `DELETE /api/fuel-logs/:id` - Delete fuel log
 
-*   **Method:** `GET`
-*   **Endpoint:** `/api/vehicles/:vehicleId/fuel-logs`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-
-## Get Fuel Log By ID
-
-Retrieves a single fuel log by its ID.
-
-*   **Method:** `GET`
-*   **Endpoint:** `/api/vehicles/:vehicleId/fuel-logs/:id`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-
-## Update Fuel Log
-
-Updates a fuel log's information.
-
-*   **Method:** `PUT`
-*   **Endpoint:** `/api/vehicles/:vehicleId/fuel-logs/:id`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-*   **Request Body:**
-    ```json
-    {
-      "date": "2025-07-25",
-      "odometer": 12400,
-      "fuelAmount": 35,
-      "cost": 3500,
-      "notes": "Partial refill"
-    }
-    ```
-
-## Delete Fuel Log
-
-Deletes a fuel log.
-
-*   **Method:** `DELETE`
-*   **Endpoint:** `/api/vehicles/:vehicleId/fuel-logs/:id`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
+For complete documentation, examples, and interactive testing, visit the [Developer Guide](/developer-guide/api/).

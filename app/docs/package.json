@@ -5,14 +5,24 @@
   "main": "index.js",
   "scripts": {
     "docs:dev": "npx vitepress dev . --host",
-    "docs:build": "npx vitepress build .",
-    "docs:preview": "npx vitepress preview . --host"
+    "docs:build": "npm run validate && npx vitepress build .",
+    "docs:preview": "npx vitepress preview . --host",
+    "validate": "node .vitepress/scripts/validate.js",
+    "validate:links": "node .vitepress/scripts/validate.js --links",
+    "validate:images": "node .vitepress/scripts/validate.js --images",
+    "validate:openapi": "node .vitepress/scripts/validate.js --openapi",
+    "validate:freshness": "node .vitepress/scripts/validate.js --freshness"
   },
   "devDependencies": {
-    "vitepress": "1.6.3"
+    "glob": "^10.3.10",
+    "vitepress": "1.6.3",
+    "vitepress-openapi": "^0.1.8"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "module",
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
 }

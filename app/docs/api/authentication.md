@@ -1,36 +1,24 @@
 # Authentication API
 
-This section documents the API endpoints for user authentication.
+> **📍 Documentation Moved**
+>
+> This API documentation has been moved to the Developer Guide for better organization.
+>
+> **New Location:** [Developer Guide > API > Authentication](/developer-guide/api/authentication.md)
 
-## Set PIN
+## Quick Links
 
-Sets the user's PIN for authentication.
+- **[Complete API Documentation](/developer-guide/api/)** - Full API reference
+- **[Authentication Guide](/developer-guide/api/authentication.md)** - PIN-based authentication
+- **[Interactive API Docs](/developer-guide/api/swagger-ui.md)** - Test endpoints in your browser
+- **[OpenAPI Specification](/api-specs/openapi.yaml)** - Complete API specification
 
-*   **Method:** `POST`
-*   **Endpoint:** `/api/pin`
-*   **Request Body:**
-    ```json
-    {
-      "pin": "123456"
-    }
-    ```
+## Quick Reference
 
-## Verify PIN
+The Authentication API provides PIN-based authentication for Tracktor:
 
-Verifies the user's PIN.
+- `GET /api/pin/status` - Check if PIN is set
+- `POST /api/pin` - Set authentication PIN
+- `POST /api/pin/verify` - Verify PIN
 
-*   **Method:** `POST`
-*   **Endpoint:** `/api/pin/verify`
-*   **Request Body:**
-    ```json
-    {
-      "pin": "123456"
-    }
-    ```
-
-## PIN Status
-
-Checks if a PIN has been set.
-
-*   **Method:** `GET`
-*   **Endpoint:** `/api/pin/status`
+For complete documentation, examples, and interactive testing, visit the [Developer Guide](/developer-guide/api/).

@@ -1,68 +1,26 @@
 # Maintenance Log API
 
-This section documents the API endpoints for managing maintenance logs.
+> **📍 Documentation Moved**
+>
+> This API documentation has been moved to the Developer Guide for better organization.
+>
+> **New Location:** [Developer Guide > API > Maintenance Logs](/developer-guide/api/maintenance-logs.md)
 
-## Add Maintenance Log
+## Quick Links
 
-Adds a new maintenance log for a vehicle.
+- **[Complete API Documentation](/developer-guide/api/)** - Full API reference
+- **[Maintenance Logs API Guide](/developer-guide/api/maintenance-logs.md)** - Complete maintenance tracking documentation
+- **[Interactive API Docs](/developer-guide/api/swagger-ui.md)** - Test endpoints in your browser
+- **[OpenAPI Specification](/api-specs/openapi.yaml)** - Complete API specification
 
-*   **Method:** `POST`
-*   **Endpoint:** `/api/vehicles/:vehicleId/maintenance-logs`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-*   **Request Body:**
-    ```json
-    {
-      "date": "2025-07-24",
-      "odometer": 12345,
-      "service": "Oil Change",
-      "cost": 100,
-      "notes": "Changed oil and filter"
-    }
-    ```
+## Quick Reference
 
-## Get All Maintenance Logs for Vehicle
+The Maintenance Log API provides maintenance tracking endpoints:
 
-Retrieves all maintenance logs for a specific vehicle.
+- `GET /api/maintenance-logs` - List all maintenance logs
+- `POST /api/maintenance-logs` - Create new maintenance log
+- `GET /api/maintenance-logs/:id` - Get maintenance log by ID
+- `PUT /api/maintenance-logs/:id` - Update maintenance log
+- `DELETE /api/maintenance-logs/:id` - Delete maintenance log
 
-*   **Method:** `GET`
-*   **Endpoint:** `/api/vehicles/:vehicleId/maintenance-logs`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-
-## Get Maintenance Log By ID
-
-Retrieves a single maintenance log by its ID.
-
-*   **Method:** `GET`
-*   **Endpoint:** `/api/vehicles/:vehicleId/maintenance-logs/:id`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-
-## Update Maintenance Log
-
-Updates a maintenance log's information.
-
-*   **Method:** `PUT`
-*   **Endpoint:** `/api/vehicles/:vehicleId/maintenance-logs/:id`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
-*   **Request Body:**
-    ```json
-    {
-      "date": "2025-07-25",
-      "odometer": 12400,
-      "service": "Tire Rotation",
-      "cost": 50,
-      "notes": "Rotated all tires"
-    }
-    ```
-
-## Delete Maintenance Log
-
-Deletes a maintenance log.
-
-*   **Method:** `DELETE`
-*   **Endpoint:** `/api/vehicles/:vehicleId/maintenance-logs/:id`
-*   **Headers:**
-    *   `X-User-PIN`: The user's PIN.
+For complete documentation, examples, and interactive testing, visit the [Developer Guide](/developer-guide/api/).
