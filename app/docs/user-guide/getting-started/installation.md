@@ -1,28 +1,6 @@
 # Installation
 
-Learn how to install and run Tracktor on your system. This guide covers multiple installation methods to suit different deployment scenarios.
-
-## System Requirements
-
-Before installing Tracktor, ensure your system meets these minimum requirements:
-
-### Hardware Requirements
-
-- **Memory:** Minimum 512MB RAM (1GB recommended)
-- **Storage:** At least 500MB free space (for application and data)
-- **Network:** Internet connection for initial setup and updates
-
-### Software Requirements
-
-- **Node.js:** Version 18 or higher (LTS version recommended)
-- **npm:** Version 8 or higher (usually comes with Node.js)
-- **Git:** For cloning the repository
-- **Web Browser:** Modern browser (Chrome, Firefox, Safari, Edge)
-
-### Optional Requirements
-
-- **Docker:** Version 20.10 or higher (for containerized deployment)
-- **Docker Compose:** Version 2.0 or higher (for multi-container setup)
+Learn how to install and run **Tracktor** on your system. This guide covers multiple installation methods to suit different deployment scenarios.
 
 ## Installation Methods
 
@@ -30,17 +8,24 @@ Choose the installation method that best fits your needs:
 
 - **Docker Compose (Recommended):** Complete setup with all services
 - **Docker:** Single container deployment
-- **Manual Installation:** Direct installation on your system
+- **Bare Metal:** Direct installation on your system
+- **Proxmox LXC:** Install LXC on proxmox host using [ProxmoxVE Helper Scripts](https://community-scripts.github.io/ProxmoxVE/)
 - **Development Setup:** For contributors and developers
 
-<PlaceholderBlock 
-  id="installation-methods-screenshot"
-  type="screenshot" 
-  message="Add screenshot showing the different installation options and their outcomes"
-  priority="medium"
-  location="/user-guide/getting-started/installation.md"
-  instructions="Capture screenshots of successful installations for each method, showing the final running application"
-/>
+## System Requirements
+
+Before installing Tracktor, ensure your system meets these minimum requirements which varies based on the installation type :
+
+| Installation Type     | Hardware Requirements                                                        | Software Dependencies          |
+| --------------------- | ---------------------------------------------------------------------------- | ------------------------------ |
+| **Docker Compose**    | **-**                                                                        | - docker<br>- compose<br>- git |
+| **Docker**            | **-**                                                                        | - docker<br>- git              |
+| **Bare Metal**        | **- Memory:** 512MB RAM<br>**- Storage:** 1GB free space                     | - node.js<br>- git             |
+| **Proxmox LXC**       | **- Memory:** 512MB RAM<br>**- Storage:** 1GB free space<br>**- CPU:** 1vCPU | - proxmox<br>- lxc             |
+| **Development Setup** | [Setup Guide](/developer-guide/development/setup.html)                       | -                              |
+> **Note:** For production deployments, it is recommended to have at least 1GB of RAM and 2GB of free disk space.
+
+## Installation Steps
 
 ### Method 1: Docker Compose (Recommended)
 
@@ -53,38 +38,48 @@ Docker Compose provides the easiest way to deploy Tracktor with all services con
 
 #### Quick Start Steps
 
-1. **Clone the repository:**
+**Step 1:** Download or create a `docker-compose.yml` file in your directory:
+```bash
+# Downlaod Docker compose file
+curl -o docker-compose.yml https://raw.githubusercontent.com/javedh-dev/tracktor/main/docker/docker-compose.yml
+```
+```yaml
+services:
+  app:
+    image: ghcr.io/javedh-dev/tracktor:latest
+    container_name: tracktor-app
+    restart: always
+    env_file: .env
+    ports:
+      - "3333:3000"
+    volumes:
+      - tracktor-app-data:/data/tracktor.db
 
-   ```bash
-   git clone https://github.com/javedh-dev/tracktor.git
-   cd tracktor
-   ```
+volumes:
+  tracktor-app-data: null
+```
 
-2. **Start all services:**
+**Step 2:** Download the example `.env` file from github
 
-   ```bash
-   docker-compose up -d
-   ```
+```bash
+curl -o .env https://raw.githubusercontent.com/javedh-dev/tracktor/main/.env.example
+```
 
-3. **Access the application:**
-   - Main Application: `http://localhost:3000`
-   - Documentation: `http://localhost:5173`
+OR create the `.env` file and add environement variables as per your requirement.
 
-<PlaceholderBlock 
-  id="docker-compose-success-screenshot"
-  type="screenshot" 
-  message="Add screenshot of successful Docker Compose startup showing running containers and accessible application"
-  priority="high"
-  location="/user-guide/getting-started/installation.md"
-  instructions="Show docker-compose ps output and browser screenshot of running application at localhost:3000"
-/>
+```bash
+touch .env
+```
+You can check the available environment variables in the [Configuration Reference](../configuration/environment-variables.md).
+**Step 3:** Start the application using Docker Compose:
 
-#### What Gets Installed
+```bash
+docker-compose up -d
+```
+**Step 4:** Access the application:
+Open `http://localhost:3333` in your browser
+> **Note:** The `-d` flag runs the containers in detached mode.
 
-- Tracktor backend API server
-- Tracktor frontend application
-- SQLite database (persistent storage)
-- Documentation server
 
 ### Method 2: Docker Installation
 
@@ -96,42 +91,41 @@ For a simpler Docker setup without Docker Compose.
 
 #### Steps
 
-1. **Clone the repository:**
+**Step 1:** Pull the Tracktor Docker image -
 
    ```bash
-   git clone https://github.com/javedh-dev/tracktor.git
-   cd tracktor
+   docker pull ghcr.io/javedh-dev/tracktor:latest
    ```
 
-2. **Build the Docker image:**
+**Step 2:** Create a persistent volume for data storage -
 
    ```bash
-   docker build -t tracktor .
+   docker volume create tracktor-data
    ```
 
-3. **Run the container:**
+**Step 3:** (Optional) Create a `.env` file for environment variables -
 
    ```bash
-   docker run -p 3000:3000 -v tracktor-data:/app/data -d tracktor
+   touch .env
    ```
 
-4. **Access the application:**
+   Add any necessary environment variables as per your requirement. You can check the available environment variables in the [Configuration Reference](../configuration/environment-variables.md).
+
+**Step 3:** Run the container -
+
+   ```bash
+    docker run -d --name tracktor -p 3000:3000 -v tracktor-data:/app/data --env-file .env ghcr.io/javedh-dev/tracktor:latest
+   ```
+
+**Step 4:** Access the application -
    Open `http://localhost:3000` in your browser
 
-<PlaceholderBlock 
-  id="docker-installation-config"
-  type="configuration" 
-  message="Add environment-specific Docker configuration examples for different deployment scenarios"
-  priority="medium"
-  location="/user-guide/getting-started/installation.md"
-  instructions="Include examples for production, development, and custom port configurations"
-/>
 
 > **Note:** The `-v tracktor-data:/app/data` flag creates a persistent volume for your data.
 
-### Method 3: Manual Installation
+### Method 3: Bare Metal(Manual) Installation
 
-Install Tracktor directly on your system for more control over the deployment.
+Install Tracktor directly on your system for more control over the deployment and code transparency.
 
 #### Prerequisites
 
@@ -141,28 +135,39 @@ Install Tracktor directly on your system for more control over the deployment.
 
 #### Installation Steps
 
-1. **Clone the repository:**
+**Step 1:** Clone the repository and checkout main(stable) branch and navigate into it -
 
    ```bash
    git clone https://github.com/javedh-dev/tracktor.git
+   git checkout main
    cd tracktor
    ```
 
-2. **Install dependencies:**
+**Step 2:** Install dependencies -
 
    ```bash
    npm install
    ```
 
-3. **Set up environment:**
+**Step 3:** (Optional) Create a `.env` file for environment variables -
+
+   ```bash
+   touch .env
+   ```
+
+
+
+**Step 3:** Set up environment and database -
 
    ```bash
    npm run setup
    ```
-
    This creates necessary configuration files and initializes the database.
+   Add any necessary environment variables as per your requirement. You can check the available environment variables in the [Configuration Reference](../configuration/environment-variables.md).
 
-4. **Build the application:**
+   > **Note:** Set the `NODE_ENV` variable to `production` in the `.env` file for production deployments.
+
+**Step 4:** Build the application -
 
    ```bash
    npm run build
@@ -171,58 +176,34 @@ Install Tracktor directly on your system for more control over the deployment.
 5. **Start the application:**
 
    ```bash
-   npm start
+   npm run start
    ```
 
 6. **Access the application:**
    Open `http://localhost:3000` in your browser
 
-#### Manual Setup Details
 
-The setup process will:
+### Method 4: Proxmox LXC Installation
 
-- Create environment configuration files
-- Initialize the SQLite database
-- Set up default application settings
-- Create necessary directories for data storage
-
-### Method 4: Development Setup
-
-For developers who want to contribute or modify Tracktor.
+For installing Tracktor in a lightweight LXC container on a Proxmox host.
 
 #### Prerequisites
+- Proxmox VE installed and running
+- ProxmoxVE Helper Scripts (see [ProxmoxVE Helper Scripts](https://community-scripts.github.io/ProxmoxVE/))
+- At least 1GB free disk space
 
-- All manual installation prerequisites
-- Code editor (VS Code recommended)
+#### Installation Steps
+**Step 1:** Create a new LXC container using the ProxmoxVE Helper Scripts by running the following command on your Proxmox host.
+> Reference : [ProxmoxVE Helper Scripts - Tracktor LXC](https://community-scripts.github.io/ProxmoxVE/ct/tracktor/)
 
-#### Development Steps
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVED/main/ct/tracktor.sh)"
+```
 
-1. **Clone and install:**
+### Method 5: Development Setup
 
-   ```bash
-   git clone https://github.com/javedh-dev/tracktor.git
-   cd tracktor
-   npm install
-   ```
-
-2. **Set up development environment:**
-
-   ```bash
-   npm run setup
-   ```
-
-3. **Start development servers:**
-
-   ```bash
-   npm run dev
-   ```
-
-4. **Access development servers:**
-   - Frontend: `http://localhost:5173`
-   - Backend API: `http://localhost:3001`
-   - Documentation: `http://localhost:5174`
-
-For more details, see the [Developer Guide](/developer-guide/development/setup.md).
+For contributors and developers who want to set up a development environment.
+> Please refer to the [Development Setup Guide](/developer-guide/development/setup.html) for detailed instructions.
 
 ## Post-Installation Verification
 
@@ -257,48 +238,19 @@ docker-compose logs
 ### Troubleshooting Installation Issues
 
 If you encounter problems:
-
-#### Common Issues
-
-**Port Already in Use:**
-
-```bash
-# Check what's using port 3000
-lsof -i :3000
-
-# Use a different port
-docker run -p 3001:3000 tracktor
-```
-
-**Permission Errors:**
-
-```bash
-# On Linux/macOS, you might need sudo for Docker
-sudo docker-compose up -d
-
-# Or add your user to the docker group
-sudo usermod -aG docker $USER
-```
-
-**Node.js Version Issues:**
-
-```bash
-# Check your Node.js version
-node --version
-
-# Update Node.js if needed (using nvm)
-nvm install 18
-nvm use 18
-```
+- Review the installation steps to ensure all commands were executed correctly
+- Check for error messages in the terminal or browser console
+- Ensure all prerequisites are met (e.g., Docker, Node.js versions)
+- Check out the [troubleshooting guide](../support/common-issues.md) for common problems and solutions
 
 #### Getting Help
 
 If issues persist:
 
-- Check the [troubleshooting guide](../troubleshooting/common-issues.md)
-- Review the [FAQ](../troubleshooting/faq.md)
+- Check the [troubleshooting guide](../support/common-issues.md)
+- Review the [FAQ](../support/faq.md)
 - See the [developer guide](/developer-guide/) for technical details
-- Check the [GitHub issues](https://github.com/javedh-dev/tracktor/issues)
+- Check and raise a new issue if it doesn't exist [GitHub issues](https://github.com/javedh-dev/tracktor/issues)
 
 ## Next Steps
 
@@ -319,14 +271,6 @@ Once Tracktor is installed and running successfully:
 ### Advanced Usage
 
 7. **[Dashboard Overview](../features/)** - Understand analytics and reporting
-8. **[Data Management](../troubleshooting/common-issues.md#data-backup)** - Learn about backup and data safety
-
-## Installation Summary
-
-You've successfully installed Tracktor! Here's what you accomplished:
-
-- ✅ Installed Tracktor using your chosen method
-- ✅ Verified the application is running correctly
-- ✅ Confirmed access to the login interface
+8. **[Data Management](../support/data-management.md)** - Learn about backup and data safety
 
 The application is now ready for initial configuration and use.
