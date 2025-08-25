@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { RequestHandler, Router } from "express";
 import { setPin, verifyPin, getPinStatus } from "@controllers/PinController.js";
 import { asyncHandler } from "@middleware/async-handler.js";
 import rateLimit from "express-rate-limit";
@@ -13,7 +13,7 @@ const pinVerifyLimiter = rateLimit({
 });
 
 router.post("/pin", asyncHandler(setPin));
-router.post("/pin/verify", pinVerifyLimiter, asyncHandler(verifyPin));
+router.post("/pin/verify", pinVerifyLimiter as unknown as RequestHandler, asyncHandler(verifyPin));
 router.get("/pin/status", asyncHandler(getPinStatus));
 
 export default router;
