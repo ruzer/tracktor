@@ -29,7 +29,7 @@ COPY --from=backend-builder /app/backend/node_modules ./backend/node_modules
 COPY --from=backend-builder /app/backend/package.json ./backend/package.json
 
 # Copy built frontend from frontend-builder stage
-COPY --from=frontend-builder /app/frontend/build ./backend/frontend/build
+COPY --from=frontend-builder /app/frontend/build ./frontend/build
 
 # Copy and set up entrypoint script
 COPY docker/entrypoint.sh /app/entrypoint.sh
