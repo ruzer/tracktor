@@ -33,8 +33,8 @@ app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/config", configRoutes);
 
 if (env.isProduction()) {
-  // @ts-expect-error -- Ignore import error for dynamic import
-  const { handler } = await import("../frontend/build/handler.js");
+  // @ts-ignore
+  const { handler } = await import("../../frontend/build/handler.js");
   app.use(handler);
 } else {
   app.get("/", (req, res) => {
