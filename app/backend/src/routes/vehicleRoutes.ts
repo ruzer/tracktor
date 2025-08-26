@@ -9,6 +9,7 @@ import {
 import { authenticatePin } from "@middleware/auth.js";
 import { asyncHandler } from "@middleware/async-handler.js";
 import fuelLogRoutes from "./fuelLogRoutes.js";
+import fuelLogLPRoutes from "./fuelLogLPRoutes.js";
 import insuranceRoutes from "./insuranceRoutes.js";
 import maintenanceLogRoutes from "./maintenanceLogRoutes.js";
 import puccRoutes from "./puccRoutes.js";
@@ -22,6 +23,7 @@ router.put("/:id", authenticatePin, asyncHandler(updateVehicle));
 router.delete("/:id", authenticatePin, asyncHandler(deleteVehicle));
 
 router.use("/:vehicleId/fuel-logs", fuelLogRoutes);
+router.use("/lp/:licensePlate/fuel-logs", fuelLogLPRoutes);
 router.use("/:vehicleId/insurance", insuranceRoutes);
 router.use("/:vehicleId/maintenance-logs", maintenanceLogRoutes);
 router.use("/:vehicleId/pucc", puccRoutes);

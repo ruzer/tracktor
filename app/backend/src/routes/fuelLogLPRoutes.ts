@@ -1,0 +1,15 @@
+import { Router } from "express";
+import {
+  addFuelLogByLicensePlate,
+  getFuelLogsByLicensePlate,
+} from "@controllers/FuelLogController.js";
+import { authenticatePin } from "@middleware/auth.js";
+import { asyncHandler } from "@middleware/async-handler.js";
+
+const router = Router({ mergeParams: true });
+
+// NUEVAS RUTAS POR LICENSE PLATE
+router.post("/", authenticatePin, asyncHandler(addFuelLogByLicensePlate));
+router.get("/", authenticatePin, asyncHandler(getFuelLogsByLicensePlate));
+
+export default router;
