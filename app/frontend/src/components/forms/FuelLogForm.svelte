@@ -4,7 +4,7 @@
 	import { env } from '$env/dynamic/public';
 	import { handleApiError } from '$lib/models/Error';
 	import type { Status } from '$lib/models/status';
-	import { cleanup, getCurrencySymbol } from '$lib/utils/formatting';
+	import { cleanup, getCurrencySymbol, getDistanceUnit, getVolumeUnit } from '$lib/utils/formatting';
 	import FormField from '../common/FormField.svelte';
 	import { Calendar1, Gauge, Fuel, FileText, BadgeDollarSign } from '@lucide/svelte';
 
@@ -109,7 +109,7 @@
 			id="odometer"
 			type="number"
 			label="Odometer"
-			placeholder="Odometer Reading"
+			placeholder={`Odometer Reading (${getDistanceUnit()})`}
 			bind:value={refill.odometer}
 			icon={Gauge}
 			required={true}
@@ -121,7 +121,7 @@
 		<FormField
 			id="fuelAmount"
 			type="number"
-			placeholder="Fuel Amount (Litres)"
+			placeholder={`Fuel Amount (${getVolumeUnit()})`}
 			bind:value={refill.fuelAmount}
 			icon={Fuel}
 			label="Fuel Amount"
@@ -132,7 +132,7 @@
 		<FormField
 			id="cost"
 			type="number"
-			placeholder={`Cost ( ${getCurrencySymbol()} )`}
+			placeholder={`Cost (${getCurrencySymbol()})`}
 			bind:value={refill.cost}
 			icon={BadgeDollarSign}
 			label="Cost"
