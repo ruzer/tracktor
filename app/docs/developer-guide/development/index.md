@@ -15,16 +15,7 @@ New to the project? Start here:
 
 ### Getting Started
 
-```bash
-# Clone and setup
-git clone <repository-url>
-cd tracktor
-npm install
-npm run setup
-
-# Start development
-npm run dev
-```
+For complete setup instructions, see our [Development Setup Guide](./setup.md).
 
 ### Daily Development
 
@@ -43,74 +34,9 @@ npm run lint
 npm run check
 ```
 
-## Project Structure
-
-```
-tracktor/
-├── app/
-│   ├── backend/           # Node.js/Express backend
-│   ├── frontend/          # SvelteKit frontend
-│   └── docs/              # VitePress documentation
-├── docker/                # Docker configuration
-├── scripts/               # Build and setup scripts
-└── docs/                  # Additional documentation
-```
-
-## Technology Stack
-
-### Frontend
-
-- **SvelteKit 2.x**: Full-stack framework
-- **TypeScript**: Type safety and tooling
-- **Tailwind CSS**: Utility-first styling
-- **Vite**: Build tool and dev server
-
-### Backend
-
-- **Node.js**: JavaScript runtime
-- **Express.js**: Web framework
-- **TypeScript**: Type safety
-- **Sequelize**: ORM for database operations
-- **SQLite**: Database engine
-
-### Development Tools
-
-- **ESLint**: Code linting
-- **Prettier**: Code formatting
-- **tsx**: TypeScript execution
-- **Concurrently**: Run multiple processes
-
 ## Key Concepts
 
-### Workspace Management
-
-The project uses npm workspaces to manage multiple packages:
-
-```bash
-# Install dependencies for all workspaces
-npm install
-
-# Run commands in specific workspace
-npm run dev --workspace=backend
-npm run build --workspace=frontend
-
-# Run commands across all workspaces
-npm run lint --workspaces
-```
-
-### Environment Configuration
-
-- Centralized environment variables in root `.env`
-- Automatic environment setup with `npm run setup`
-- Development and production configurations
-- SvelteKit public variables with `PUBLIC_` prefix
-
-### Database Management
-
-- Migration-based schema management
-- Transactional migrations for data integrity
-- Seeder system for development data
-- SQLite for simplicity and performance
+For detailed information about project structure, technology stack, and development concepts, see our [Development Setup Guide](./setup.md).
 
 ## Development Practices
 
@@ -169,69 +95,14 @@ npm run lint --workspaces
 
 ## Debugging
 
-### Development Servers
-
-- **Frontend**: http://localhost:5173 (Vite dev server)
-- **Backend**: http://localhost:3000 (Express server)
-- **Hot Reload**: Automatic for both frontend and backend
-
-### Debugging Tools
-
-- **VS Code Debugger**: Integrated debugging support
-- **Browser DevTools**: Frontend debugging and inspection
-- **Node.js Inspector**: Backend debugging
-- **Database Browser**: SQLite inspection tools
-
-### Logging
-
-```bash
-# Enable debug logging
-LOG_LEVEL=debug npm run dev
-
-# Enable SQL query logging
-SHOW_SQL=true npm run dev:backend
-```
+For comprehensive debugging information, see our [Debugging Guide](./debugging.md).
 
 ## Troubleshooting
 
-### Common Issues
-
-- **Port conflicts**: Change ports in `.env`
-- **Permission errors**: Fix npm permissions
-- **Database issues**: Reset and remigrate
-- **TypeScript errors**: Clear cache and rebuild
-- **CORS errors**: Update allowed origins
-
-### Getting Help
-
-1. Check this documentation
-2. Review existing issues in the repository
-3. Ask questions in team channels
-4. Create detailed bug reports
+For detailed troubleshooting information, see our [Development Setup Guide](./setup.md#troubleshooting).
 
 ## Contributing
 
-### Before You Start
-
-- Read the [Coding Standards](./coding-standards.md)
-- Set up your development environment
-- Familiarize yourself with the project structure
-- Review existing code patterns
-
-### Development Process
-
-1. **Plan**: Discuss significant changes before implementation
-2. **Code**: Follow established patterns and standards
-3. **Test**: Ensure all tests pass and add new tests
-4. **Document**: Update documentation for new features
-5. **Review**: Submit pull requests for code review
-
-### Code Review Guidelines
-
-- Focus on code quality and maintainability
-- Ensure proper error handling
-- Verify test coverage
-- Check documentation updates
-- Validate performance implications
+For complete contributing information, see our [Contributing Guide](../contributing/).
 
 This development guide provides the foundation for productive work on the Tracktor application. For specific technical details, refer to the individual guide sections.

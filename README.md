@@ -103,7 +103,7 @@
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read the [contributing guidelines](app/docs/contributing.md) before submitting a pull request. 🙏
+Contributions are welcome! Please read the [contributing guidelines](app/docs/developer-guide/contributing/) before submitting a pull request. 🙏
 
 ## 📄 License
 

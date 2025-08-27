@@ -277,7 +277,7 @@ All endpoints can be tested with cURL commands. See the code examples above for 
 
 For API-related questions or issues:
 
-- Check the [troubleshooting guide](/user-guide/troubleshooting/)
+- Check the [troubleshooting guide](/user-guide/support/common-issues.md)
 - Review the [developer setup guide](../development/setup.md)
 - Open an issue on [GitHub](https://github.com/javedh-dev/tracktor)
 

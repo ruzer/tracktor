@@ -13,12 +13,7 @@ Vehicle management is the foundation of Tracktor - everything starts with adding
 
 ## Overview
 
-Vehicle management in Tracktor provides:
-
-- **Centralized vehicle information** storage
-- **Multiple vehicle support** for families or fleets
-- **Detailed vehicle profiles** with comprehensive data
-- **Integration with all other features** (fuel, maintenance, insurance, PUCC)
+Vehicle management is the foundation of Tracktor, providing centralized storage for all vehicle information. Every other feature builds upon the vehicle profiles you create here, making accurate vehicle setup essential for optimal tracking.
 
 ## Adding a New Vehicle
 
