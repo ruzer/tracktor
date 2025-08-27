@@ -15,13 +15,7 @@ Monitor fuel consumption, track efficiency, and analyze spending patterns with T
 
 ## Overview
 
-Fuel tracking in Tracktor provides:
-
-- **Detailed fuel purchase logging** with automatic efficiency calculations
-- **Real-time fuel economy monitoring** and trend analysis
-- **Cost tracking and spending analysis** across time periods
-- **Comparative analytics** for multiple vehicles
-- **Historical data** for long-term insights and patterns
+Fuel tracking helps you monitor consumption, optimize efficiency, and control costs through detailed logging and automatic calculations. Every fuel purchase becomes data that helps you understand your vehicle's performance and spending patterns.
 
 ## Understanding Fuel Tracking
 

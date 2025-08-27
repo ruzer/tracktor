@@ -1,65 +1,37 @@
 # Deployment
 
-This guide provides instructions for deploying the Tracktor application on your own server. You can choose between using Docker for a containerized setup or deploying it as a standard Node.js application.
+**This page has been moved to provide better organization and more comprehensive deployment options.**
 
-## Docker Deployment
+<script setup>
+import { onMounted } from 'vue'
 
-Using Docker is the recommended way to deploy Tracktor, as it encapsulates the application and its dependencies in a consistent environment.
+onMounted(() => {
+  // Redirect after 3 seconds
+  setTimeout(() => {
+    window.location.href = '/developer-guide/deployment/'
+  }, 3000)
+})
+</script>
 
-### Prerequisites
+## 🔗 New Location
 
-*   Docker installed on your server.
+The complete deployment guide is now available at:
 
-### Steps
+**[Developer Guide > Deployment](/developer-guide/deployment/)**
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/tracktor.git
-    cd tracktor
-    ```
+*You will be automatically redirected in 3 seconds...*
 
-2.  **Build the Docker image:**
-    ```bash
-    docker build -t tracktor .
-    ```
+## Quick Links
 
-3.  **Run the Docker container:**
-    ```bash
-    docker run -p 3000:3000 -d tracktor
-    ```
+- **[Docker Deployment](/developer-guide/deployment/docker)** - Containerized deployment (recommended)
+- **[Manual Deployment](/developer-guide/deployment/manual-deployment)** - Traditional server deployment
+- **[Environment Variables](/developer-guide/deployment/environment-variables)** - Configuration reference
+- **[Production Considerations](/developer-guide/deployment/production-considerations)** - Production best practices
 
-This will start the Tracktor application, and it will be accessible at `http://localhost:3000`.
+## Quick Start
 
-## Node.js Deployment
+For most users, **Docker deployment** is the recommended approach. See the [Docker Deployment Guide](/developer-guide/deployment/docker) for detailed instructions.
 
-If you prefer to run the application directly on your server without Docker, you can follow these steps.
+---
 
-### Prerequisites
-
-*   Node.js (v18 or higher) installed on your server.
-*   npm (usually comes with Node.js).
-
-### Steps
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/tracktor.git
-    cd tracktor
-    ```
-
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-
-3.  **Build the application:**
-    ```bash
-    npm run build
-    ```
-
-4.  **Start the application:**
-    ```bash
-    npm start
-    ```
-
-This will start the Tracktor application, and it will be accessible at `http://localhost:3000`.
+*This redirect page will be removed in a future version. Please update your bookmarks to use the new location.*

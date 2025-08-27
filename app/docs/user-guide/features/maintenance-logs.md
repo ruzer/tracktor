@@ -9,13 +9,7 @@ Keep comprehensive records of all vehicle maintenance activities, track service 
 
 ## Overview
 
-Maintenance logging in Tracktor provides:
-
-- **Complete service history** for each vehicle with detailed records
-- **Cost tracking and analysis** for maintenance expenses and budgeting
-- **Service provider management** with contact information and service quality tracking
-- **Maintenance scheduling** and reminder capabilities for proactive care
-- **Integration with fuel tracking** to analyze maintenance impact on efficiency
+Maintenance logging creates comprehensive service records that help extend vehicle life, maintain warranty coverage, and optimize service costs. Detailed maintenance history also significantly increases resale value and helps identify patterns in vehicle care needs.
 
 ## Understanding Maintenance Tracking
 

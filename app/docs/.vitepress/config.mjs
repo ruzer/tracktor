@@ -6,6 +6,8 @@ export default {
   description: "Comprehensive vehicle management and tracking documentation",
   base: "/",
   ignoreDeadLinks: false, // We now have proper link validation
+  
+
   head: [
     ["meta", { name: "theme-color", content: "#3c82f6" }],
     ["meta", { name: "apple-mobile-web-app-capable", content: "yes" }],
@@ -118,9 +120,9 @@ export default {
           items: [
             {
               text: "Common Issues",
-              link: "/user-guide/troubleshooting/common-issues",
+              link: "/user-guide/support/common-issues",
             },
-            { text: "FAQ", link: "/user-guide/troubleshooting/faq" },
+            { text: "FAQ", link: "/user-guide/support/faq" },
           ],
         },
       ],
@@ -239,29 +241,8 @@ export default {
         {
           text: "Quick Start",
           items: [
-            { text: "Introduction", link: "/introduction" },
             { text: "User Guide", link: "/user-guide/" },
             { text: "Developer Guide", link: "/developer-guide/" },
-          ],
-        },
-        {
-          text: "Legacy Documentation",
-          collapsed: true,
-          items: [
-            { text: "Deployment", link: "/deployment" },
-            { text: "Contributing", link: "/contributing" },
-          ],
-        },
-        {
-          text: "Legacy API Docs",
-          collapsed: true,
-          items: [
-            { text: "Authentication", link: "/api/authentication" },
-            { text: "Vehicles", link: "/api/vehicles" },
-            { text: "Fuel Log", link: "/api/fuel-log" },
-            { text: "Maintenance Log", link: "/api/maintenance-log" },
-            { text: "PUCC", link: "/api/pucc" },
-            { text: "Insurance", link: "/api/insurance" },
           ],
         },
       ],

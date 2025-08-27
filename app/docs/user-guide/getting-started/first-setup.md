@@ -174,21 +174,12 @@ For a detailed walkthrough with screenshots, see the [Adding Your First Vehicle]
 
 ## Step 5: Exploring Key Features
 
-Now that you have Tracktor set up and your first vehicle added, let's explore the main features:
+Now that you have Tracktor set up and your first vehicle added, you can explore the main features:
 
-### Dashboard Overview
+- **Dashboard** - Overview of all your vehicles and recent activity
+- **Feature Areas** - Fuel tracking, maintenance logs, insurance management, and pollution certificates
 
-- **Vehicle cards** showing key information for each vehicle
-- **Recent activity** displaying latest fuel logs and maintenance
-- **Charts and analytics** for fuel efficiency and cost tracking
-- **Upcoming reminders** for maintenance and document renewals
-
-### Main Feature Areas
-
-- **Fuel Tracking** - Log refueling and monitor efficiency
-- **Maintenance Logs** - Record service history and schedule future maintenance
-- **Insurance Management** - Track policies and renewal dates
-- **PUCC/Certificates** - Manage pollution certificates and regulatory documents
+For detailed information about each feature, see the [Features Guide](../features/).
 
 ## Setup Complete!
 
@@ -205,15 +196,9 @@ Continue your Tracktor journey:
 
 ### Immediate Actions
 
-1. **[Learn basic navigation](./basic-navigation.md)** - Master the interface and navigation
-2. **[Add your first fuel log](../features/fuel-tracking.md)** - Start tracking fuel efficiency
-3. **[Record maintenance history](../features/maintenance-logs.md)** - Keep comprehensive service records
-
-### Explore Advanced Features
-
-4. **[Explore all features](../features/)** - Discover everything Tracktor can do
-5. **[Follow tutorials](../tutorials/)** - Step-by-step guides for common tasks
-6. **[Set up insurance tracking](../features/insurance-management.md)** - Manage policies and renewals
+1. **[Learn basic navigation](./basic-navigation.md)** - Master the interface
+2. **[Explore all features](../features/)** - Discover what Tracktor can do
+3. **[Follow tutorials](../tutorials/)** - Step-by-step guides for common tasks
 
 ### Get Help When Needed
 

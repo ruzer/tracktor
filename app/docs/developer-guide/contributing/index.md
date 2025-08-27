@@ -101,44 +101,15 @@ Consider:
 
 ### 2. Set Up Your Development Environment
 
-```bash
-# Fork and clone the repository
-git clone https://github.com/your-username/tracktor.git
-cd tracktor
-
-# Install dependencies
-npm install
-
-# Set up environment
-npm run setup
-
-# Start development servers
-npm run dev
-```
+Follow our comprehensive [Development Setup Guide](/developer-guide/development/setup.md) to configure your local environment.
 
 ### 3. Understand the Codebase
 
-#### Project Structure
-
-```
-tracktor/
-├── app/
-│   ├── backend/           # Node.js/Express API server
-│   ├── frontend/          # SvelteKit web application
-│   └── docs/              # VitePress documentation site
-├── docker/                # Docker configuration files
-├── scripts/               # Build and utility scripts
-└── docs/                  # Additional project documentation
-```
+Review our [Architecture Overview](/developer-guide/architecture/overview.md) to understand the system design and project structure.
 
 #### Technology Stack
 
-- **Frontend**: SvelteKit, TypeScript, Tailwind CSS
-- **Backend**: Node.js, Express.js, TypeScript, Sequelize
-- **Database**: SQLite
-- **Documentation**: VitePress
-- **Testing**: Vitest, Playwright
-- **Deployment**: Docker, Docker Compose
+For detailed technology information, see our [Architecture Overview](/developer-guide/architecture/overview.md).
 
 ### 4. Make Your Contribution
 
