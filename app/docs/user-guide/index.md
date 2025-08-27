@@ -2,13 +2,6 @@
 
 Welcome to the **Tracktor** User Guide. This comprehensive guide will help you get the most out of your vehicle tracking and management experience.
 
-## Quick Navigation
-
-- [Getting Started](./getting-started/) - Installation, setup, and first steps
-- [Features](./features/) - Detailed feature documentation
-- [Tutorials](./tutorials/) - Step-by-step walkthroughs
-- [Support](./support/) - Common issues and solutions
-
 ## What is Tracktor?
 
 Tracktor is your complete vehicle management solution, designed to simplify tracking and organizing everything related to your vehicles. Whether you own one car or manage a small fleet, Tracktor centralizes all your vehicle information in one secure, easy-to-use platform.

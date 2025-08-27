@@ -6,7 +6,7 @@ export default {
   description: "Comprehensive vehicle management and tracking documentation",
   base: "/",
   ignoreDeadLinks: false, // We now have proper link validation
-  
+
 
   head: [
     ["meta", { name: "theme-color", content: "#3c82f6" }],
@@ -51,11 +51,11 @@ export default {
     ],
     sidebar: {
       "/user-guide/": [
+        { text: "Overview", link: "/user-guide/" },
         {
           text: "Getting Started",
           collapsed: false,
           items: [
-            { text: "Overview", link: "/user-guide/" },
             {
               text: "Installation",
               link: "/user-guide/getting-started/installation",
@@ -63,10 +63,6 @@ export default {
             {
               text: "First Setup",
               link: "/user-guide/getting-started/first-setup",
-            },
-            {
-              text: "Basic Navigation",
-              link: "/user-guide/getting-started/basic-navigation",
             },
           ],
         },
@@ -265,6 +261,7 @@ export default {
   vite: {
     assetsInclude: ["**/*.yaml", "**/*.yml"],
     server: {
+      port: 5174,
       fs: {
         allow: [".."],
       },
