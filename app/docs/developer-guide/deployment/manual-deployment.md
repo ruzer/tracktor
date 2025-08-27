@@ -111,7 +111,7 @@ nano .env
 
 Example production .env:
 
-```env
+```properties
 NODE_ENV=production
 PORT=3000
 DATABASE_PATH=/home/tracktor/tracktor/app/backend/tracktor.db

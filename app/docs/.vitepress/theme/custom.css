@@ -200,7 +200,9 @@ body {
 
 .VPSidebar::-webkit-scrollbar-thumb:hover {
   background: var(--vp-c-text-3);
-} /* En
+}
+
+/* En
 hanced Navigation and Search Styles */
 
 /* Improved mobile navigation */
@@ -375,6 +377,7 @@ hanced Navigation and Search Styles */
 
 /* Print styles */
 @media print {
+
   .VPNav,
   .VPSidebar,
   .VPDocAside,
@@ -430,6 +433,19 @@ hanced Navigation and Search Styles */
   width: 100%;
 }
 
-.vp-code > * {
+.vp-code>* {
   font-family: "IBM Plex Mono", monospace !important;
+}
+
+.image-bg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.image-src {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  border-radius: 8px;
+  border: #ddd solid 1px;
+  top: 60% !important;
 }

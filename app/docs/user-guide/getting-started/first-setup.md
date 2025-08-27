@@ -7,13 +7,14 @@ Configure Tracktor for your first use after installation. This guide will walk y
 Ensure you have:
 
 - ✅ Successfully installed Tracktor
-- ✅ Verified the application is running at `http://localhost:3000`
+- ✅ Verified the application is running at `http://<YOUR_IP_ADDRESS>:3000`
 - ✅ A modern web browser ready
 
 ## Step 1: Initial Access
 
-1. **Open your web browser** and navigate to `http://localhost:3000`
+1. **Open your web browser** and navigate to `http://<YOUR_IP_ADDRESS>:3000`
 2. **You'll see the login screen** - This is your gateway to Tracktor
+> **NOTE :** If you have note defined `AUTH_PIN` environment variable. The app will ask for the pin for first time to setup as shown in screen below and once setup you will be redirected to the login screen to verify your login 
 
 <img src="/screenshots/login.png" alt="Login Page" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
 
