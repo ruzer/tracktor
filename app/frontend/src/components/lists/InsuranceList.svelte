@@ -10,6 +10,9 @@
 	import { getApiUrl } from '$lib/utils/api';
 	import { t } from '$lib/stores/i18n';
 
+	// Agregar import en la parte superior
+	import { getApiUrl } from '$lib/utils/api';
+
 	let { vehicleId } = $props();
 
 	interface Insurance {
@@ -50,6 +53,7 @@
 					'X-User-PIN': browser ? localStorage.getItem('userPin') || '' : ''
 				}
 			});
+			// Corregir la lógica en fetchInsuranceDetails (línea 47-50)
 			if (response.ok) {
 				insurances = await response.json();
 				console.log('Insurance : ', JSON.stringify(insurances));

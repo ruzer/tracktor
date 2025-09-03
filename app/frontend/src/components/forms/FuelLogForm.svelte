@@ -127,13 +127,8 @@
 		<FormField
 			id="odometer"
 			type="number"
-<<<<<<< HEAD
-				label={$t('forms.labels.odometer')}
-				placeholder={$t('forms.placeholders.odometerReading')}
-=======
 			label={$t('forms.labels.odometer')}
 			placeholder={$t('forms.placeholders.odometerReading')}
->>>>>>> c9d7687 (feat: implement i18n system and advanced ColorPicker)
 			bind:value={refill.odometer}
 			icon={Gauge}
 			required={true}
@@ -145,11 +140,7 @@
 		<FormField
 			id="fuelAmount"
 			type="number"
-<<<<<<< HEAD
-				placeholder={$t('forms.placeholders.fuelAmountLitres')}
-=======
 			placeholder={$t('forms.placeholders.fuelAmountLitres')}
->>>>>>> c9d7687 (feat: implement i18n system and advanced ColorPicker)
 			bind:value={refill.fuelAmount}
 			icon={Fuel}
 			label={$t('forms.labels.fuelAmount')}
@@ -159,11 +150,7 @@
 		<FormField
 			id="cost"
 			type="number"
-<<<<<<< HEAD
-				placeholder={`${$t('forms.placeholders.costCurrency')} ( ${getCurrencySymbol()} )`}
-=======
-			placeholder={`${$t('forms.placeholders.costCurrency')} ( ${getCurrencySymbol()} )`}
->>>>>>> c9d7687 (feat: implement i18n system and advanced ColorPicker)
+			placeholder={`${$t('forms.placeholders.totalCost')} ( ${getCurrencySymbol()} )`}
 			bind:value={refill.cost}
 			icon={BadgeDollarSign}
 			label={$t('forms.labels.cost')}
@@ -199,10 +186,6 @@
 		label={$t('forms.labels.notes')}
 		ariaLabel="Notes"
 	/>
-<<<<<<< HEAD
-		<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
-=======
 	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
->>>>>>> c9d7687 (feat: implement i18n system and advanced ColorPicker)
 </form>
 <StatusBlock message={status.message} type={status.type} />

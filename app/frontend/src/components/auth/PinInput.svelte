@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let complete: (pin: string) => void;
 	let pin = Array(6).fill('');
-	let inputs: HTMLInputElement[] = [];
+	let inputs: HTMLInputElement[] = $state([]);
 
 	function onInput(e: Event, i: number) {
 		const input = e.target as HTMLInputElement;
