@@ -34,11 +34,15 @@ export const getFuelLogs = async (vehicleId: string) => {
       return { ...log.toJSON(), mileage: null };
     }
 
-    // find the previous log that serves as a starting point - either a full tank or after a gap
+    // find the previous full tank log that serves as a starting point
+    // a missed log acts as a barrier, preventing searching further back
     let startIndex = -1;
     for (let i = index - 1; i >= 0; i--) {
-      if (arr[i]?.filled || arr[i]?.missedLast) {
+      if (arr[i]?.filled) {
         startIndex = i;
+        break;
+      }
+      if (arr[i]?.missedLast) {
         break;
       }
     }
