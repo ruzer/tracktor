@@ -1,5 +1,5 @@
 > ⚠️ **WARNING:**
-> Tracktor is under very active development. There may be frequent breaking changes, and it is **not stable for production use**.
+> Tracktor is under active development. There may be frequent breaking changes, though we are taking precautions but it is **not stable for production use**.
 > _Please keep regular backups of your data!_
 
 <div align="center" style="margin-bottom: 20px;">
@@ -30,7 +30,11 @@
 
 <p align="center">
   <h3>🔐 Login Page</h3><br>
-  <img src="app/docs/public/screenshots/login.png" alt="Login Page" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+   <picture style="border-radius: 10px">
+   <source media="(prefers-color-scheme: dark)" srcset="./docs/screenshots/login-dark.png" />
+   <source media="(prefers-color-scheme: light)" srcset="./docs/screenshots/login-light.png" />
+   <img alt="Login Page" src="./docs/screenshots/login-light.png" />
+ </picture>
 </p>
 <p align="center">
   <h3>📈 Charts</h3><br>
@@ -57,53 +61,16 @@
 
 - 🎨 **Frontend:** SvelteKit, Tailwind CSS
 - 🖥️ **Backend:** Node.js, Express.js
-- 🗄️ **Database:** SQLite
-- 📚 **Documentation:** VitePress
+- 🗄️ **Database:** SQLite, sequelize ORM
 - 🐳 **Containerization:** Docker & Docker Compose
 
 ## 🚀 Getting Started
 
-### 📦 Prerequisites
-
-- 🟢 Node.js (v18 or higher)
-- 📦 npm
-- 🐳 Docker & Docker Compose (for containerized setup)
-
-### 🛠️ Installation (Development)
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/your-username/tracktor.git
-   cd tracktor
-   ```
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-3. **Set up environment:**
-   ```bash
-   npm run setup
-   ```
-4. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
-5. **Open your browser:**
-   Navigate to `http://localhost:5173` for the frontend.
-
-### 🐳 Running with Docker Compose
-
-1. **Build and start all services:**
-   ```bash
-   docker-compose up --build
-   ```
-2. **Access the app:**
-   - 🚜 Main App: `http://localhost:3000`
-   - 📚 Docs: `http://localhost:5173`
+Please check the [installation guide](./docs/INSTALL.md) for detailed instructions on setting up the project.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read the [contributing guidelines](app/docs/developer-guide/contributing/) before submitting a pull request. 🙏
+Contributions are welcome! Please read the [contributing guidelines](./docs/CONTRIBUTING.md) before submitting a pull request. 🙏
 
 ## 📄 License
 
