@@ -7,7 +7,7 @@
   "scripts": {
     "setup": "node scripts/setup-env.js",
     "test:cors": "node scripts/test-cors.js",
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run docs:dev\"",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "npm run dev --workspace=backend",
     "dev:frontend": "npm run dev --workspace=frontend",
     "build": "npm run build --workspace=backend && npm run build --workspace=frontend",
@@ -21,9 +21,6 @@
     "format": "npm run format --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "check": "npm run check --workspaces --if-present",
-    "docs:dev": "npm run dev --workspace=docs",
-    "docs:build": "npm run build --workspace=docs",
-    "docs:preview": "npm run preview --workspace=docs",
     "clean": "npm run clean --workspaces --if-present",
     "reset": "npm run reset --workspaces --if-present",
     "install:all": "npm install --workspaces"
