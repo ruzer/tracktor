@@ -99,7 +99,7 @@ Please consider supporting this project by giving it a star! ⭐ or [sponsoring]
 
 ## 📄 License
 
-This project is licensed under the ISC License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## 📊 Repository activity
 
@@ -118,5 +118,5 @@ This project is licensed under the ISC License. See the [LICENSE](LICENSE) file 
 ## 🤝 Contributors
 
 <a href="https://github.com/javedh-dev/tracktor/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=javedh-dev/tracktor" width="100%"/>
+  <img src="https://contrib.rocks/image?repo=javedh-dev/tracktor"/>
 </a>
