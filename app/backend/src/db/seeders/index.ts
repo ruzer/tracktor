@@ -136,6 +136,8 @@ export const seedDemoData = async () => {
       fuelAmount: 35,
       cost: 50,
       notes: "Full tank",
+      filled: true,
+      missedLast: false
     },
     {
       vehicleId: vehicle1.id,
@@ -143,6 +145,8 @@ export const seedDemoData = async () => {
       odometer: 16000,
       fuelAmount: 32,
       cost: 48,
+      filled: true,
+      missedLast: false
     },
   ];
 
@@ -153,6 +157,8 @@ export const seedDemoData = async () => {
       odometer: 25600,
       fuelAmount: 40,
       cost: 60,
+      filled: true,
+      missedLast: false
     },
     {
       vehicleId: vehicle2.id,
@@ -161,6 +167,8 @@ export const seedDemoData = async () => {
       fuelAmount: 38,
       cost: 55,
       notes: "Filled at Shell",
+      filled: true,
+      missedLast: false
     },
   ];
 
@@ -177,6 +185,8 @@ export const seedDemoData = async () => {
       odometer: currentOdometer1,
       fuelAmount: parseFloat(fuelAmount.toFixed(2)),
       cost: parseFloat(cost.toFixed(2)),
+      filled: true,
+      missedLast: false
     });
   }
 
@@ -193,6 +203,8 @@ export const seedDemoData = async () => {
       odometer: currentOdometer2,
       fuelAmount: parseFloat(fuelAmount.toFixed(2)),
       cost: parseFloat(cost.toFixed(2)),
+      filled: true,
+      missedLast: false
     });
   }
 
