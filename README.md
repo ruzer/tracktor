@@ -14,7 +14,11 @@
 </p>
 
 <p align="center">
-  <img src="app/docs/public/screenshots/dashboard.png" alt="Dashboard" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/screenshots/dashboard-dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/screenshots/dashboard-light.png" />
+    <img alt="Dashboard" src="./docs/screenshots/dashboard-light.png" width="90%" style="border-radius: 10px" />
+  </picture>
 </p>
 
 ## ✨ Features
@@ -30,31 +34,51 @@
 
 <p align="center">
   <h3>🔐 Login Page</h3><br>
-   <picture style="border-radius: 10px">
-   <source media="(prefers-color-scheme: dark)" srcset="./docs/screenshots/login-dark.png" />
-   <source media="(prefers-color-scheme: light)" srcset="./docs/screenshots/login-light.png" />
-   <img alt="Login Page" src="./docs/screenshots/login-light.png" />
- </picture>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/screenshots/login-dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/screenshots/login-light.png" />
+    <img alt="Login Page" src="./docs/screenshots/login-light.png" style="border-radius: 10px" />
+  </picture>
 </p>
 <p align="center">
   <h3>📈 Charts</h3><br>
-  <img src="app/docs/public/screenshots/charts.png" alt="Charts" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/screenshots/charts-dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/screenshots/charts-light.png" />
+    <img alt="Login Page" src="./docs/screenshots/charts-light.png" style="border-radius: 10px" />
+  </picture>
 </p>
 <p align="center">
   <h3>⛽ Fuel Log</h3><br>
-  <img src="app/docs/public/screenshots/fuel.png" alt="Fuel Log" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/screenshots/fuel-dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/screenshots/fuel-light.png" />
+    <img alt="Fuel Log" src="./docs/screenshots/fuel-light.png" style="border-radius: 10px" />
+  </picture>
 </p>
 <p align="center">
   <h3>🛠️ Maintenance Log</h3><br>
-  <img src="app/docs/public/screenshots/maintenance.png" alt="Maintenance Log" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/screenshots/maintenance-dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/screenshots/maintenance-light.png" />
+    <img alt="Maintenance Log" src="./docs/screenshots/maintenance-light.png" style="border-radius: 10px" />
+  </picture>
 </p>
 <p align="center">
   <h3>🛡️ Insurance Details</h3><br>
-  <img src="app/docs/public/screenshots/insurance.png" alt="Insurance Details" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/screenshots/insurance-dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/screenshots/insurance-light.png" />
+    <img alt="Insurance Details" src="./docs/screenshots/insurance-light.png" style="border-radius: 10px" />
+  </picture>
 </p>
 <p align="center">
   <h3>📄 PUCC Details</h3><br>
-  <img src="app/docs/public/screenshots/pucc.png" alt="PUCC Details" width="90%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/screenshots/pucc-dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="./docs/screenshots/pucc-light.png" />
+    <img alt="PUCC Details" src="./docs/screenshots/pucc-light.png" style="border-radius: 10px" />
+  </picture>
 </p>
 
 ## 🛠️ Tech Stack
