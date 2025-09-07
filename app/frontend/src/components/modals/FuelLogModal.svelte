@@ -28,7 +28,6 @@
 	<ModalContainer
 		onclose={() => closeModal()}
 		title={editMode ? 'Edit Fuel Log' : 'Log Fuel Refill'}
-		{loading}
 	>
 		<FuelLogForm
 			{vehicleId}

@@ -5,9 +5,22 @@
 	import { env } from '$env/dynamic/public';
 	import { handleApiError } from '$lib/models/Error';
 	import type { Status } from '$lib/models/status';
-	import { cleanup, getCurrencySymbol, getDistanceUnit, getVolumeUnit } from '$lib/utils/formatting';
+	import {
+		cleanup,
+		getCurrencySymbol,
+		getDistanceUnit,
+		getVolumeUnit
+	} from '$lib/utils/formatting';
 	import FormField from '../common/FormField.svelte';
-	import { Calendar1, Gauge, Fuel, FileText, BadgeDollarSign } from '@lucide/svelte';
+	import {
+		Calendar1,
+		Gauge,
+		Fuel,
+		FileText,
+		BadgeDollarSign,
+		CircleSlash,
+		ArrowBigLeftDash
+	} from '@lucide/svelte';
 
 	let {
 		vehicleId,
@@ -24,8 +37,8 @@
 		fuelAmount: null,
 		cost: null,
 		notes: null,
-    missedLast: false,
-    filled: true,
+		missedLast: false,
+		filled: true
 	});
 
 	let status = $state<Status>({
@@ -75,8 +88,8 @@
 					fuelAmount: '',
 					cost: '',
 					notes: '',
-          missedLast: false,
-          filled: true
+					missedLast: false,
+					filled: true
 				});
 			} else {
 				const data = await response.json();
@@ -147,18 +160,18 @@
 		/>
 	</div>
 
-  <div class="grid grid-flow-row grid-cols-2 gap-4">
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
 		<Checkbox
 			id="filled"
 			bind:checked={refill.filled}
-			icon={Fuel}
+			icon={CircleSlash}
 			label="Tank Filled?"
 			ariaLabel="Tank Filled"
 		/>
 		<Checkbox
 			id="missedLast"
 			bind:checked={refill.missedLast}
-			icon={BadgeDollarSign}
+			icon={ArrowBigLeftDash}
 			label="Missed Last?"
 			ariaLabel="Previous Fuel Log Missed"
 		/>
