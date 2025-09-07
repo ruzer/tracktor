@@ -3,8 +3,7 @@
 > _Please keep regular backups of your data!_
 
 <div align="center" style="margin-bottom: 20px;">
-  <img src="app/docs/public/logo-dark.svg#gh-dark-mode-only" style="height:60px; margin-right: 10px; vertical-align: middle;"/>
-  <img src="app/docs/public/logo-light.svg#gh-light-mode-only" style="height:60px; margin-right: 10px; vertical-align: middle;"/>
+  <img src="./docs/screenshots/logo.svg" style="height:60px; margin-right: 10px; vertical-align: middle;"/>
   <h1 style="display:inline; font-size: 2.5rem; vertical-align: middle;">Tracktor</h1>
 </div>
 
