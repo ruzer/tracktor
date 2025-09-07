@@ -99,6 +99,10 @@ Contributions are welcome! Please read the [contributing guidelines](./docs/CONT
 
 This project is licensed under the ISC License. See the [LICENSE](LICENSE) file for details.
 
+## 📊 Repository activity
+
+![Activities](https://repobeats.axiom.co/api/embed/d41931a72a5373ee0d2073e72279862171468023.svg "Repobeats analytics image")
+
 ## ⭐ Star History
 
 <a href="https://www.star-history.com/#javedh-dev/tracktor&Date">
@@ -107,4 +111,10 @@ This project is licensed under the ISC License. See the [LICENSE](LICENSE) file 
    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=javedh-dev/tracktor&type=Date" />
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=javedh-dev/tracktor&type=Date" />
  </picture>
+</a>
+
+## 🤝 Contributors
+
+<a href="https://github.com/javedh-dev/tracktor/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=javedh-dev/tracktor" width="100%"/>
 </a>
