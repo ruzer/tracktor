@@ -1,30 +1,38 @@
 import { InsuranceError } from "@exceptions/InsuranceError.js";
 import { Status } from "@exceptions/ServiceError.js";
-import { Insurance, Vehicle } from "@models/index.js";
+import { VehicleError } from "@exceptions/VehicleError.js";
+import * as schema from "@db/schema";
+import { db } from "@db";
+import { eq, and } from "drizzle-orm";
 
 export const addInsurance = async (vehicleId: string, insuranceData: any) => {
-  const vehicle = await Vehicle.findByPk(vehicleId);
+  const vehicle = await db.query.vehicleTable.findFirst({
+    where: (vehicles, { eq }) => eq(vehicles.id, vehicleId),
+  });
   if (!vehicle) {
-    throw new InsuranceError(
-      `No Vehicle found for id : ${vehicleId}`,
-      Status.NOT_FOUND,
+    throw new VehicleError(
+      `No vehicle found for id : ${vehicleId}`,
+      Status.NOT_FOUND
     );
   }
-  const insurance = await Insurance.create({
-    ...insuranceData,
-    vehicleId: vehicleId,
-  });
+  const insurance = await db
+    .insert(schema.insuranceTable)
+    .values({
+      ...insuranceData,
+      vehicleId: vehicleId,
+    })
+    .returning();
   return {
-    id: insurance.id,
+    id: insurance[0]?.id,
     message: "Insurance details added successfully.",
   };
 };
 
 export const getInsurances = async (vehicleId: string) => {
-  const insurance = await Insurance.findAll({
-    where: { vehicleId: vehicleId },
+  const insurance = await db.query.insuranceTable.findMany({
+    where: (insurances, { eq }) => eq(insurances.vehicleId, vehicleId),
   });
-  if (!insurance) {
+  if (!insurance || insurance.length === 0) {
     throw new InsuranceError(
       `No Insurances found for vehicle id : ${vehicleId}`,
       Status.NOT_FOUND,
@@ -38,8 +46,8 @@ export const updateInsurance = async (
   id: string,
   insuranceData: any,
 ) => {
-  const insurance = await Insurance.findOne({
-    where: { vehicleId: vehicleId, id },
+  const insurance = await db.query.insuranceTable.findFirst({
+    where: (insurances, { eq, and }) => and(eq(insurances.vehicleId, vehicleId), eq(insurances.id, id)),
   });
   if (!insurance) {
     throw new InsuranceError(
@@ -47,15 +55,21 @@ export const updateInsurance = async (
       Status.NOT_FOUND,
     );
   }
-  await insurance.update(insuranceData);
+  await db
+    .update(schema.insuranceTable)
+    .set({
+      ...insuranceData,
+    })
+    .where(eq(schema.insuranceTable.id, id));
   return { message: "Insurance details updated successfully." };
 };
 
 export const deleteInsurance = async (id: string) => {
-  const result = await Insurance.destroy({
-    where: { id },
-  });
-  if (result === 0) {
+  const result = await db
+    .delete(schema.insuranceTable)
+    .where(eq(schema.insuranceTable.id, id))
+    .returning();
+  if (result.length === 0) {
     throw new InsuranceError(
       `No Insurances found for id: ${id}`,
       Status.NOT_FOUND,

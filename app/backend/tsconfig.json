@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es2022",
-    "module": "nodenext",
     "rootDir": ".",
     "outDir": "./dist",
     "esModuleInterop": true,
@@ -13,7 +12,7 @@
     "allowJs": true,
     "moduleDetection": "force",
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "bundler",
     "noUncheckedIndexedAccess": true,
     "declaration": true,
     "paths": {
@@ -25,8 +24,6 @@
       "@db/*": ["./src/db/*"],
       "@exceptions": ["./src/exceptions"],
       "@exceptions/*": ["./src/exceptions/*"],
-      "@models": ["./src/models"],
-      "@models/*": ["./src/models/*"],
       "@routes": ["./src/routes"],
       "@routes/*": ["./src/routes/*"],
       "@services": ["./src/services"],
