@@ -8,7 +8,7 @@ import { asyncHandler } from "@middleware/async-handler.js";
 
 const router = Router({ mergeParams: true });
 
-// NUEVAS RUTAS POR LICENSE PLATE
+// NEW ROUTES BY LICENSE PLATE
 router.post("/", authenticatePin, asyncHandler(addFuelLogByLicensePlate));
 router.get("/", authenticatePin, asyncHandler(getFuelLogsByLicensePlate));
 
