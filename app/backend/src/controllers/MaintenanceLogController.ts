@@ -13,7 +13,7 @@ export const addMaintenanceLog = async (req: Request, res: Response) => {
       Status.BAD_REQUEST,
     );
   }
-  if (!date || !odometer || !serviceCenter || !cost) {
+  if (!date || !odometer || !serviceCenter || cost === undefined || cost === null) {
     throw new MaintenanceLogError(
       "Date, Odometer, ServiceCenter, and Cost are required.",
       Status.BAD_REQUEST,
@@ -62,7 +62,7 @@ export const updateMaintenanceLog = async (req: Request, res: Response) => {
       Status.BAD_REQUEST,
     );
   }
-  if (!date || !odometer || !service || !cost) {
+  if (!date || !odometer || !service || cost === undefined || cost === null ) {
     throw new MaintenanceLogError(
       "Date, Odometer, Service, and Cost are required.",
       Status.BAD_REQUEST,
