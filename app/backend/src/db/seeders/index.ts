@@ -81,7 +81,7 @@ const seedDemoData = async (enforce: boolean = false) => {
         licensePlate: faker.vehicle.vrm(),
         vin: faker.vehicle.vin(),
         color: faker.color.rgb(),
-        odometer: faker.number.int({ min: 100, max: 5000000 }),
+        odometer: faker.number.int({ min: 100, max: 500000 }),
       },
       {
         make: faker.vehicle.manufacturer(),
@@ -90,7 +90,7 @@ const seedDemoData = async (enforce: boolean = false) => {
         licensePlate: faker.vehicle.vrm(),
         vin: faker.vehicle.vin(),
         color: faker.color.rgb(),
-        odometer: faker.number.int({ min: 100, max: 5000000 }),
+        odometer: faker.number.int({ min: 100, max: 500000 }),
       },
     ])
     .returning();
@@ -115,7 +115,7 @@ const seedDemoData = async (enforce: boolean = false) => {
       .values({
         vehicleId: vehicle.id,
         date: faker.date.past({ years: 5 }),
-        odometer: faker.number.int({ min: 100, max: 5000000 }),
+        odometer: faker.number.int({ min: 100, max: 50000 }),
         serviceCenter: faker.company.name(),
         cost: faker.number.int({ min: 1000, max: 5000 }),
       })
@@ -127,7 +127,10 @@ const seedDemoData = async (enforce: boolean = false) => {
       .insert(pollutionCertificateTable)
       .values({
         vehicleId: vehicle.id,
-        certificateNumber: faker.string.alphanumeric({ casing: "upper" }),
+        certificateNumber: faker.string.alphanumeric({
+          casing: "upper",
+          length: 10,
+        }),
         issueDate: faker.date.past({ years: 1 }),
         expiryDate: faker.date.future({ years: 1 }),
         testingCenter: faker.company.name(),
@@ -138,20 +141,20 @@ const seedDemoData = async (enforce: boolean = false) => {
   vehicles.forEach(async (vehicle) => {
     const fuelLogs = [];
     for (let i = 0; i < 25; i++) {
-      fuelLogs.push({});
+      fuelLogs.push({
+        vehicleId: vehicle.id,
+        date: faker.date.past({ years: 1 }),
+        odometer: faker.number.int({
+          min: vehicle.odometer!,
+          max: vehicle.odometer! + 20000,
+        }),
+        fuelAmount: faker.number.float({ min: 1, max: 100 }),
+        cost: faker.number.float({ min: 10, max: 10000 }),
+        filled: faker.datatype.boolean({ probability: 0.9 }),
+        missedLast: faker.datatype.boolean({ probability: 0.1 }),
+      });
     }
-    db.insert(fuelLogTable).values({
-      vehicleId: vehicle.id,
-      date: faker.date.past({ years: 1 }),
-      odometer: faker.number.int({
-        min: vehicle.odometer!,
-        max: vehicle.odometer! + 20000,
-      }),
-      fuelAmount: faker.number.float({ min: 1, max: 100 }),
-      cost: faker.number.float({ min: 10, max: 10000 }),
-      filled: faker.datatype.boolean({ probability: 0.9 }),
-      missedLast: faker.datatype.boolean({ probability: 0.1 }),
-    });
+    await db.insert(fuelLogTable).values(fuelLogs);
   });
 
   console.log("Demo data seeded successfully");
