@@ -64,7 +64,7 @@ export const deleteFuelLog = async (req: Request, res: Response) => {
   res.status(200).json(result);
 };
 
-// Agregar FuelLog por licensePlate
+// Add FuelLog by licensePlate
 export const addFuelLogByLicensePlate = async (req: Request, res: Response) => {
   const { licensePlate } = req.params;
   const { date, odometer, fuelAmount, cost } = req.body;
@@ -78,7 +78,7 @@ export const addFuelLogByLicensePlate = async (req: Request, res: Response) => {
 
   if (!licensePlate) {
     throw new FuelLogError(
-      "License Plate required. ",
+      "License Plate required.",
       Status.BAD_REQUEST,
     );
   }
@@ -87,7 +87,7 @@ export const addFuelLogByLicensePlate = async (req: Request, res: Response) => {
   res.status(201).json(result);
 };
 
-// Obtener FuelLogs por licensePlate
+// Get FuelLogs by licensePlate
 export const getFuelLogsByLicensePlate = async (req: Request, res: Response) => {
   const { licensePlate } = req.params;
   if (!licensePlate) {
