@@ -1,85 +1,13 @@
-import { Umzug, SequelizeStorage } from "umzug";
-import path from "path";
-import { fileURLToPath } from "url";
-import { db } from "./db.js";
-import env from "@config/env.js";
+import "dotenv/config";
+import * as schema from "@db/schema";
+import { drizzle } from "drizzle-orm/libsql";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Determine if we're running in development (TypeScript) or production (compiled JavaScript)
-const isProduction = __filename.includes("/dist/");
-const migrationExtension = isProduction ? "js" : "ts";
-
-const umzug = new Umzug({
-  migrations: {
-    glob: path.join(__dirname, `migrations/*.${migrationExtension}`),
-    resolve: ({ name, path: migrationPath }) => {
-      return {
-        name,
-        up: async (params) => {
-          const migration = await import(migrationPath || "");
-          return migration.up(params);
-        },
-        down: async (params) => {
-          const migration = await import(migrationPath || "");
-          return migration.down(params);
-        },
-      };
-    },
+const db = drizzle({
+  connection: { url: `file:${process.env.DB_FILE_NAME! || "./tracktor.db"}` },
+  casing: "snake_case",
+  schema: {
+    ...schema,
   },
-  context: db.getQueryInterface(),
-  storage: new SequelizeStorage({
-    tableName: "migrations",
-    sequelize: db,
-  }),
-  logger: console,
 });
 
-type Migration = typeof umzug._types.migration;
-
-const performDbMigrations = async () => {
-  try {
-    console.log("Running database migrations...");
-    await umzug.up({});
-    console.log("Migrations completed successfully");
-  } catch (error) {
-    console.error("Migration failed:", error);
-    throw error;
-  }
-};
-
-const seedData = async () => {
-  if (env.DEMO_MODE) {
-    console.log("Demo mode enabled - seeding with sample data");
-    await insertDummyData();
-  } else {
-    await setupPinAndConfigs();
-  }
-};
-
-const setupPinAndConfigs = async () => {
-  const { seedInitialConfig, seedAuthPin } = await import("./seeders/index.js");
-
-  await seedInitialConfig();
-
-  const pin = process.env.AUTH_PIN;
-  if (pin) {
-    await seedAuthPin(pin);
-  }
-};
-
-const insertDummyData = async () => {
-  try {
-    const { seedDemoData, seedAuthPin } = await import("./seeders/index.js");
-
-    await setupPinAndConfigs();
-    await seedAuthPin("123456");
-    await seedDemoData();
-  } catch (error) {
-    console.error("Error populating database:", error);
-    throw error;
-  }
-};
-
-export { Migration, performDbMigrations, seedData, db };
+export { db };

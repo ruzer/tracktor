@@ -3,9 +3,9 @@ import cors from "cors";
 import pinRoutes from "@routes/pinRoutes.js";
 import vehicleRoutes from "@routes/vehicleRoutes.js";
 import configRoutes from "@routes/configRoutes.js";
-import { initializeDatabase } from "@db/init.js";
 import { errorHandler } from "@middleware/error-handler.js";
 import env, { validateEnvironment } from "@config/env.js";
+import { seedData } from "@db/seeders/index.js";
 
 // Validate environment before starting
 validateEnvironment();
@@ -33,6 +33,7 @@ app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/config", configRoutes);
 
 if (env.isProduction()) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const { handler } = await import("../../frontend/build/handler.js");
   app.use(handler);
@@ -44,7 +45,7 @@ if (env.isProduction()) {
 
 app.use(errorHandler);
 
-initializeDatabase()
+seedData()
   .then(() => {
     app.listen(env.SERVER_PORT, env.SERVER_HOST, () => {
       console.log("─".repeat(75));
@@ -60,6 +61,6 @@ initializeDatabase()
     });
   })
   .catch((err) => {
-    console.error("❌ Failed to initialize database:", err);
+    console.error("❌ Failed to seed database:", err);
     process.exit(1);
   });

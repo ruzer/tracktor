@@ -1,31 +1,39 @@
 import bcrypt from "bcrypt";
-import { Auth } from "@models/index.js";
 import { AuthError } from "@exceptions/AuthError.js";
 import { Status } from "@exceptions/ServiceError.js";
+import * as schema from "@db/schema";
+import { db } from "@db";
+import { eq } from "drizzle-orm";
 
 export const setPin = async (pin: string) => {
   const hash = await bcrypt.hash(pin, 10);
 
-  const [auth, created] = await Auth.findOrCreate({
-    where: { id: 1 },
-    defaults: { hash: hash },
+  const existingAuth = await db.query.authTable.findFirst({
+    where: (auth, { eq }) => eq(auth.id, 1),
   });
 
-  if (!created) {
-    auth.hash = hash;
-    await auth.save();
+  if (existingAuth) {
+    await db
+      .update(schema.authTable)
+      .set({ hash: hash })
+      .where(eq(schema.authTable.id, 1));
     return { message: "PIN updated successfully." };
   } else {
+    await db
+      .insert(schema.authTable)
+      .values({ id: 1, hash: hash });
     return { message: "PIN set successfully." };
   }
 };
 
 export const verifyPin = async (pin: string) => {
-  const auth = await Auth.findByPk(1);
+  const auth = await db.query.authTable.findFirst({
+    where: (auth, { eq }) => eq(auth.id, 1),
+  });
   if (!auth) {
     throw new AuthError("PIN is not set yet. Please set PIN first.");
   }
-  const match = await bcrypt.compare(pin, auth.get("hash"));
+  const match = await bcrypt.compare(pin, auth.hash);
   if (match) {
     return { message: "PIN verified successfully." };
   } else {
@@ -37,6 +45,8 @@ export const verifyPin = async (pin: string) => {
 };
 
 export const getPinStatus = async () => {
-  const auth = await Auth.findByPk(1);
+  const auth = await db.query.authTable.findFirst({
+    where: (auth, { eq }) => eq(auth.id, 1),
+  });
   return { exists: !!auth };
 };

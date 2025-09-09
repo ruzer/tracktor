@@ -1,24 +1,32 @@
 import { Status } from "@exceptions/ServiceError.js";
 import { VehicleError } from "@exceptions/VehicleError.js";
-import { Insurance, PollutionCertificate, Vehicle } from "@models/index.js";
+import * as schema from "@db/schema";
+import { db } from "@db";
+import { eq } from "drizzle-orm";
 
 export const addVehicle = async (vehicleData: any) => {
-  const vehicle = await Vehicle.create(vehicleData);
-  return { id: vehicle.id, message: "Vehicle added successfully." };
+  const vehicle = await db
+    .insert(schema.vehicleTable)
+    .values(vehicleData)
+    .returning();
+  return { id: vehicle[0]?.id, message: "Vehicle added successfully." };
 };
 
 export const getAllVehicles = async () => {
-  const vehicles = await Vehicle.findAll({
-    include: [
-      { association: "insurance" },
-      { association: "pollutionCertificate" },
-    ],
-  });
+  const vehicles = await db.query.vehicleTable.findMany();
+
+  // Get all insurances and pollution certificates for all vehicles
+  const allInsurances = await db.query.insuranceTable.findMany();
+  const allPollutionCertificates =
+    await db.query.pollutionCertificateTable.findMany();
 
   return vehicles.map((vehicle) => {
-    const insurances: Insurance[] = (vehicle as any).insurance;
-    const pollutionCertificates: PollutionCertificate[] = (vehicle as any)
-      .pollutionCertificate;
+    const insurances = allInsurances.filter(
+      (insurance) => insurance.vehicleId === vehicle.id
+    );
+    const pollutionCertificates = allPollutionCertificates.filter(
+      (pucc) => pucc.vehicleId === vehicle.id
+    );
 
     let insuranceStatus = "Not Available";
     if (insurances && insurances.length > 0) {
@@ -45,7 +53,7 @@ export const getAllVehicles = async () => {
     }
 
     return {
-      ...vehicle.toJSON(),
+      ...vehicle,
       insuranceStatus,
       puccStatus,
     };
@@ -53,7 +61,9 @@ export const getAllVehicles = async () => {
 };
 
 export const getVehicleById = async (id: string) => {
-  const vehicle = await Vehicle.findByPk(id);
+  const vehicle = await db.query.vehicleTable.findFirst({
+    where: (vehicles, { eq }) => eq(vehicles.id, id),
+  });
   if (!vehicle) {
     throw new VehicleError(`No vehicle found for id : ${id}`, Status.NOT_FOUND);
   }
@@ -61,21 +71,22 @@ export const getVehicleById = async (id: string) => {
 };
 
 export const updateVehicle = async (id: string, vehicleData: any) => {
-  const vehicle = await Vehicle.findByPk(id);
-  if (!vehicle) {
-    throw new VehicleError(`No vehicle found for id : ${id}`, Status.NOT_FOUND);
-  }
-
-  await vehicle.update(vehicleData);
+  await getVehicleById(id);
+  await db
+    .update(schema.vehicleTable)
+    .set({
+      ...vehicleData,
+    })
+    .where(eq(schema.vehicleTable.id, id));
   return { message: "Vehicle updated successfully." };
 };
 
 export const deleteVehicle = async (id: string) => {
-  const result = await Vehicle.destroy({
-    where: { id: id },
-    cascade: true,
-  });
-  if (result === 0) {
+  const result = await db
+    .delete(schema.vehicleTable)
+    .where(eq(schema.vehicleTable.id, id))
+    .returning();
+  if (result.length === 0) {
     throw new VehicleError(`No vehicle found for id : ${id}`, Status.NOT_FOUND);
   }
   return { message: "Vehicle deleted successfully." };
