@@ -13,7 +13,12 @@ export default defineConfig(({ mode }) => {
 			port: Number(env.CLIENT_PORT) || 5173,
 			host: env.CLIENT_HOST || '0.0.0.0',
 			proxy: {
-				'/api': `http://localhost:3000`,
+				// Forward API requests to the backend server in dev
+				'/api': {
+					target: `http://localhost:${env.SERVER_PORT || 3333}`,
+					changeOrigin: true,
+					secure: false,
+				},
 			}
 		},
 		envDir: resolve(process.cwd(), '../../'),
