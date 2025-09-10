@@ -10,9 +10,6 @@
 	import { getApiUrl } from '$lib/utils/api';
 	import { t } from '$lib/stores/i18n';
 
-	// Agregar import en la parte superior
-	import { getApiUrl } from '$lib/utils/api';
-
 	let { vehicleId } = $props();
 
 	interface Insurance {

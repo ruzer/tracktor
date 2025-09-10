@@ -152,10 +152,6 @@
 		required={false}
 		ariaLabel="Additional Notes"
 	/>
-<<<<<<< HEAD
 	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
-=======
-	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
->>>>>>> c9d7687 (feat: implement i18n system and advanced ColorPicker)
 </form>
 <StatusBlock message={status.message} type={status.type} />

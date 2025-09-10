@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let complete: (pin: string) => void;
+	let { complete } = $props();
 	let pin = Array(6).fill('');
 	let inputs: HTMLInputElement[] = $state([]);
 
@@ -24,8 +24,8 @@
 			inputmode="numeric"
 			pattern="[0-9]*"
 			maxlength="1"
-			on:input={(e) => onInput(e, i)}
-			on:keydown={(e) => onKeydown(e, i)}
+			oninput={(e) => onInput(e, i)}
+			onkeydown={(e) => onKeydown(e, i)}
 			aria-label={`PIN digit ${i + 1}`}
 		/>
 	{/each}
