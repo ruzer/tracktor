@@ -26,7 +26,11 @@ export default {
     validatingAuth: 'Validating Auth...',
     redirecting: 'Redirecting...',
     settings: 'Settings',
-    logout: 'Logout'
+    logout: 'Logout',
+    demoBanner: {
+      message: '⚠️ NOTICE: This is a demo instance. Data will be reset periodically and is not saved permanently. Please avoid adding any personal info.',
+      defaultPin: 'Default PIN : 123456'
+    }
   },
   errors: {
     requiredVehicleId: 'Vehicle ID is required.',

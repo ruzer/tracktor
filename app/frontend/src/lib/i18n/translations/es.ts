@@ -26,7 +26,11 @@ export default {
     validatingAuth: 'Validando Autenticación...',
     redirecting: 'Redirigiendo...',
     settings: 'Configuraciones',
-    logout: 'Cerrar Sesión'
+    logout: 'Cerrar Sesión',
+    demoBanner: {
+      message: '⚠️ AVISO: Esta es una instancia de demostración. Los datos se restablecen periódicamente y no se guardan permanentemente. Por favor, evita ingresar información personal.',
+      defaultPin: 'PIN por defecto: 123456'
+    }
   },
   errors: {
     requiredVehicleId: 'Se requiere el ID del vehículo.',

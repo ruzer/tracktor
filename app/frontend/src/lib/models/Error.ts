@@ -1,4 +1,6 @@
 import type { Status } from './status';
+import { get } from 'svelte/store';
+import { t as tStore } from '$lib/stores/i18n';
 
 export type ApiError = {
 	type: string;
@@ -10,9 +12,10 @@ export type ApiError = {
 
 export const handleApiError = (data: ApiError, editMode: boolean): Status => {
 	console.log(JSON.stringify(data));
-	let message = data.errors.map((e) => e.path + ' : ' + e.message).join('\n');
+	const translate = get(tStore);
+	let message = data.errors.map((e) => `${e.path ? e.path + ' : ' : ''}${e.message}`).join('\n');
 	return {
-		message: message || `Failed to ${editMode ? 'update' : 'add'} vehicle.`,
+		message: message || translate('errors.fetchFailed'),
 		type: 'ERROR'
 	};
 };

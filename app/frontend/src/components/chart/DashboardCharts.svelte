@@ -69,16 +69,16 @@
 				}
 				const mileageDataPoints = data.map((log: any) => log.mileage);
 
-				fuelCostData = {
-					labels,
-					datasets: [
-						{
-							label: `Total Fuel Cost (${getCurrencySymbol()})`,
-							data: costData,
-							fill: true,
-							borderColor: 'rgb(75, 192, 192)',
-							tension: 0.3,
-							borderWidth: 2,
+        fuelCostData = {
+          labels,
+          datasets: [
+            {
+              label: `${$t('table.headers.totalCost')} (${getCurrencySymbol()})`,
+              data: costData,
+              fill: true,
+              borderColor: 'rgb(75, 192, 192)',
+              tension: 0.3,
+              borderWidth: 2,
 							borderCapStyle: 'round',
 							pointStyle: 'circle',
 							pointRadius: 2
@@ -86,16 +86,16 @@
 					]
 				};
 
-				mileageData = {
-					labels,
-					datasets: [
-						{
-							label: `Mileage (${getMileageUnit()})`,
-							data: mileageDataPoints,
-							borderColor: 'rgb(255, 99, 132)',
-							fill: true,
-							tension: 0.3,
-							borderWidth: 2,
+        mileageData = {
+          labels,
+          datasets: [
+            {
+              label: `${$t('table.headers.mileage')} (${getMileageUnit()})`,
+              data: mileageDataPoints,
+              borderColor: 'rgb(255, 99, 132)',
+              fill: true,
+              tension: 0.3,
+              borderWidth: 2,
 							borderCapStyle: 'round',
 							pointStyle: 'circle',
 							pointRadius: 2
@@ -123,7 +123,7 @@
 		<Jumper size="100" color="#155dfc" unit="px" duration="2s" />
 	</p>
 {:else if error}
-	<p class="text-red-500">Error: {error}</p>
+  <p class="text-red-500">{$t('common.error')}: {error}</p>
 {:else if fuelCostData?.datasets?.length === 0 && mileageData?.datasets?.length === 0}
 	<p>{$t('dashboard.noDataAvailable')}</p>
 {:else}
