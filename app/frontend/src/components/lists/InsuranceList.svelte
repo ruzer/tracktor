@@ -29,12 +29,12 @@
 	let deleteDialog = $state(false);
 
 	$effect(() => {
-		if (!vehicleId) {
-			error = 'Vehicle ID is required.';
-			loading = false;
-		} else {
-			fetchInsuranceDetails();
-		}
+    if (!vehicleId) {
+      error = $t('errors.requiredVehicleId');
+      loading = false;
+    } else {
+      fetchInsuranceDetails();
+    }
 	});
 
 	async function fetchInsuranceDetails() {
@@ -51,19 +51,19 @@
 				}
 			});
 			// Corregir la lógica en fetchInsuranceDetails (línea 47-50)
-			if (response.ok) {
-				insurances = await response.json();
-				console.log('Insurance : ', JSON.stringify(insurances));
-			} else {
-				error = 'Failed to fetch insurance data.';
-			}
-		} catch (e) {
-			console.error(e);
-			error = 'Network error. Please try again.';
-		} finally {
-			loading = false;
-		}
-	}
+      if (response.ok) {
+        insurances = await response.json();
+        console.log('Insurance : ', JSON.stringify(insurances));
+      } else {
+        error = $t('errors.fetchInsuranceFailed');
+      }
+    } catch (e) {
+      console.error(e);
+      error = $t('errors.networkError');
+    } finally {
+      loading = false;
+    }
+  }
 
 	async function deleteInsurance(insuranceId: string | undefined) {
 		if (!insuranceId) {
@@ -79,17 +79,17 @@
 					}
 				}
 			);
-			if (response.ok) {
-				await fetchInsuranceDetails();
-			} else {
-				const data = await response.json();
-				error = data.message || 'Failed to delete insurance details.';
-			}
-		} catch (e) {
-			console.error(e);
-			error = 'Network error. Failed to delete insurance details.';
-		}
-	}
+      if (response.ok) {
+        await fetchInsuranceDetails();
+      } else {
+        const data = await response.json();
+        error = data.message || $t('errors.deleteInsuranceFailed');
+      }
+    } catch (e) {
+      console.error(e);
+      error = $t('errors.networkError');
+    }
+  }
 
 	onMount(() => {
 		fetchInsuranceDetails();
@@ -101,7 +101,7 @@
 		<Jumper size="100" color="#155dfc" unit="px" duration="2s" />
 	</p>
 {:else if error}
-	<p class="text-red-500">Error: {error}</p>
+  <p class="text-red-500">{$t('common.error')}: {error}</p>
 {:else if insurances.length === 0}
 	<div>{$t('modals.noInsuranceLogs')}</div>
 {:else}
@@ -115,46 +115,46 @@
 					<span class="text-xl font-bold text-gray-800 dark:text-gray-100">{ins.provider}</span>
 				</div>
 				<div class="flex gap-2">
-					<IconButton
-						buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
-						iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
-						icon={Trash2}
-						onclick={() => {
-							selectedInsurance = ins.id;
-							deleteDialog = true;
-						}}
-						ariaLabel="Delete"
-					/>
+        <IconButton
+          buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
+          iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
+          icon={Trash2}
+          onclick={() => {
+            selectedInsurance = ins.id;
+            deleteDialog = true;
+          }}
+          ariaLabel={$t('common.delete')}
+        />
 				</div>
 			</div>
 			<div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
 					<Hash class="h-5 w-5" />
-					<span class="font-semibold">Policy Number:</span>
+        <span class="font-semibold">{$t('forms.labels.policyNumber')}:</span>
 					<span>{ins.policyNumber}</span>
 				</div>
 				<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
 					<DollarSign class="h-5 w-5" />
-					<span class="font-semibold">Cost:</span>
+        <span class="font-semibold">{$t('forms.labels.cost')}:</span>
 					<span>{formatCurrency(ins.cost)}</span>
 				</div>
 				<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
 					<Calendar class="h-5 w-5 " />
-					<span class="font-semibold">Start Date:</span>
+        <span class="font-semibold">{$t('forms.labels.startDate')}:</span>
 					<span>{formatDate(ins.startDate)}</span>
 				</div>
 				<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
 					<Calendar class="h-5 w-5 " />
-					<span class="font-semibold">End Date:</span>
+        <span class="font-semibold">{$t('forms.labels.endDate')}:</span>
 					<span>{formatDate(ins.endDate)}</span>
 				</div>
-				{#if ins.notes}
-					<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-						<Notebook class="h-5 w-5 " />
-						<span class="font-semibold">Notes:</span>
-						<span>{ins.notes}</span>
-					</div>
-				{/if}
+        {#if ins.notes}
+          <div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+            <Notebook class="h-5 w-5 " />
+            <span class="font-semibold">{$t('forms.labels.notes')}:</span>
+            <span>{ins.notes}</span>
+          </div>
+        {/if}
 			</div>
 		</div>
 	{/each}

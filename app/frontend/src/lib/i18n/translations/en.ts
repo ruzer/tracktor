@@ -18,6 +18,7 @@ export default {
     success: 'Success',
     confirm: 'Confirm',
     close: 'Close',
+    toggleDarkMode: 'Toggle dark mode',
     notAvailable: 'Not Available'
   },
   app: {
@@ -26,6 +27,36 @@ export default {
     redirecting: 'Redirecting...',
     settings: 'Settings',
     logout: 'Logout'
+  },
+  errors: {
+    requiredVehicleId: 'Vehicle ID is required.',
+    networkError: 'Failed to connect to the server.',
+    fetchFailed: 'Failed to fetch data.',
+    fetchFuelLogsFailed: 'Failed to fetch fuel logs.',
+    fetchMaintenanceLogsFailed: 'Failed to fetch maintenance logs.',
+    fetchInsuranceFailed: 'Failed to fetch insurance data.',
+    fetchPollutionFailed: 'Failed to fetch pollution certificates.',
+    deleteFailed: 'Failed to delete.',
+    deleteFuelLogFailed: 'Failed to delete fuel log.',
+    deleteMaintenanceFailed: 'Failed to delete maintenance log.',
+    deleteInsuranceFailed: 'Failed to delete insurance details.',
+    deletePollutionFailed: 'Failed to delete pollution certificate.'
+  },
+  login: {
+    title: 'Welcome',
+    checkingPinStatus: 'Checking PIN status...',
+    enterPinPrompt: 'Enter your 6-digit PIN to access Tracktor',
+    success: {
+      pinVerified: 'PIN Verified Successfully'
+    },
+    errors: {
+      missingPinEnv: 'No PIN found. Please set `AUTH_PIN` environment variable before starting the app.',
+      checkStatusFailed: 'Failed to check PIN status.',
+      unknownServerError: 'Unknown server error occurred.',
+      connectionFailed: 'Failed to connect to the server. Please check your connection.',
+      invalidPin: 'Invalid PIN. Please try again.',
+      failedSetPin: 'Failed to set PIN.'
+    }
   },
   dashboard: {
     title: 'Your Vehicles',

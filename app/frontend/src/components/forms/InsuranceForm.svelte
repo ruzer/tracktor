@@ -113,7 +113,7 @@
 		icon={Building2}
 		label={$t('forms.labels.provider')}
 		required={true}
-		ariaLabel="Provider"
+		ariaLabel={$t('forms.labels.provider')}
 	/>
 	<FormField
 		id="policy-number"
@@ -123,7 +123,7 @@
 		icon={IdCard}
 		label={$t('forms.labels.policyNumber')}
 		required={true}
-		ariaLabel="Policy Number"
+		ariaLabel={$t('forms.labels.policyNumber')}
 	/>
 	<div class="grid grid-flow-row grid-cols-2 gap-4">
 		<FormField
@@ -134,7 +134,7 @@
 			icon={Calendar1}
 			required={true}
 			label={$t('forms.labels.startDate')}
-			ariaLabel="Start Date"
+			ariaLabel={$t('forms.labels.startDate')}
 		/>
 
 		<FormField
@@ -145,7 +145,7 @@
 			icon={Calendar1}
 			label={$t('forms.labels.endDate')}
 			required={true}
-			ariaLabel="End Date"
+			ariaLabel={$t('forms.labels.endDate')}
 		/>
 	</div>
 	<FormField
@@ -156,7 +156,7 @@
 		icon={BadgeDollarSign}
 		label={$t('forms.labels.cost')}
 		required={true}
-		ariaLabel="Cost"
+		ariaLabel={$t('forms.labels.cost')}
 	/>
 	<FormField
 		id="notes"
@@ -166,7 +166,7 @@
 		icon={Notebook}
 		label={$t('forms.labels.notes')}
 		required={false}
-		ariaLabel="Notes"
+		ariaLabel={$t('forms.labels.notes')}
 	/>
 	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
 </form>

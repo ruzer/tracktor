@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { Plus } from '@lucide/svelte';
-	import { scale } from 'svelte/transition';
-	import IconButton from './IconButton.svelte';
+  import { Plus } from '@lucide/svelte';
+  import { scale } from 'svelte/transition';
+  import IconButton from './IconButton.svelte';
+  import { t } from '$lib/stores/i18n';
 
-	const { onclose, children, title } = $props();
+  const { onclose, children, title } = $props();
 </script>
 
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
@@ -15,13 +16,13 @@
 			<h2 class="text-left text-2xl font-bold text-gray-900 dark:text-gray-100">
 				{title}
 			</h2>
-			<IconButton
-				buttonStyles="bg-gray-200 dark:bg-gray-700"
-				iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500 rotate-45 h-6 w-6"
-				icon={Plus}
-				onclick={onclose}
-				ariaLabel="Close"
-			/>
+    <IconButton
+      buttonStyles="bg-gray-200 dark:bg-gray-700"
+      iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500 rotate-45 h-6 w-6"
+      icon={Plus}
+      onclick={onclose}
+      ariaLabel={$t('common.close')}
+    />
 		</div>
 		<div class="mb-4 border-b border-gray-200 dark:border-gray-700"></div>
 		{@render children()}
