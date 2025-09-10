@@ -88,6 +88,8 @@ export default {
       fuelAmount: 'Cantidad de Combustible',
       cost: 'Costo',
       notes: 'Notas',
+      filled: '¿Tanque lleno?',
+      missedLast: '¿Se omitió la última?',
       startDate: 'Fecha de Inicio',
       endDate: 'Fecha de Fin',
       testingCenter: 'Centro de Pruebas',
@@ -103,6 +105,12 @@ export default {
       color: 'Color',
       licensePlate: 'Placa',
       vinNumber: 'Número VIN'
+    },
+    help: {
+      filled:
+        'Marca si esta recarga fue con tanque lleno. El rendimiento se calcula solo entre dos registros de tanque lleno, sumando las recargas parciales intermedias.',
+      missedLast:
+        'Marca si olvidaste registrar la recarga anterior. Esto impide usar registros anteriores para el cálculo de rendimiento hasta el siguiente tanque lleno.'
     },
     placeholders: {
       date: 'Fecha',

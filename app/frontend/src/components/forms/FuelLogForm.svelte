@@ -165,15 +165,17 @@
 			id="filled"
 			bind:checked={refill.filled}
 			icon={CircleSlash}
-			label="Tank Filled?"
-			ariaLabel="Tank Filled"
+			label={$t('forms.labels.filled')}
+			help={$t('forms.help.filled')}
+			ariaLabel={$t('forms.labels.filled')}
 		/>
 		<Checkbox
 			id="missedLast"
 			bind:checked={refill.missedLast}
 			icon={ArrowBigLeftDash}
-			label="Missed Last?"
-			ariaLabel="Previous Fuel Log Missed"
+			label={$t('forms.labels.missedLast')}
+			help={$t('forms.help.missedLast')}
+			ariaLabel={$t('forms.labels.missedLast')}
 		/>
 	</div>
 

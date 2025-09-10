@@ -5,6 +5,8 @@
 		icon = null,
 		label = undefined,
 		ariaLabel = '',
+		help = undefined,
+		helpAriaLabel = 'Help',
 		disabled = false,
 		inputClass = '',
 		onInput = undefined
@@ -28,6 +30,16 @@
 				<Icon class="inline-block h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
 			{/if}
 			{label}
+			{#if help}
+				<span
+					class="inline-flex items-center rounded-full px-1 text-sm text-gray-400 hover:text-gray-500 focus:outline-none dark:text-gray-500"
+					role="img"
+					title={help}
+					aria-label={helpAriaLabel}
+				>
+					?
+				</span>
+			{/if}
 		</label>
 	{/if}
 </div>

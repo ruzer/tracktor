@@ -88,6 +88,8 @@ export default {
       fuelAmount: 'Fuel Amount',
       cost: 'Cost',
       notes: 'Notes',
+      filled: 'Tank Filled?',
+      missedLast: 'Missed Last?',
       startDate: 'Start Date',
       endDate: 'End Date',
       testingCenter: 'Testing Center',
@@ -103,6 +105,12 @@ export default {
       color: 'Color',
       licensePlate: 'License Plate',
       vinNumber: 'VIN Number'
+    },
+    help: {
+      filled:
+        'Mark if this refill filled the tank to full. Mileage is computed only between two full-tank logs, summing any partial refills in between.',
+      missedLast:
+        'Mark if you missed logging the previous refill. This blocks using earlier logs for mileage until the next full-tank entry.'
     },
     placeholders: {
       date: 'Date',
