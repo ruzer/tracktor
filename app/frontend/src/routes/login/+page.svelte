@@ -22,7 +22,9 @@
 		if (browser) {
 			async function checkPinStatus() {
 				try {
-					const response = await fetch(getApiUrl('/api/pin/status'));
+					const pinStatusUrl = getApiUrl('/api/pin/status');
+					console.debug('[login] GET /api/pin/status ->', pinStatusUrl);
+					const response = await fetch(pinStatusUrl);
 					if (response.ok) {
 						const data = await response.json();
 						pinExists = data.exists;
@@ -34,13 +36,14 @@
 							};
 						}
 					} else {
+						console.error('[login] PIN status failed', response.status, response.statusText);
 						status = {
 							message: 'Failed to check PIN status.',
 							type: 'ERROR'
 						};
 					}
 				} catch (e) {
-					console.error(e);
+					console.error('[login] PIN status error', e);
 					status = {
 						message: 'Unknown Server Error Occurred.',
 						type: 'ERROR'
@@ -77,7 +80,9 @@
 
 	const endpointCall = async (pin: string, verify = true) => {
 		const endpoint = verify ? '/api/pin/verify' : '/api/pin';
-		const response = await fetch(getApiUrl(endpoint), {
+		const url = getApiUrl(endpoint);
+		console.debug('[login] POST', endpoint, '->', url);
+		const response = await fetch(url, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -98,6 +103,7 @@
 			await simulateNetworkDelay(1000);
 			goto('/dashboard', { replaceState: true });
 		} else {
+			console.error('[login] PIN endpoint failed', response.status, response.statusText);
 			const data = await response.json();
 			status = {
 				message:

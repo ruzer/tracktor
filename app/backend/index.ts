@@ -3,9 +3,9 @@ import cors from "cors";
 import pinRoutes from "@routes/pinRoutes.js";
 import vehicleRoutes from "@routes/vehicleRoutes.js";
 import configRoutes from "@routes/configRoutes.js";
+import { initializeDatabase } from "@db/init.js";
 import { errorHandler } from "@middleware/error-handler.js";
 import env, { validateEnvironment } from "@config/env.js";
-import { seedData } from "@db/seeders/index.js";
 
 // Validate environment before starting
 validateEnvironment();
@@ -23,6 +23,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Handle preflight requests
+app.options("*", cors(corsOptions));
+
 app.use(express.json());
 
 app.use("/api", pinRoutes);
@@ -30,19 +33,19 @@ app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/config", configRoutes);
 
 if (env.isProduction()) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const { handler } = await import("../frontend/handler.js");
+  const { handler } = await import("../../frontend/build/handler.js");
   app.use(handler);
 } else {
   app.get("/", (req, res) => {
-    res.redirect("http://localhost:5173");
+    // Línea 41 - Redirección en modo desarrollo (ajustada al puerto del frontend)
+    res.redirect("http://localhost:5175");
   });
 }
 
 app.use(errorHandler);
 
-seedData()
+initializeDatabase()
   .then(() => {
     app.listen(env.SERVER_PORT, env.SERVER_HOST, () => {
       console.log("─".repeat(75));
@@ -58,6 +61,6 @@ seedData()
     });
   })
   .catch((err) => {
-    console.error("❌ Failed to seed database:", err);
+    console.error("❌ Failed to initialize database:", err);
     process.exit(1);
   });

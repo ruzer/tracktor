@@ -10,10 +10,20 @@ export function getApiUrl(path: string): string {
 	const cleanBaseUrl = baseUrl.replace(/\/$/, '');
 	const cleanPath = path.replace(/^\//, '');
 
-	// If base URL is empty or just a slash, return the path as-is (relative URL)
+	// Build final URL
+	let url: string;
 	if (!cleanBaseUrl || cleanBaseUrl === '') {
-		return `/${cleanPath}`;
+		// Return relative URL when no base is configured (proxy mode)
+		url = `/${cleanPath}`;
+	} else {
+		// Return absolute URL when base URL is configured
+		url = `${cleanBaseUrl}/${cleanPath}`;
 	}
 
-	return `${cleanBaseUrl}/${cleanPath}`;
+	// Debug: trace URL building in dev console
+	try {
+		console.debug('[api] getApiUrl', { baseUrl: cleanBaseUrl || '(empty)', path: cleanPath, url });
+	} catch {}
+
+	return url;
 }
