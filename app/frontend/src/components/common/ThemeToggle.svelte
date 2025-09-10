@@ -1,27 +1,4 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { darkModeStore } from '$lib/stores/dark-mode';
-	import { Moon, Sun } from '@lucide/svelte';
-	let darkMode = $state(false);
-
-	if (browser) {
-		const storedDark = localStorage.getItem('darkMode');
-		darkMode = storedDark === 'true';
-		document.documentElement.classList.toggle('dark', storedDark === 'true');
-		darkModeStore.set(storedDark === 'true');
-	}
-
-	function toggleDarkMode() {
-		darkMode = !darkMode;
-		document.documentElement.classList.toggle('dark', darkMode);
-		if (browser) {
-			localStorage.setItem('darkMode', darkMode ? 'true' : 'false');
-		}
-		darkModeStore.set(darkMode);
-	}
-</script>
-
-<script lang="ts">
   import { t } from '$lib/stores/i18n';
   import { browser } from '$app/environment';
   import { darkModeStore } from '$lib/stores/dark-mode';
