@@ -22,13 +22,17 @@ const getOrigins = (): string[] => {
     .filter(Boolean);
 };
 
+const SERVER_HOST = process.env.SERVER_HOST || process.env.BACKEND_HOST || "0.0.0.0";
+const SERVER_PORT_RAW = process.env.SERVER_PORT || process.env.BACKEND_PORT;
+const SERVER_PORT_NUM = Number(SERVER_PORT_RAW);
+
 export const env = {
   // Application Environment
   NODE_ENV: process.env.NODE_ENV || "development",
 
   // Server Configuration
-  SERVER_HOST: process.env.SERVER_HOST || "0.0.0.0",
-  SERVER_PORT: Number(process.env.SERVER_PORT) || 3000,
+  SERVER_HOST,
+  SERVER_PORT: !isNaN(SERVER_PORT_NUM) && SERVER_PORT_NUM > 0 ? SERVER_PORT_NUM : 3000,
 
   // Database Configuration
   DATABASE_PATH: process.env.DATABASE_PATH || "./tracktor.db",
