@@ -1,37 +1,41 @@
 import { FuelLogError } from "@exceptions/FuelLogError.js";
 import { Status } from "@exceptions/ServiceError.js";
 import { VehicleError } from "@exceptions/VehicleError.js";
-import { Vehicle, FuelLog } from "@models/index.js";
+import * as schema from "@db/schema/index.js";
+import { db } from "@db/index.js";
+import { eq } from "drizzle-orm";
 
 export const addFuelLog = async (vehicleId: string, fuelLogData: any) => {
-  const vehicle = await Vehicle.findByPk(vehicleId);
+  const vehicle = await db.query.vehicleTable.findFirst({
+    where: (vehicles, { eq }) => eq(vehicles.id, vehicleId),
+  });
   if (!vehicle) {
     throw new VehicleError(
       `No vehicle found for id : ${vehicleId}`,
-      Status.NOT_FOUND,
+      Status.NOT_FOUND
     );
   }
-  const fuelLog = await FuelLog.create({
-    ...fuelLogData,
-    vehicleId: vehicleId,
-  });
-  return { id: fuelLog.id, message: "Fuel log added successfully." };
+  const fuelLog = await db
+    .insert(schema.fuelLogTable)
+    .values({
+      ...fuelLogData,
+      vehicleId: vehicleId,
+    })
+    .returning();
+  return { id: fuelLog[0]?.id, message: "Fuel log added successfully." };
 };
 
 export const getFuelLogs = async (vehicleId: string) => {
-  const fuelLogs = await FuelLog.findAll({
-    where: { vehicleId: vehicleId },
-    order: [
-      ["date", "ASC"],
-      ["odometer", "ASC"],
-    ],
+  const fuelLogs = await db.query.fuelLogTable.findMany({
+    where: (log, { eq }) => eq(log.vehicleId, vehicleId),
+    orderBy: (log, { asc }) => asc(log.date),
   });
 
   // Calculate mileage
   return fuelLogs.map((log, index, arr) => {
     // mileage can only be calculated for a full tank and a previous log is needed
     if (index === 0 || !log.filled || log.missedLast) {
-      return { ...log.toJSON(), mileage: null };
+      return { ...log, mileage: null };
     }
 
     // find the previous full tank log that serves as a starting point
@@ -49,7 +53,7 @@ export const getFuelLogs = async (vehicleId: string) => {
 
     // if there is no valid starting log, mileage can't be calculated
     if (startIndex === -1) {
-      return { ...log.toJSON(), mileage: null };
+      return { ...log, mileage: null };
     }
 
     const startLog = arr[startIndex]!;
@@ -63,46 +67,48 @@ export const getFuelLogs = async (vehicleId: string) => {
 
     // avoid division by zero and ensure distance is positive
     if (totalFuel === 0 || distance <= 0) {
-      return { ...log.toJSON(), mileage: null };
+      return { ...log, mileage: null };
     }
 
     const mileage = distance / totalFuel;
-    return { ...log.toJSON(), mileage: parseFloat(mileage.toFixed(2)) };
+    return { ...log, mileage: parseFloat(mileage.toFixed(2)) };
   });
 };
 
 export const getFuelLogById = async (id: string) => {
-  const fuelLog = await FuelLog.findByPk(id);
+  const fuelLog = await db.query.fuelLogTable.findFirst({
+    where: (log, { eq }) => eq(log.id, id),
+  });
+
   if (!fuelLog) {
     throw new FuelLogError(
       `No Fuel Logs found for id : ${id}`,
-      Status.NOT_FOUND,
+      Status.NOT_FOUND
     );
   }
   return fuelLog;
 };
 
 export const updateFuelLog = async (id: string, fuelLogData: any) => {
-  const fuelLog = await FuelLog.findByPk(id);
-  if (!fuelLog) {
-    throw new FuelLogError(
-      `No Fuel Logs found for id : ${id}`,
-      Status.NOT_FOUND,
-    );
-  }
-
-  await fuelLog.update(fuelLogData);
+  getFuelLogById(id);
+  await db
+    .update(schema.fuelLogTable)
+    .set({
+      ...fuelLogData,
+    })
+    .where(eq(schema.fuelLogTable.id, id));
   return { message: "Fuel log updated successfully." };
 };
 
 export const deleteFuelLog = async (id: string) => {
-  const result = await FuelLog.destroy({
-    where: { id: id },
-  });
-  if (result === 0) {
+  const result = await db
+    .delete(schema.fuelLogTable)
+    .where(eq(schema.fuelLogTable.id, id))
+    .returning();
+  if (result.length === 0) {
     throw new FuelLogError(
       `No Fuel Logs found for id : ${id}`,
-      Status.NOT_FOUND,
+      Status.NOT_FOUND
     );
   }
   return { message: "Fuel log deleted successfully." };

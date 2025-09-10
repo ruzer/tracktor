@@ -24,12 +24,14 @@ FROM node:22-alpine
 WORKDIR /app
 
 # Copy built backend from backend-builder stage
-COPY --from=backend-builder /app/backend/dist ./backend/dist
+COPY --from=backend-builder /app/backend/dist ./backend
+COPY --from=backend-builder /app/backend/src/db/migrations ./backend/src/db/migrations
 COPY --from=backend-builder /app/backend/node_modules ./backend/node_modules
 COPY --from=backend-builder /app/backend/package.json ./backend/package.json
 
 # Copy built frontend from frontend-builder stage
-COPY --from=frontend-builder /app/frontend/build ./frontend/build
+COPY --from=frontend-builder /app/frontend/build ./frontend
+COPY --from=frontend-builder /app/frontend/package.json ./package.json
 
 # Copy and set up entrypoint script
 COPY docker/entrypoint.sh /app/entrypoint.sh
