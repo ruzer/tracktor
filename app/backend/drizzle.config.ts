@@ -4,8 +4,8 @@ import { defineConfig } from "drizzle-kit";
 export default defineConfig({
   out: "./src/db/migrations",
   migrations: {
-    prefix: "unix",
-    table: "migrations",
+    prefix: "timestamp",
+    table: "_migrations",
   },
   schema: "./src/db/schema",
   dialect: "sqlite",

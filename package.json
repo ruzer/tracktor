@@ -27,12 +27,9 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.0",
-    "drizzle-kit": "^0.31.4",
     "tsx": "^4.20.5"
   },
   "dependencies": {
-    "@libsql/client": "^0.15.14",
-    "dotenv": "^17.2.2",
-    "drizzle-orm": "^0.44.5"
+    "dotenv": "^17.2.2"
   }
 }

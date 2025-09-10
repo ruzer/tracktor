@@ -8,7 +8,7 @@ cd /app/backend
 
 # Run database migrations
 echo "Running database migrations..."
-if node dist/src/db/migrate.js migrate; then
+if npx drizzle-kit migrate --config drizzle.config.js; then
     echo "✓ Database migrations completed successfully"
 else
     echo "✗ Database migrations failed"
@@ -17,4 +17,4 @@ fi
 
 # Start the server
 echo "Starting server..."
-exec node dist/index.js
+exec node index.js
