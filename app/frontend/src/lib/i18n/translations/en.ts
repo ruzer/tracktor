@@ -70,7 +70,11 @@ export default {
     noDataAvailable: 'No data available for this vehicle.',
     vehicleTrends: 'Vehicle Trends',
     fuelCostOverTime: 'Fuel Cost Over Time',
-    mileageOverTime: 'Mileage Over Time'
+    mileageOverTime: 'Mileage Over Time',
+    datasets: {
+      totalFuelCost: 'Total Fuel Cost ({{currency}})',
+      mileage: 'Mileage ({{unit}})'
+    }
   },
   vehicle: {
     licensePlate: 'License Plate',

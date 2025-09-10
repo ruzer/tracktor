@@ -70,7 +70,11 @@ export default {
     noDataAvailable: 'No hay datos disponibles para este vehículo.',
     vehicleTrends: 'Tendencias del Vehículo',
     fuelCostOverTime: 'Costo de Combustible en el Tiempo',
-    mileageOverTime: 'Kilometraje en el Tiempo'
+    mileageOverTime: 'Kilometraje en el Tiempo',
+    datasets: {
+      totalFuelCost: 'Costo total de combustible ({{currency}})',
+      mileage: 'Kilometraje ({{unit}})'
+    }
   },
   vehicle: {
     licensePlate: 'Placa',

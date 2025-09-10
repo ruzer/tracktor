@@ -73,7 +73,7 @@
           labels,
           datasets: [
             {
-              label: `${$t('table.headers.totalCost')} (${getCurrencySymbol()})`,
+              label: $t('dashboard.datasets.totalFuelCost', { currency: getCurrencySymbol() }),
               data: costData,
               fill: true,
               borderColor: 'rgb(75, 192, 192)',
@@ -90,7 +90,7 @@
           labels,
           datasets: [
             {
-              label: `${$t('table.headers.mileage')} (${getMileageUnit()})`,
+              label: $t('dashboard.datasets.mileage', { unit: getMileageUnit() }),
               data: mileageDataPoints,
               borderColor: 'rgb(255, 99, 132)',
               fill: true,
