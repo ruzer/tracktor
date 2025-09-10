@@ -121,7 +121,7 @@ export default {
     maintenance: 'Maintenance',
     insurance: 'Insurance',
     pollution: 'Pollution Certificate',
-    plates: 'Plates',
+    plates: 'Plate History',
     assignments: 'Assignments',
     taxes: 'Taxes'
   },

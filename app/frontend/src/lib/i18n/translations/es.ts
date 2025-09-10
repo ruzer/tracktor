@@ -121,7 +121,7 @@ export default {
     maintenance: 'Mantenimiento',
     insurance: 'Seguro',
     pollution: 'Certificado de Contaminación',
-    plates: 'Placas',
+    plates: 'Historial de Placas',
     assignments: 'Resguardo',
     taxes: 'Impuestos'
   },
