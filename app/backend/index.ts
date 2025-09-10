@@ -3,6 +3,7 @@ import cors from "cors";
 import pinRoutes from "@routes/pinRoutes.js";
 import vehicleRoutes from "@routes/vehicleRoutes.js";
 import configRoutes from "@routes/configRoutes.js";
+import insurancePolicyRoutes from "@routes/insurancePolicyRoutes.js";
 import { initializeDatabase } from "@db/init.js";
 import { errorHandler } from "@middleware/error-handler.js";
 import env, { validateEnvironment } from "@config/env.js";
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use("/api", pinRoutes);
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/config", configRoutes);
+app.use("/api/insurance-policies", insurancePolicyRoutes);
 
 if (env.isProduction()) {
   // @ts-ignore
