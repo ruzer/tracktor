@@ -25,6 +25,18 @@
 		{
 			name: $t('navigation.pollution'),
 			id: 'pollution'
+		},
+		{
+			name: $t('navigation.plates'),
+			id: 'plates'
+		},
+		{
+			name: $t('navigation.assignments'),
+			id: 'assignments'
+		},
+		{
+			name: $t('navigation.taxes'),
+			id: 'taxes'
 		}
 	];
 </script>

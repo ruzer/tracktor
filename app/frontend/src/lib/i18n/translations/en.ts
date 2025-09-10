@@ -19,7 +19,9 @@ export default {
     confirm: 'Confirm',
     close: 'Close',
     toggleDarkMode: 'Toggle dark mode',
-    notAvailable: 'Not Available'
+    notAvailable: 'Not Available',
+    yes: 'Yes',
+    no: 'No'
   },
   app: {
     title: 'Tracktor',
@@ -118,7 +120,10 @@ export default {
     fuelLogs: 'Fuel Logs',
     maintenance: 'Maintenance',
     insurance: 'Insurance',
-    pollution: 'Pollution Certificate'
+    pollution: 'Pollution Certificate',
+    plates: 'Plates',
+    assignments: 'Assignments',
+    taxes: 'Taxes'
   },
   forms: {
     labels: {
@@ -143,7 +148,23 @@ export default {
       year: 'Year',
       color: 'Color',
       licensePlate: 'License Plate',
-      vinNumber: 'VIN Number'
+      vinNumber: 'VIN Number',
+      plate: 'Plate',
+      retireDate: 'Retired Date',
+      reason: 'Reason',
+      current: 'Current',
+      retire: 'Retire',
+      assigneeName: 'Assignee Name',
+      assigneeRole: 'Assignee Role',
+      area: 'Area',
+      unit: 'Unit',
+      close: 'Close',
+      taxType: 'Tax Type',
+      amount: 'Amount',
+      paid: 'Paid',
+      paidDate: 'Paid Date',
+      receiptFolio: 'Receipt Folio',
+      markPaid: 'Mark Paid'
     },
     help: {
       filled:
@@ -178,6 +199,7 @@ export default {
       add: 'Add',
       update: 'Update'
     },
+    
     validation: {
       noVehicleSelected: 'No vehicle selected.',
       requiredFields: 'Date, Odometer, Fuel Amount, and Cost are required.',

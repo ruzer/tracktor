@@ -19,7 +19,9 @@ export default {
     confirm: 'Confirmar',
     close: 'Cerrar',
     toggleDarkMode: 'Cambiar modo oscuro',
-    notAvailable: 'No Disponible'
+    notAvailable: 'No Disponible',
+    yes: 'Sí',
+    no: 'No'
   },
   app: {
     title: 'Tracktor',
@@ -118,7 +120,10 @@ export default {
     fuelLogs: 'Registros de Combustible',
     maintenance: 'Mantenimiento',
     insurance: 'Seguro',
-    pollution: 'Certificado de Contaminación'
+    pollution: 'Certificado de Contaminación',
+    plates: 'Placas',
+    assignments: 'Resguardo',
+    taxes: 'Impuestos'
   },
   forms: {
     labels: {
@@ -143,7 +148,23 @@ export default {
       year: 'Año',
       color: 'Color',
       licensePlate: 'Placa',
-      vinNumber: 'Número VIN'
+      vinNumber: 'Número VIN',
+      plate: 'Placa',
+      retireDate: 'Fecha de Baja',
+      reason: 'Motivo',
+      current: 'Actual',
+      retire: 'Dar de baja',
+      assigneeName: 'Asignado a',
+      assigneeRole: 'Cargo',
+      area: 'Área',
+      unit: 'Unidad',
+      close: 'Cerrar',
+      taxType: 'Tipo de Impuesto',
+      amount: 'Monto',
+      paid: 'Pagado',
+      paidDate: 'Fecha de Pago',
+      receiptFolio: 'Folio de Recibo',
+      markPaid: 'Marcar Pagado'
     },
     help: {
       filled:
