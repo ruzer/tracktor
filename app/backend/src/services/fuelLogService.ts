@@ -114,24 +114,30 @@ export const deleteFuelLog = async (id: string) => {
   return { message: "Fuel log deleted successfully." };
 };
 
-export const addFuelLogByLicensePlate = async (licensePlate: string, fuelLogData: any) => {
-  const vehicle = await Vehicle.findOne({ where: { licensePlate } });
+export const addFuelLogByLicensePlate = async (
+  licensePlate: string,
+  fuelLogData: any
+) => {
+  const vehicle = await db.query.vehicleTable.findFirst({
+    where: (vehicle, { eq }) => eq(vehicle.licensePlate, licensePlate),
+  });
   if (!vehicle) {
     throw new VehicleError(
       `No vehicle found for license plate : ${licensePlate}`,
-      Status.NOT_FOUND,
+      Status.NOT_FOUND
     );
   }
-
   return await addFuelLog(vehicle.id, fuelLogData);
 };
 
 export const getFuelLogsByLicensePlate = async (licensePlate: string) => {
-  const vehicle = await Vehicle.findOne({ where: { licensePlate } });
+  const vehicle = await db.query.vehicleTable.findFirst({
+    where: (vehicle, { eq }) => eq(vehicle.licensePlate, licensePlate),
+  });
   if (!vehicle) {
     throw new VehicleError(
       `No vehicle found for license plate : ${licensePlate}`,
-      Status.NOT_FOUND,
+      Status.NOT_FOUND
     );
   }
   return await getFuelLogs(vehicle.id);
