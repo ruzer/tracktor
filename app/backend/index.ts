@@ -23,9 +23,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Handle preflight requests
-app.options("*", cors(corsOptions));
-
 app.use(express.json());
 
 app.use("/api", pinRoutes);
@@ -35,7 +32,7 @@ app.use("/api/config", configRoutes);
 if (env.isProduction()) {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const { handler } = await import("../../frontend/build/handler.js");
+  const { handler } = await import("../frontend/handler.js");
   app.use(handler);
 } else {
   app.get("/", (req, res) => {

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { getPinStatus, verifyPin } from "@services/pinService";
+import { getPinStatus, verifyPin } from "@services/pinService.js";
 
 export const authenticatePin = async (
   req: Request,

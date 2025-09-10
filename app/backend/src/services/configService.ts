@@ -1,7 +1,7 @@
 import { ConfigError } from "@exceptions/ConfigError.js";
 import { Status } from "@exceptions/ServiceError.js";
-import * as schema from "@db/schema";
-import { db } from "@db";
+import * as schema from "@db/schema/index.js";
+import { db } from "@db/index.js";
 import { eq } from "drizzle-orm";
 
 export const getAppConfigs = async () => {

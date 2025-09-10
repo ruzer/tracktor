@@ -1,5 +1,6 @@
 import { sqliteTable as table } from "drizzle-orm/sqlite-core";
 import * as t from "drizzle-orm/sqlite-core";
+import { timestamps } from "./audit.helper.js";
 
 export const vehicleTable = table("vehicles", {
   id: t
@@ -13,4 +14,5 @@ export const vehicleTable = table("vehicles", {
   vin: t.text(),
   color: t.text(),
   odometer: t.integer(),
+  ...timestamps,
 });

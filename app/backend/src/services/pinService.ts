@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import { AuthError } from "@exceptions/AuthError.js";
 import { Status } from "@exceptions/ServiceError.js";
-import * as schema from "@db/schema";
-import { db } from "@db";
+import * as schema from "@db/schema/index.js";
+import { db } from "@db/index.js";
 import { eq } from "drizzle-orm";
 
 export const setPin = async (pin: string) => {
@@ -19,9 +19,7 @@ export const setPin = async (pin: string) => {
       .where(eq(schema.authTable.id, 1));
     return { message: "PIN updated successfully." };
   } else {
-    await db
-      .insert(schema.authTable)
-      .values({ id: 1, hash: hash });
+    await db.insert(schema.authTable).values({ id: 1, hash: hash });
     return { message: "PIN set successfully." };
   }
 };
@@ -39,7 +37,7 @@ export const verifyPin = async (pin: string) => {
   } else {
     throw new AuthError(
       "Incorrect PIN provided. Please try again with correct PIN",
-      Status.UNAUTHORIZED,
+      Status.UNAUTHORIZED
     );
   }
 };

@@ -1,48 +1,24 @@
 import bcrypt from "bcrypt";
 import {
   authTable,
-  configTable,
   fuelLogTable,
   insuranceTable,
   maintenanceLogTable,
   pollutionCertificateTable,
   vehicleTable,
-} from "@db/schema";
-import { db } from "@db";
+} from "@db/schema/index.js";
+import { db } from "@db/index.js";
 import { faker } from "@faker-js/faker";
 import { configDotenv } from "dotenv";
 
 configDotenv();
 
 export const seedData = async () => {
-  await seedInitialConfig();
   const pinEnv = process.env.AUTH_PIN;
   const enforceEnv = process.env.FORCE_DEMO_SEED_DATA;
   const demoMode = process.env.PUBLIC_DEMO_MODE;
   if (pinEnv && pinEnv.trim().length == 6) await seedAuthPin(pinEnv);
-  if (demoMode) await seedDemoData(enforceEnv == "true");
-};
-
-const seedInitialConfig = async () => {
-  const configData = [
-    {
-      key: "dateFormat",
-      value: "MM/dd/yyyy",
-      description: "Format for displaying dates",
-    },
-    {
-      key: "currency",
-      value: "USD",
-      description: "Default currency for financial transactions",
-    },
-    {
-      key: "unitOfMeasure",
-      value: "metric",
-      description: "Unit of measure for distance and volume",
-    },
-  ];
-  await db.insert(configTable).values(configData).onConflictDoNothing().run();
-  console.log("Initial configuration seeded");
+  if (demoMode == "true") await seedDemoData(enforceEnv == "true");
 };
 
 const seedAuthPin = async (pin: string) => {
@@ -102,8 +78,8 @@ const seedDemoData = async (enforce: boolean = false) => {
         vehicleId: vehicle.id,
         provider: faker.company.name(),
         policyNumber: faker.string.numeric({ length: { min: 12, max: 18 } }),
-        startDate: faker.date.past({ years: 1 }),
-        endDate: faker.date.future({ years: 1 }),
+        startDate: faker.date.past({ years: 1 }).toDateString(),
+        endDate: faker.date.future({ years: 1 }).toDateString(),
         cost: faker.number.int({ min: 1000, max: 5000 }),
       })
       .run();
@@ -114,7 +90,7 @@ const seedDemoData = async (enforce: boolean = false) => {
       .insert(maintenanceLogTable)
       .values({
         vehicleId: vehicle.id,
-        date: faker.date.past({ years: 5 }),
+        date: faker.date.past({ years: 5 }).toDateString(),
         odometer: faker.number.int({ min: 100, max: 50000 }),
         serviceCenter: faker.company.name(),
         cost: faker.number.int({ min: 1000, max: 5000 }),
@@ -131,8 +107,8 @@ const seedDemoData = async (enforce: boolean = false) => {
           casing: "upper",
           length: 10,
         }),
-        issueDate: faker.date.past({ years: 1 }),
-        expiryDate: faker.date.future({ years: 1 }),
+        issueDate: faker.date.past({ years: 1 }).toDateString(),
+        expiryDate: faker.date.future({ years: 1 }).toDateString(),
         testingCenter: faker.company.name(),
       })
       .run();
@@ -143,7 +119,7 @@ const seedDemoData = async (enforce: boolean = false) => {
     for (let i = 0; i < 25; i++) {
       fuelLogs.push({
         vehicleId: vehicle.id,
-        date: faker.date.past({ years: 1 }),
+        date: faker.date.past({ years: 1 }).toDateString(),
         odometer: faker.number.int({
           min: vehicle.odometer!,
           max: vehicle.odometer! + 20000,

@@ -10,9 +10,10 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "moduleDetection": "force",
+    // "moduleDetection": "force",
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "nodenext",
+    "module": "nodenext",
     "noUncheckedIndexedAccess": true,
     "declaration": true,
     "paths": {

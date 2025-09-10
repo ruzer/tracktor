@@ -1,7 +1,7 @@
 import { Status } from "@exceptions/ServiceError.js";
 import { VehicleError } from "@exceptions/VehicleError.js";
-import * as schema from "@db/schema";
-import { db } from "@db";
+import * as schema from "@db/schema/index.js";
+import { db } from "@db/index.js";
 import { eq } from "drizzle-orm";
 
 export const addVehicle = async (vehicleData: any) => {
