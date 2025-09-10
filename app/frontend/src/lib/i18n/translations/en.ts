@@ -107,7 +107,7 @@ export default {
     placeholders: {
       date: 'Date',
       odometerReading: 'Odometer Reading',
-      fuelAmountLitres: 'Fuel Amount (Litres)',
+      fuelAmountLitres: 'Fuel Amount',
       costCurrency: 'Total Cost',
       totalCost: 'Total Cost of Refill',
       notes: 'Notes',

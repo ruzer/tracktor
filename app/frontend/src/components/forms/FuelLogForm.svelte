@@ -128,7 +128,7 @@
 			id="odometer"
 			type="number"
 			label={$t('forms.labels.odometer')}
-			placeholder={$t('forms.placeholders.odometerReading')}
+			placeholder={`${$t('forms.placeholders.odometerReading')} ( ${getDistanceUnit()} )`}
 			bind:value={refill.odometer}
 			icon={Gauge}
 			required={true}
@@ -140,7 +140,7 @@
 		<FormField
 			id="fuelAmount"
 			type="number"
-			placeholder={$t('forms.placeholders.fuelAmountLitres')}
+			placeholder={`${$t('forms.placeholders.fuelAmountLitres')} ( ${getVolumeUnit()} )`}
 			bind:value={refill.fuelAmount}
 			icon={Fuel}
 			label={$t('forms.labels.fuelAmount')}

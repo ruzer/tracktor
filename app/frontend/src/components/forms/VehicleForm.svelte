@@ -20,6 +20,7 @@
 	import { cleanup } from '$lib/utils/formatting';
 	import { t } from '$lib/stores/i18n';
 	import ColorPicker from '../common/ColorPicker.svelte';
+	import { getDistanceUnit } from '$lib/utils/formatting';
 
 	let { vehicleToEdit = null, editMode = false, modalVisibility = $bindable(), loading } = $props();
 
@@ -182,7 +183,7 @@
 	<FormField
 		id="odometer"
 		type="number"
-		placeholder={$t('forms.placeholders.odometerReading')}
+		placeholder={`${$t('forms.placeholders.odometerReading')} ( ${getDistanceUnit()} )`}
 		bind:value={vehicle.odometer}
 		icon={Gauge}
 		label={$t('forms.labels.odometer')}
