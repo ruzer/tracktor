@@ -16,13 +16,13 @@ export const addVehicle = async (vehicleData: any) => {
       // unset any current for safety (should be none on create)
       await db
         .update(schema.vehiclePlateTable)
-        .set({ isCurrent: 0 as any })
+        .set({ isCurrent: false })
         .where(eq(schema.vehiclePlateTable.vehicleId, inserted.id));
       await db.insert(schema.vehiclePlateTable).values({
         vehicleId: inserted.id,
         plate: vehicleData.licensePlate,
         issuedDate: new Date().toISOString().slice(0, 10),
-        isCurrent: 1 as any,
+        isCurrent: true,
       }).run();
     }
   } catch (e) {

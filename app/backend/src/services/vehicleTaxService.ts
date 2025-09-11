@@ -28,7 +28,9 @@ export const upsertTax = async (
 };
 
 export const markPaid = async (vehicleId: string, id: string, paidDate?: string) => {
-  await db.update(schema.vehicleTaxTable).set({ paid: 1 as any, paidDate: paidDate || new Date().toISOString().slice(0, 10) }).where(and(eq(schema.vehicleTaxTable.id, id), eq(schema.vehicleTaxTable.vehicleId, vehicleId)));
+  await db
+    .update(schema.vehicleTaxTable)
+    .set({ paid: true, paidDate: paidDate || new Date().toISOString().slice(0, 10) })
+    .where(and(eq(schema.vehicleTaxTable.id, id), eq(schema.vehicleTaxTable.vehicleId, vehicleId)));
   return { message: "Tax marked as paid" };
 };
-

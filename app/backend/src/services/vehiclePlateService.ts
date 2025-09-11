@@ -28,8 +28,13 @@ export const addPlate = async (
     // unset previous current
     await db
       .update(schema.vehiclePlateTable)
-      .set({ isCurrent: 0 })
-      .where(and(eq(schema.vehiclePlateTable.vehicleId, vehicleId), eq(schema.vehiclePlateTable.isCurrent, 1 as any)));
+      .set({ isCurrent: false })
+      .where(
+        and(
+          eq(schema.vehiclePlateTable.vehicleId, vehicleId),
+          eq(schema.vehiclePlateTable.isCurrent, true)
+        )
+      );
   }
 
   const inserted = await db
@@ -46,11 +51,16 @@ export const markCurrent = async (vehicleId: string, plateId: string) => {
   if (!plate) throw new VehicleError("Plate not found", Status.NOT_FOUND);
   await db
     .update(schema.vehiclePlateTable)
-    .set({ isCurrent: 0 })
-    .where(and(eq(schema.vehiclePlateTable.vehicleId, vehicleId), eq(schema.vehiclePlateTable.isCurrent, 1 as any)));
+    .set({ isCurrent: false })
+    .where(
+      and(
+        eq(schema.vehiclePlateTable.vehicleId, vehicleId),
+        eq(schema.vehiclePlateTable.isCurrent, true)
+      )
+    );
   await db
     .update(schema.vehiclePlateTable)
-    .set({ isCurrent: 1 })
+    .set({ isCurrent: true })
     .where(eq(schema.vehiclePlateTable.id, plateId));
   return { message: "Current plate updated" };
 };
@@ -66,8 +76,7 @@ export const retirePlate = async (
   if (!plate) throw new VehicleError("Plate not found", Status.NOT_FOUND);
   await db
     .update(schema.vehiclePlateTable)
-    .set({ retiredDate: data.retiredDate, reason: data.reason, isCurrent: 0 })
+    .set({ retiredDate: data.retiredDate, reason: data.reason, isCurrent: false })
     .where(eq(schema.vehiclePlateTable.id, plateId));
   return { message: "Plate retired" };
 };
-
