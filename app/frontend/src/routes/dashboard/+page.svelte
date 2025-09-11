@@ -12,6 +12,9 @@
 	import MaintenenceLogTab from '$components/tabs/MaintenenceLogTab.svelte';
 	import InsuranceTab from '$components/tabs/InsuranceTab.svelte';
 	import PollutionTab from '$components/tabs/PollutionTab.svelte';
+    import PlatesTab from '$components/tabs/PlatesTab.svelte';
+    import AssignmentsTab from '$components/tabs/AssignmentsTab.svelte';
+    import TaxesTab from '$components/tabs/TaxesTab.svelte';
 	import { vehicleModelStore, vehiclesStore } from '$lib/stores/vehicle';
 	import PollutionCertificateModal from '$components/modals/PollutionCertificateModal.svelte';
 	import InsuranceModal from '$components/modals/InsuranceModal.svelte';
@@ -94,6 +97,12 @@
 					<InsuranceTab vehicleId={selectedVehicleId} />
 				{:else if activeTab === 'pollution'}
 					<PollutionTab vehicleId={selectedVehicleId} />
+				{:else if activeTab === 'plates'}
+					<PlatesTab vehicleId={selectedVehicleId} />
+				{:else if activeTab === 'assignments'}
+					<AssignmentsTab vehicleId={selectedVehicleId} />
+				{:else if activeTab === 'taxes'}
+					<TaxesTab vehicleId={selectedVehicleId} />
 				{/if}
 			</div>
 		</div>

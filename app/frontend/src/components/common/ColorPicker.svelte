@@ -2,9 +2,9 @@
   import { createEventDispatcher } from 'svelte';
   import { t } from '$lib/stores/i18n';
 
-  // Usar $props() en lugar de export let para Svelte 5
-  const { value = '#000000', label = '', required = false } = $props<{
-    value?: string;
+  // Usar $props() en lugar de export let para Svelte 5 y permitir bind:value
+  let { value = $bindable(), label = '', required = false } = $props<{
+    value?: string | null;
     label?: string;
     required?: boolean;
   }>();
@@ -27,12 +27,12 @@
     { name: 'Dorado', hex: '#FFD700' }
   ];
 
-  let selectedColor = $state(value);
+  let selectedColor = $state(value || '#000000');
   let showAdvanced = $state(false);
   let hue = $state(0);
   let saturation = $state(100);
   let lightness = $state(50);
-  let manualHex = $state(value);
+  let manualHex = $state(value || '#000000');
 
   // Convertir hex a HSL
   function hexToHsl(hex: string): [number, number, number] {
@@ -105,6 +105,7 @@
     selectedColor = hex;
     manualHex = hex;
     [hue, saturation, lightness] = hexToHsl(hex);
+    value = hex; // update bind:value
     dispatch('change', hex);
   }
 
@@ -112,6 +113,7 @@
     const newColor = hslToHex(hue, saturation, lightness);
     selectedColor = newColor;
     manualHex = newColor;
+    value = newColor; // update bind:value
     dispatch('change', newColor);
   }
 
@@ -119,6 +121,7 @@
     if (/^#[0-9A-F]{6}$/i.test(manualHex)) {
       selectedColor = manualHex;
       [hue, saturation, lightness] = hexToHsl(manualHex);
+      value = manualHex; // update bind:value
       dispatch('change', manualHex);
     }
   }

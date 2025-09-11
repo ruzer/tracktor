@@ -127,7 +127,7 @@
 			icon={Building2}
 			label={$t('forms.labels.make')}
 			required={true}
-			ariaLabel="Vehicle Make"
+			ariaLabel={$t('forms.labels.make')}
 		/>
 		<FormField
 			id="model"
@@ -137,7 +137,7 @@
 			icon={Car}
 			label={$t('forms.labels.model')}
 			required={true}
-			ariaLabel="Vehicle Model"
+			ariaLabel={$t('forms.labels.model')}
 		/>
 	</div>
 	<div class="grid grid-flow-row grid-cols-2 gap-4">
@@ -149,12 +149,12 @@
 			icon={Calendar1}
 			label={$t('forms.labels.year')}
 			required={true}
-			ariaLabel="Vehicle Year"
+			ariaLabel={$t('forms.labels.year')}
 		/>
 		<!-- Reemplazar el FormField de color con: -->
 		<ColorPicker
 			bind:value={vehicle.color}
-			label={$t('forms.labels.color')}
+		label={$t('forms.labels.color')}
 			required
 			on:change={(e) => vehicle.color = e.detail}
 		/>
@@ -168,7 +168,7 @@
 		icon={IdCard}
 		label={$t('forms.labels.licensePlate')}
 		required={true}
-		ariaLabel="License Plate"
+		ariaLabel={$t('forms.labels.licensePlate')}
 	/>
 	<FormField
 		id="vin"
@@ -177,7 +177,7 @@
 		bind:value={vehicle.vin}
 		icon={Fingerprint}
 		label={$t('forms.labels.vinNumber')}
-		ariaLabel="VIN Number"
+		ariaLabel={$t('forms.labels.vinNumber')}
 	/>
 
 	<FormField
@@ -187,7 +187,7 @@
 		bind:value={vehicle.odometer}
 		icon={Gauge}
 		label={$t('forms.labels.odometer')}
-		ariaLabel="Odometer"
+		ariaLabel={$t('forms.labels.odometer')}
 	/>
 	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
 

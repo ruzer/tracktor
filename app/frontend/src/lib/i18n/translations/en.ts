@@ -18,14 +18,51 @@ export default {
     success: 'Success',
     confirm: 'Confirm',
     close: 'Close',
-    notAvailable: 'Not Available'
+    toggleDarkMode: 'Toggle dark mode',
+    notAvailable: 'Not Available',
+    yes: 'Yes',
+    no: 'No'
   },
   app: {
     title: 'Tracktor',
     validatingAuth: 'Validating Auth...',
     redirecting: 'Redirecting...',
     settings: 'Settings',
-    logout: 'Logout'
+    logout: 'Logout',
+    demoBanner: {
+      message: '⚠️ NOTICE: This is a demo instance. Data will be reset periodically and is not saved permanently. Please avoid adding any personal info.',
+      defaultPin: 'Default PIN : 123456'
+    }
+  },
+  errors: {
+    requiredVehicleId: 'Vehicle ID is required.',
+    networkError: 'Failed to connect to the server.',
+    fetchFailed: 'Failed to fetch data.',
+    fetchFuelLogsFailed: 'Failed to fetch fuel logs.',
+    fetchMaintenanceLogsFailed: 'Failed to fetch maintenance logs.',
+    fetchInsuranceFailed: 'Failed to fetch insurance data.',
+    fetchPollutionFailed: 'Failed to fetch pollution certificates.',
+    deleteFailed: 'Failed to delete.',
+    deleteFuelLogFailed: 'Failed to delete fuel log.',
+    deleteMaintenanceFailed: 'Failed to delete maintenance log.',
+    deleteInsuranceFailed: 'Failed to delete insurance details.',
+    deletePollutionFailed: 'Failed to delete pollution certificate.'
+  },
+  login: {
+    title: 'Welcome',
+    checkingPinStatus: 'Checking PIN status...',
+    enterPinPrompt: 'Enter your 6-digit PIN to access Tracktor',
+    success: {
+      pinVerified: 'PIN Verified Successfully'
+    },
+    errors: {
+      missingPinEnv: 'No PIN found. Please set `AUTH_PIN` environment variable before starting the app.',
+      checkStatusFailed: 'Failed to check PIN status.',
+      unknownServerError: 'Unknown server error occurred.',
+      connectionFailed: 'Failed to connect to the server. Please check your connection.',
+      invalidPin: 'Invalid PIN. Please try again.',
+      failedSetPin: 'Failed to set PIN.'
+    }
   },
   dashboard: {
     title: 'Your Vehicles',
@@ -35,7 +72,11 @@ export default {
     noDataAvailable: 'No data available for this vehicle.',
     vehicleTrends: 'Vehicle Trends',
     fuelCostOverTime: 'Fuel Cost Over Time',
-    mileageOverTime: 'Mileage Over Time'
+    mileageOverTime: 'Mileage Over Time',
+    datasets: {
+      totalFuelCost: 'Total Fuel Cost ({{currency}})',
+      mileage: 'Mileage ({{unit}})'
+    }
   },
   vehicle: {
     licensePlate: 'License Plate',
@@ -79,7 +120,10 @@ export default {
     fuelLogs: 'Fuel Logs',
     maintenance: 'Maintenance',
     insurance: 'Insurance',
-    pollution: 'Pollution Certificate'
+    pollution: 'Pollution Certificate',
+    plates: 'Plate History',
+    assignments: 'Assignments',
+    taxes: 'Taxes'
   },
   forms: {
     labels: {
@@ -88,6 +132,8 @@ export default {
       fuelAmount: 'Fuel Amount',
       cost: 'Cost',
       notes: 'Notes',
+      filled: 'Tank Filled?',
+      missedLast: 'Missed Last?',
       startDate: 'Start Date',
       endDate: 'End Date',
       testingCenter: 'Testing Center',
@@ -102,7 +148,29 @@ export default {
       year: 'Year',
       color: 'Color',
       licensePlate: 'License Plate',
-      vinNumber: 'VIN Number'
+      vinNumber: 'VIN Number',
+      plate: 'Plate',
+      retireDate: 'Retired Date',
+      reason: 'Reason',
+      current: 'Current',
+      retire: 'Retire',
+      assigneeName: 'Assignee Name',
+      assigneeRole: 'Assignee Role',
+      area: 'Area',
+      unit: 'Unit',
+      close: 'Close',
+      taxType: 'Tax Type',
+      amount: 'Amount',
+      paid: 'Paid',
+      paidDate: 'Paid Date',
+      receiptFolio: 'Receipt Folio',
+      markPaid: 'Mark Paid'
+    },
+    help: {
+      filled:
+        'Mark if this refill filled the tank to full. Mileage is computed only between two full-tank logs, summing any partial refills in between.',
+      missedLast:
+        'Mark if you missed logging the previous refill. This blocks using earlier logs for mileage until the next full-tank entry.'
     },
     placeholders: {
       date: 'Date',
@@ -131,6 +199,7 @@ export default {
       add: 'Add',
       update: 'Update'
     },
+    
     validation: {
       noVehicleSelected: 'No vehicle selected.',
       requiredFields: 'Date, Odometer, Fuel Amount, and Cost are required.',

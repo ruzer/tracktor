@@ -107,7 +107,7 @@
 			icon={Calendar1}
 			label={$t('forms.labels.date')}
 			required={true}
-			ariaLabel="Log Date"
+			ariaLabel={$t('forms.labels.date')}
 		/>
 		<FormField
 			id="odometer"
@@ -117,7 +117,7 @@
 			icon={Gauge}
 			label={$t('forms.labels.odometer')}
 			required={true}
-			ariaLabel="Odometer Reading"
+			ariaLabel={$t('forms.labels.odometer')}
 		/>
 	</div>
 	<div class="grid grid-flow-row grid-cols-2 gap-4">
@@ -129,7 +129,7 @@
 			icon={BadgeDollarSign}
 			label={$t('forms.labels.cost')}
 			required={true}
-			ariaLabel="Service Cost ( {getCurrencySymbol()} )"
+			ariaLabel={$t('forms.labels.cost')}
 		/>
 		<FormField
 			id="service"
@@ -139,7 +139,7 @@
 			icon={Hammer}
 			label={$t('forms.labels.serviceCenter')}
 			required={true}
-			ariaLabel="Service Description"
+			ariaLabel={$t('forms.labels.serviceCenter')}
 		/>
 	</div>
 	<FormField
@@ -150,7 +150,7 @@
 		icon={Notebook}
 		label={$t('forms.labels.notes')}
 		required={false}
-		ariaLabel="Additional Notes"
+		ariaLabel={$t('forms.labels.notes')}
 	/>
 	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
 </form>

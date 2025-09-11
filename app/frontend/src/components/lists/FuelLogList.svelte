@@ -29,17 +29,17 @@
 
 	let fuelLogs: FuelLog[] = $state([]);
 	let loading = $state(true);
-	let error = $state('');
+  let error = $state('');
 	let selectedFuelLog = $state<string>();
 	let deleteDialog = $state(false);
 
 	$effect(() => {
-		if (!vehicleId) {
-			error = 'Vehicle ID is required.';
-			loading = false;
-		} else {
-			fetchFuelLogs();
-		}
+    if (!vehicleId) {
+      error = $t('errors.requiredVehicleId');
+      loading = false;
+    } else {
+      fetchFuelLogs();
+    }
 	});
 
 	async function fetchFuelLogs() {
@@ -51,16 +51,16 @@
 					'X-User-PIN': localStorage.getItem('userPin') || ''
 				}
 			});
-			if (response.ok) {
-				fuelLogs = await response.json();
-			} else {
-				const data = await response.json();
-				error = data.message || 'Failed to fetch fuel logs.';
-			}
-		} catch (e) {
-			console.error('Failed to connect to the server.', e);
-			error = 'Failed to connect to the server.';
-		}
+    if (response.ok) {
+      fuelLogs = await response.json();
+    } else {
+      const data = await response.json();
+      error = data.message || $t('errors.fetchFuelLogsFailed');
+    }
+  } catch (e) {
+    console.error('Failed to connect to the server.', e);
+    error = $t('errors.networkError');
+  }
 		loading = false;
 	}
 
@@ -78,16 +78,16 @@
 					}
 				}
 			);
-			if (response.ok) {
-				fuelLogs = fuelLogs.filter((log) => log.id !== logId);
-			} else {
-				const data = await response.json();
-				error = data.message || 'Failed to delete fuel log.';
-			}
-		} catch (e) {
-			console.error('Failed to connect to the server.', e);
-			error = 'Failed to connect to the server.';
-		}
+    if (response.ok) {
+      fuelLogs = fuelLogs.filter((log) => log.id !== logId);
+    } else {
+      const data = await response.json();
+      error = data.message || $t('errors.deleteFuelLogFailed');
+    }
+  } catch (e) {
+    console.error('Failed to connect to the server.', e);
+    error = $t('errors.networkError');
+  }
 	}
 
 	onMount(() => {
@@ -100,7 +100,7 @@
 		<Jumper size="100" color="#155dfc" unit="px" duration="2s" />
 	</p>
 {:else if error}
-	<p class="text-red-500">Error: {error}</p>
+  <p class="text-red-500">{$t('common.error')}: {error}</p>
 {:else if fuelLogs.length === 0}
 	<p>{$t('modals.noFuelLogs')}</p>
 {:else}
@@ -142,8 +142,8 @@
 									selectedFuelLog = log.id;
 									deleteDialog = true;
 								}}
-								ariaLabel="Delete"
-							/>
+            ariaLabel={$t('common.delete')}
+          />
 						</td>
 					</tr>
 				{/each}

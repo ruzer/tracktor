@@ -5,6 +5,7 @@ import {
   insuranceTable,
   maintenanceLogTable,
   pollutionCertificateTable,
+  ownershipTypeTable,
   vehicleTable,
 } from "@db/schema/index.js";
 import { db } from "@db/index.js";
@@ -17,6 +18,8 @@ export const seedData = async () => {
   const pinEnv = process.env.AUTH_PIN;
   const enforceEnv = process.env.FORCE_DEMO_SEED_DATA;
   const demoMode = process.env.PUBLIC_DEMO_MODE;
+  // Seed configurable catalogues first (idempotent)
+  await seedOwnershipTypes();
   if (pinEnv && pinEnv.trim().length == 6) await seedAuthPin(pinEnv);
   if (demoMode == "true") await seedDemoData(enforceEnv == "true");
 };
@@ -29,6 +32,21 @@ const seedAuthPin = async (pin: string) => {
     .onConflictDoNothing()
     .run();
   console.log("Authentication PIN configured");
+};
+
+const seedOwnershipTypes = async () => {
+  try {
+    const defaults = [
+      { name: "Propio", active: true },
+      { name: "Arrendado", active: true },
+      { name: "Prestado", active: true },
+      { name: "Comodato", active: true },
+    ];
+    await db.insert(ownershipTypeTable).values(defaults).onConflictDoNothing().run();
+    console.log("Ownership types seeded (idempotent)");
+  } catch (e) {
+    console.error("Failed to seed ownership types:", e);
+  }
 };
 
 const seedDemoData = async (enforce: boolean = false) => {

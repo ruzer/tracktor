@@ -111,7 +111,7 @@
 		icon={IdCard}
 		label={$t('forms.labels.certificateNumber')}
 		required={true}
-		ariaLabel="Certificate Number"
+		ariaLabel={$t('forms.labels.certificateNumber')}
 	/>
 	<div class="grid grid-flow-row grid-cols-2 gap-4">
 		<FormField
@@ -122,7 +122,7 @@
 			icon={Calendar1}
 			label={$t('forms.labels.issueDate')}
 			required={true}
-			ariaLabel="Issue Date"
+			ariaLabel={$t('forms.labels.issueDate')}
 		/>
 		<FormField
 			id="expiry-date"
@@ -132,7 +132,7 @@
 			icon={Calendar1}
 			label={$t('forms.labels.expiryDate')}
 			required={true}
-			ariaLabel="Expiry Date"
+			ariaLabel={$t('forms.labels.expiryDate')}
 		/>
 	</div>
 	<FormField
@@ -143,7 +143,7 @@
 		icon={TestTube2}
 		label={$t('forms.labels.testingCenter')}
 		required={true}
-		ariaLabel="Testing Center"
+		ariaLabel={$t('forms.labels.testingCenter')}
 	/>
 	<FormField
 		id="notes"
@@ -153,7 +153,7 @@
 		icon={Notebook}
 		label={$t('forms.labels.notes')}
 		required={false}
-		ariaLabel="Notes"
+		ariaLabel={$t('forms.labels.notes')}
 	/>
 		<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
 </form>

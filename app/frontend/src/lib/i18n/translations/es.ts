@@ -18,14 +18,51 @@ export default {
     success: 'Éxito',
     confirm: 'Confirmar',
     close: 'Cerrar',
-    notAvailable: 'No Disponible'
+    toggleDarkMode: 'Cambiar modo oscuro',
+    notAvailable: 'No Disponible',
+    yes: 'Sí',
+    no: 'No'
   },
   app: {
     title: 'Tracktor',
     validatingAuth: 'Validando Autenticación...',
     redirecting: 'Redirigiendo...',
     settings: 'Configuraciones',
-    logout: 'Cerrar Sesión'
+    logout: 'Cerrar Sesión',
+    demoBanner: {
+      message: '⚠️ AVISO: Esta es una instancia de demostración. Los datos se restablecen periódicamente y no se guardan permanentemente. Por favor, evita ingresar información personal.',
+      defaultPin: 'PIN por defecto: 123456'
+    }
+  },
+  errors: {
+    requiredVehicleId: 'Se requiere el ID del vehículo.',
+    networkError: 'Error al conectar con el servidor.',
+    fetchFailed: 'Error al obtener datos.',
+    fetchFuelLogsFailed: 'Error al obtener registros de combustible.',
+    fetchMaintenanceLogsFailed: 'Error al obtener registros de mantenimiento.',
+    fetchInsuranceFailed: 'Error al obtener datos del seguro.',
+    fetchPollutionFailed: 'Error al obtener certificados de contaminación.',
+    deleteFailed: 'Error al eliminar.',
+    deleteFuelLogFailed: 'Error al eliminar el registro de combustible.',
+    deleteMaintenanceFailed: 'Error al eliminar el registro de mantenimiento.',
+    deleteInsuranceFailed: 'Error al eliminar los datos del seguro.',
+    deletePollutionFailed: 'Error al eliminar el certificado de contaminación.'
+  },
+  login: {
+    title: 'Bienvenido',
+    checkingPinStatus: 'Verificando estado del PIN...',
+    enterPinPrompt: 'Ingresa tu PIN de 6 dígitos para acceder a Tracktor',
+    success: {
+      pinVerified: 'PIN verificado correctamente'
+    },
+    errors: {
+      missingPinEnv: 'No se encontró PIN. Configura la variable de entorno `AUTH_PIN` antes de iniciar la app.',
+      checkStatusFailed: 'No se pudo verificar el estado del PIN.',
+      unknownServerError: 'Ocurrió un error de servidor desconocido.',
+      connectionFailed: 'No se pudo conectar al servidor. Verifica tu conexión.',
+      invalidPin: 'PIN inválido. Intenta de nuevo.',
+      failedSetPin: 'No se pudo establecer el PIN.'
+    }
   },
   dashboard: {
     title: 'Tus Vehículos',
@@ -35,7 +72,11 @@ export default {
     noDataAvailable: 'No hay datos disponibles para este vehículo.',
     vehicleTrends: 'Tendencias del Vehículo',
     fuelCostOverTime: 'Costo de Combustible en el Tiempo',
-    mileageOverTime: 'Kilometraje en el Tiempo'
+    mileageOverTime: 'Kilometraje en el Tiempo',
+    datasets: {
+      totalFuelCost: 'Costo total de combustible ({{currency}})',
+      mileage: 'Kilometraje ({{unit}})'
+    }
   },
   vehicle: {
     licensePlate: 'Placa',
@@ -79,7 +120,10 @@ export default {
     fuelLogs: 'Registros de Combustible',
     maintenance: 'Mantenimiento',
     insurance: 'Seguro',
-    pollution: 'Certificado de Contaminación'
+    pollution: 'Certificado de Contaminación',
+    plates: 'Historial de Placas',
+    assignments: 'Resguardo',
+    taxes: 'Impuestos'
   },
   forms: {
     labels: {
@@ -88,6 +132,8 @@ export default {
       fuelAmount: 'Cantidad de Combustible',
       cost: 'Costo',
       notes: 'Notas',
+      filled: '¿Tanque lleno?',
+      missedLast: '¿Se omitió la última?',
       startDate: 'Fecha de Inicio',
       endDate: 'Fecha de Fin',
       testingCenter: 'Centro de Pruebas',
@@ -102,7 +148,29 @@ export default {
       year: 'Año',
       color: 'Color',
       licensePlate: 'Placa',
-      vinNumber: 'Número VIN'
+      vinNumber: 'Número VIN',
+      plate: 'Placa',
+      retireDate: 'Fecha de Baja',
+      reason: 'Motivo',
+      current: 'Actual',
+      retire: 'Dar de baja',
+      assigneeName: 'Asignado a',
+      assigneeRole: 'Cargo',
+      area: 'Área',
+      unit: 'Unidad',
+      close: 'Cerrar',
+      taxType: 'Tipo de Impuesto',
+      amount: 'Monto',
+      paid: 'Pagado',
+      paidDate: 'Fecha de Pago',
+      receiptFolio: 'Folio de Recibo',
+      markPaid: 'Marcar Pagado'
+    },
+    help: {
+      filled:
+        'Marca si esta recarga fue con tanque lleno. El rendimiento se calcula solo entre dos registros de tanque lleno, sumando las recargas parciales intermedias.',
+      missedLast:
+        'Marca si olvidaste registrar la recarga anterior. Esto impide usar registros anteriores para el cálculo de rendimiento hasta el siguiente tanque lleno.'
     },
     placeholders: {
       date: 'Fecha',
