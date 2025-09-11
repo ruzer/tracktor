@@ -4,7 +4,8 @@
   import IconButton from './IconButton.svelte';
   import { t } from '$lib/stores/i18n';
 
-  const { onclose, children, title } = $props();
+  // accept optional loading and children for typed props
+  const { onclose, children, title, loading = false } = $props<{ onclose: () => void; title: string; loading?: boolean; children?: any }>();
 </script>
 
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
