@@ -71,3 +71,9 @@ Thumbs.db
 .kiro/
 temp/
 .codex-context.md
+
+# Project docs spreadsheets (not tracked)
+docs/PLANTILLA VEHICULAR DE 04 SETIEMBRE DE 2025.xlsx
+
+# Local-only storage (kept on your machine only)
+.local/
