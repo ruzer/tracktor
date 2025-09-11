@@ -9,7 +9,26 @@ export const addVehicle = async (vehicleData: any) => {
     .insert(schema.vehicleTable)
     .values(vehicleData)
     .returning();
-  return { id: vehicle[0]?.id, message: "Vehicle added successfully." };
+  const inserted = vehicle[0];
+  // Add initial plate to history as current
+  try {
+    if (inserted?.id && vehicleData?.licensePlate) {
+      // unset any current for safety (should be none on create)
+      await db
+        .update(schema.vehiclePlateTable)
+        .set({ isCurrent: 0 as any })
+        .where(eq(schema.vehiclePlateTable.vehicleId, inserted.id));
+      await db.insert(schema.vehiclePlateTable).values({
+        vehicleId: inserted.id,
+        plate: vehicleData.licensePlate,
+        issuedDate: new Date().toISOString().slice(0, 10),
+        isCurrent: 1 as any,
+      }).run();
+    }
+  } catch (e) {
+    console.error('Failed to add initial plate history for vehicle', inserted?.id, e);
+  }
+  return { id: inserted?.id, message: "Vehicle added successfully." };
 };
 
 export const getAllVehicles = async () => {

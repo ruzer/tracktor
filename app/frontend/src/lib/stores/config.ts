@@ -13,16 +13,17 @@ const createConfigStore = () => {
 	async function fetchConfig() {
 		if (browser) {
 			try {
-				const response = await fetch(getApiUrl('/api/config'), {
-					headers: {
-						'X-User-PIN': localStorage.getItem('userPin') || ''
-					}
-				});
+				const url = getApiUrl('/api/config');
+				console.debug('[config] Fetching:', url);
+				const headers: Record<string, string> = {};
+				const pin = localStorage.getItem('userPin');
+				if (pin) headers['X-User-PIN'] = pin;
+				const response = await fetch(url, { headers });
 				if (response.ok) {
 					const data: Config[] = await response.json();
 					set(data);
 				} else {
-					console.error('Failed to fetch config');
+					console.error('Failed to fetch config:', response.status, response.statusText);
 				}
 			} catch (error) {
 				console.error('Error fetching config:', error);
@@ -33,12 +34,14 @@ const createConfigStore = () => {
 	async function updateConfig(configs: Config[]) {
 		if (browser) {
 			try {
+				const headers: Record<string, string> = {
+					'Content-Type': 'application/json',
+				};
+				const pin = localStorage.getItem('userPin');
+				if (pin) headers['X-User-PIN'] = pin;
 				const response = await fetch(getApiUrl('/api/config'), {
 					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json',
-						'X-User-PIN': localStorage.getItem('userPin') || ''
-					},
+					headers,
 					body: JSON.stringify(configs)
 				});
 				if (response.ok) {

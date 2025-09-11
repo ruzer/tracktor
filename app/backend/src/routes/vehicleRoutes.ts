@@ -13,6 +13,9 @@ import fuelLogLPRoutes from "./fuelLogLPRoutes.js";
 import insuranceRoutes from "./insuranceRoutes.js";
 import maintenanceLogRoutes from "./maintenanceLogRoutes.js";
 import puccRoutes from "./puccRoutes.js";
+import vehiclePlateRoutes from "./vehiclePlateRoutes.js";
+import vehicleAssignmentRoutes from "./vehicleAssignmentRoutes.js";
+import vehicleTaxRoutes from "./vehicleTaxRoutes.js";
 
 const router = Router();
 
@@ -27,5 +30,8 @@ router.use("/lp/:licensePlate/fuel-logs", fuelLogLPRoutes);
 router.use("/:vehicleId/insurance", insuranceRoutes);
 router.use("/:vehicleId/maintenance-logs", maintenanceLogRoutes);
 router.use("/:vehicleId/pucc", puccRoutes);
+router.use("/:vehicleId/plates", vehiclePlateRoutes);
+router.use("/:vehicleId/assignments", vehicleAssignmentRoutes);
+router.use("/:vehicleId/taxes", vehicleTaxRoutes);
 
 export default router;

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/stores/i18n';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
@@ -27,12 +28,12 @@
 	let deleteDialog = $state(false);
 
 	$effect(() => {
-		if (!vehicleId) {
-			error = 'Vehicle ID is required.';
-			loading = false;
-		} else {
-			fetchMaintenanceLogs();
-		}
+    if (!vehicleId) {
+      error = $t('errors.requiredVehicleId');
+      loading = false;
+    } else {
+      fetchMaintenanceLogs();
+    }
 	});
 
 	async function fetchMaintenanceLogs() {
@@ -51,16 +52,16 @@
 			if (response.ok) {
 				const data = await response.json();
 				maintenanceLogs = data;
-			} else {
-				error = 'Failed to fetch maintenance logs.';
-			}
-		} catch (e) {
-			console.error(e);
-			error = 'Network error. Please try again.';
-		} finally {
-			loading = false;
-		}
-	}
+      } else {
+        error = $t('errors.fetchMaintenanceLogsFailed');
+      }
+    } catch (e) {
+      console.error(e);
+      error = $t('errors.networkError');
+    } finally {
+      loading = false;
+    }
+  }
 
 	async function deleteMaintenenceLog(logId: string | undefined) {
 		if (!logId) {
@@ -78,15 +79,15 @@
 			);
 			if (response.ok) {
 				await fetchMaintenanceLogs();
-			} else {
-				const data = await response.json();
-				error = data.message || 'Failed to delete maintenance log.';
-			}
-		} catch (e) {
-			console.error(e);
-			error = 'Network error. Failed to delete maintenance log.';
-		}
-	}
+      } else {
+        const data = await response.json();
+        error = data.message || $t('errors.deleteMaintenanceFailed');
+      }
+    } catch (e) {
+      console.error(e);
+      error = $t('errors.networkError');
+    }
+  }
 
 	onMount(() => {
 		fetchMaintenanceLogs();
@@ -98,25 +99,20 @@
 		<Jumper size="100" color="#155dfc" unit="px" duration="2s" />
 	</p>
 {:else if error}
-	<p class="text-red-500">Error: {error}</p>
+  <p class="text-red-500">{$t('common.error')}: {error}</p>
 {:else if maintenanceLogs.length === 0}
-	<div>No maintenance logs for this vehicle.</div>
+	<div>{$t('modals.noMaintenanceLogs')}</div>
 {:else}
 	<div class="overflow-x-auto">
 		<table class="min-w-full overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">
 			<thead class="bg-gray-200 dark:bg-gray-700">
 				<tr>
-					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">Date</th>
-					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
-						>Odometer</th
-					>
-					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
-						>Service Center</th
-					>
-					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">Cost</th>
-					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">Notes</th>
-					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">Actions</th
-					>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('table.headers.date')}</th>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('table.headers.odometer')}</th>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('forms.labels.serviceCenter')}</th>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('table.headers.cost')}</th>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('table.headers.notes')}</th>
+        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('table.headers.actions')}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -138,8 +134,8 @@
 									selectedMaintenanceLog = log.id;
 									deleteDialog = true;
 								}}
-								ariaLabel="Delete"
-							/>
+            ariaLabel={$t('common.delete')}
+          />
 						</td>
 					</tr>
 				{/each}

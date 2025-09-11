@@ -21,6 +21,7 @@
 		CircleSlash,
 		ArrowBigLeftDash
 	} from '@lucide/svelte';
+	import { t } from '$lib/stores/i18n';
 
 	let {
 		vehicleId,
@@ -51,16 +52,16 @@
 	});
 
 	async function persistLog() {
-		if (!vehicleId) {
-			status = {
-				message: 'No vehicle selected.',
-				type: 'ERROR'
-			};
-			return;
-		}
+    if (!vehicleId) {
+      status = {
+        message: $t('forms.validation.noVehicleSelected'),
+        type: 'ERROR'
+      };
+      return;
+    }
 		if (!refill.date || !refill.odometer || !refill.fuelAmount || !refill.cost) {
 			status = {
-				message: 'Date, Odometer, Fuel Amount, and Cost are required.',
+				message: $t('forms.validation.requiredFields'),
 				type: 'ERROR'
 			};
 			return;
@@ -79,7 +80,7 @@
 			);
 			if (response.ok) {
 				status = {
-					message: `Fuel refill log ${editMode ? 'updated' : 'added'} successfully!`,
+					message: editMode ? $t('forms.success.fuelLogUpdated') : $t('forms.success.fuelLogAdded'),
 					type: 'SUCCESS'
 				};
 				Object.assign(refill, {
@@ -98,7 +99,7 @@
 		} catch (e) {
 			console.error(e);
 			status = {
-				message: 'Failed to connect to the server.',
+				message: $t('forms.errors.connectionFailed'),
 				type: 'ERROR'
 			};
 		} finally {
@@ -116,22 +117,22 @@
 		<FormField
 			id="date"
 			type="date"
-			placeholder="Date"
+			placeholder={$t('forms.placeholders.date')}
 			bind:value={refill.date}
 			icon={Calendar1}
 			required={true}
-			label="Date"
-			ariaLabel="Refill Date"
+				label={$t('forms.labels.date')}
+				ariaLabel={$t('forms.labels.date')}
 		/>
 		<FormField
 			id="odometer"
 			type="number"
-			label="Odometer"
-			placeholder={`Odometer Reading (${getDistanceUnit()})`}
+			label={$t('forms.labels.odometer')}
+			placeholder={`${$t('forms.placeholders.odometerReading')} ( ${getDistanceUnit()} )`}
 			bind:value={refill.odometer}
 			icon={Gauge}
 			required={true}
-			ariaLabel="Odometer Reading"
+				ariaLabel={$t('forms.labels.odometer')}
 			inputClass="step-0.01"
 		/>
 	</div>
@@ -139,23 +140,22 @@
 		<FormField
 			id="fuelAmount"
 			type="number"
-			placeholder={`Fuel Amount (${getVolumeUnit()})`}
+			placeholder={`${$t('forms.placeholders.fuelAmountLitres')} ( ${getVolumeUnit()} )`}
 			bind:value={refill.fuelAmount}
 			icon={Fuel}
-			label="Fuel Amount"
-			required={true}
-			ariaLabel="Fuel Amount"
+				label={$t('forms.labels.fuelAmount')}
+				ariaLabel={$t('forms.labels.fuelAmount')}
 			inputClass="step-0.01"
 		/>
 		<FormField
 			id="cost"
 			type="number"
-			placeholder={`Cost (${getCurrencySymbol()})`}
+			placeholder={`${$t('forms.placeholders.totalCost')} ( ${getCurrencySymbol()} )`}
 			bind:value={refill.cost}
 			icon={BadgeDollarSign}
-			label="Cost"
-			required={true}
-			ariaLabel="Fuel Cost"
+				label={$t('forms.labels.cost')}
+				required={true}
+				ariaLabel={$t('forms.labels.cost')}
 			inputClass="step-0.01"
 		/>
 	</div>
@@ -165,27 +165,29 @@
 			id="filled"
 			bind:checked={refill.filled}
 			icon={CircleSlash}
-			label="Tank Filled?"
-			ariaLabel="Tank Filled"
+			label={$t('forms.labels.filled')}
+			help={$t('forms.help.filled')}
+			ariaLabel={$t('forms.labels.filled')}
 		/>
 		<Checkbox
 			id="missedLast"
 			bind:checked={refill.missedLast}
 			icon={ArrowBigLeftDash}
-			label="Missed Last?"
-			ariaLabel="Previous Fuel Log Missed"
+			label={$t('forms.labels.missedLast')}
+			help={$t('forms.help.missedLast')}
+			ariaLabel={$t('forms.labels.missedLast')}
 		/>
 	</div>
 
 	<FormField
 		id="notes"
 		type="text"
-		placeholder="Notes"
+		placeholder={$t('forms.placeholders.notes')}
 		bind:value={refill.notes}
 		icon={FileText}
-		label="Notes"
-		ariaLabel="Notes"
+			label={$t('forms.labels.notes')}
+			ariaLabel={$t('forms.labels.notes')}
 	/>
-	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} {loading} />
+	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
 </form>
 <StatusBlock message={status.message} type={status.type} />

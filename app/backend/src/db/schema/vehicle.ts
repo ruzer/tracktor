@@ -14,5 +14,8 @@ export const vehicleTable = table("vehicles", {
   vin: t.text(),
   color: t.text(),
   odometer: t.integer(),
+  // Ownership linkage (configurable type) and owner reference
+  ownershipTypeId: t.text(),
+  ownerName: t.text(),
   ...timestamps,
 });

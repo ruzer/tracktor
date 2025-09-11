@@ -7,6 +7,7 @@
 	import type { Status } from '$lib/models/status';
 	import { cleanup, getCurrencySymbol, getDistanceUnit } from '$lib/utils/formatting';
 	import { BadgeDollarSign, Calendar1, Gauge, Hammer, Notebook } from '@lucide/svelte';
+	import { t } from '$lib/stores/i18n';
 
 	let {
 		vehicleId,
@@ -39,7 +40,7 @@
 	async function persistLog() {
 		if (!log.date || !log.odometer || !log.serviceCenter || log.cost === null) {
 			status = {
-				message: 'Date, Odometer, Service Center, and Cost are required.',
+				message: $t('forms.validation.maintenanceRequired'),
 				type: 'ERROR'
 			};
 			return;
@@ -60,7 +61,7 @@
 
 			if (response.ok) {
 				status = {
-					message: `Maintenance log  ${editMode ? 'updated' : 'added'} successfully!`,
+					message: editMode ? $t('forms.success.maintenanceUpdated') : $t('forms.success.maintenanceAdded'),
 					type: 'SUCCESS'
 				};
 				Object.assign(log, {
@@ -78,7 +79,7 @@
 		} catch (e) {
 			console.error(e);
 			status = {
-				message: 'Failed to connect to the server.',
+				message: $t('forms.errors.connectionFailed'),
 				type: 'ERROR'
 			};
 		}
@@ -101,56 +102,56 @@
 		<FormField
 			id="date"
 			type="date"
-			placeholder="Date"
+			placeholder={$t('forms.placeholders.date')}
 			bind:value={log.date}
 			icon={Calendar1}
-			label="Date"
+			label={$t('forms.labels.date')}
 			required={true}
-			ariaLabel="Log Date"
+			ariaLabel={$t('forms.labels.date')}
 		/>
 		<FormField
 			id="odometer"
 			type="number"
-			placeholder="Odometer ( {getDistanceUnit()} )"
+			placeholder="{$t('forms.placeholders.odometerReading')} ( {getDistanceUnit()} )"
 			bind:value={log.odometer}
 			icon={Gauge}
-			label="Odometer"
+			label={$t('forms.labels.odometer')}
 			required={true}
-			ariaLabel="Odometer Reading"
+			ariaLabel={$t('forms.labels.odometer')}
 		/>
 	</div>
 	<div class="grid grid-flow-row grid-cols-2 gap-4">
 		<FormField
 			id="cost"
 			type="number"
-			placeholder="Cost ( {getCurrencySymbol()} )"
+			placeholder="{$t('forms.placeholders.costCurrency')} ( {getCurrencySymbol()} )"
 			bind:value={log.cost}
 			icon={BadgeDollarSign}
-			label="Cost"
+			label={$t('forms.labels.cost')}
 			required={true}
-			ariaLabel="Service Cost ( {getCurrencySymbol()} )"
+			ariaLabel={$t('forms.labels.cost')}
 		/>
 		<FormField
 			id="service"
 			type="text"
-			placeholder="Service Center"
+			placeholder={$t('forms.placeholders.serviceCenter')}
 			bind:value={log.serviceCenter}
 			icon={Hammer}
-			label="Service Center"
+			label={$t('forms.labels.serviceCenter')}
 			required={true}
-			ariaLabel="Service Description"
+			ariaLabel={$t('forms.labels.serviceCenter')}
 		/>
 	</div>
 	<FormField
 		id="notes"
 		type="text"
-		placeholder="Notes"
+		placeholder={$t('forms.placeholders.notes')}
 		bind:value={log.notes}
 		icon={Notebook}
-		label="Notes"
+		label={$t('forms.labels.notes')}
 		required={false}
-		ariaLabel="Additional Notes"
+		ariaLabel={$t('forms.labels.notes')}
 	/>
-	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} {loading} />
+	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
 </form>
 <StatusBlock message={status.message} type={status.type} />

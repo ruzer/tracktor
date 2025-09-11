@@ -12,12 +12,16 @@
 	import MaintenenceLogTab from '$components/tabs/MaintenenceLogTab.svelte';
 	import InsuranceTab from '$components/tabs/InsuranceTab.svelte';
 	import PollutionTab from '$components/tabs/PollutionTab.svelte';
+    import PlatesTab from '$components/tabs/PlatesTab.svelte';
+    import AssignmentsTab from '$components/tabs/AssignmentsTab.svelte';
+    import TaxesTab from '$components/tabs/TaxesTab.svelte';
 	import { vehicleModelStore, vehiclesStore } from '$lib/stores/vehicle';
 	import PollutionCertificateModal from '$components/modals/PollutionCertificateModal.svelte';
 	import InsuranceModal from '$components/modals/InsuranceModal.svelte';
 	import { browser } from '$app/environment';
 	import ConfigModal from '$components/modals/ConfigModal.svelte';
 	import Button from '$components/common/Button.svelte';
+	import { t } from '$lib/stores/i18n';
 
 	let vehicles = $state<Vehicle[]>([]);
 	let loading = $state(true);
@@ -57,11 +61,11 @@
 
 <div class="container mx-auto bg-gray-100 p-6 transition-colors dark:bg-gray-900">
 	<div class="mb-8 flex items-center justify-between">
-		<h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">Your Vehicles</h1>
+		<h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">{$t('dashboard.title')}</h1>
 		<Button
 			type="button"
 			variant="hero"
-			text="Add Vehicle"
+			text={$t('dashboard.addVehicle')}
 			icon={PlusCircle}
 			onclick={() => vehicleModelStore.show()}
 		/>
@@ -69,10 +73,10 @@
 	{#if loading}
 		<p class="flex items-center justify-center gap-5 text-lg text-gray-500 dark:text-gray-400">
 			<Jumper size="40" color="#155dfc" unit="px" duration="2s" />
-			Loading Vehicles...
+			{$t('dashboard.loadingVehicles')}
 		</p>
 	{:else if error}
-		<p class="text-lg text-red-500 dark:text-red-400">Error: {error}</p>
+		<p class="text-lg text-red-500 dark:text-red-400">{$t('common.error')}: {error}</p>
 	{:else}
 		<VehicleList {vehicles} {selectedVehicleId} {updateCallback} />
 	{/if}
@@ -93,13 +97,19 @@
 					<InsuranceTab vehicleId={selectedVehicleId} />
 				{:else if activeTab === 'pollution'}
 					<PollutionTab vehicleId={selectedVehicleId} />
+				{:else if activeTab === 'plates'}
+					<PlatesTab vehicleId={selectedVehicleId} />
+				{:else if activeTab === 'assignments'}
+					<AssignmentsTab vehicleId={selectedVehicleId} />
+				{:else if activeTab === 'taxes'}
+					<TaxesTab vehicleId={selectedVehicleId} />
 				{/if}
 			</div>
 		</div>
 	{:else if vehicles.length > 0 && !loading}
 		<div class="py-12 text-center">
 			<p class="text-lg text-gray-500 dark:text-gray-400">
-				Select a vehicle to view fuel and mileage data.
+				{$t('dashboard.selectVehicle')}
 			</p>
 		</div>
 	{/if}

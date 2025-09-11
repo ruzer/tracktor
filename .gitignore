@@ -1,15 +1,14 @@
+# Python
 .ropeproject
+
+# Dependencies
 node_modules
 
-# Environment files
-.env
-.env.local
-.env.*.local
+# Scripts
+scripts
 
-# Build outputs
-dist/
-build/
-.svelte-kit/
+# Backup/Support directories
+Sp_Support/
 
 # Logs
 logs
@@ -18,10 +17,37 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
 # Database
+vehicles.db
 *.db
 *.sqlite
 *.sqlite3
+
+# Build outputs
+dist/
+build/
+.output/
+
+# SvelteKit
+.svelte-kit/
+
+# VitePress
+.vitepress/cache/
+.vitepress/dist/
 
 # OS generated files
 .DS_Store
@@ -32,6 +58,22 @@ yarn-error.log*
 ehthumbs.db
 Thumbs.db
 
-.kiro/
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
 
+# Temporary files
+*.tmp
+*.temp
+.kiro/
 temp/
+.codex-context.md
+
+# Project docs spreadsheets (not tracked)
+docs/PLANTILLA VEHICULAR DE 04 SETIEMBRE DE 2025.xlsx
+
+# Local-only storage (kept on your machine only)
+.local/

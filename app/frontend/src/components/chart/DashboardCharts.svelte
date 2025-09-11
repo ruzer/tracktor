@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/stores/i18n';
 	import { env } from '$env/dynamic/public';
 	import { darkModeStore } from '$lib/stores/dark-mode';
 	import { Chart, registerables, type ChartOptions } from 'chart.js';
@@ -68,16 +69,16 @@
 				}
 				const mileageDataPoints = data.map((log: any) => log.mileage);
 
-				fuelCostData = {
-					labels,
-					datasets: [
-						{
-							label: `Total Fuel Cost (${getCurrencySymbol()})`,
-							data: costData,
-							fill: true,
-							borderColor: 'rgb(75, 192, 192)',
-							tension: 0.3,
-							borderWidth: 2,
+        fuelCostData = {
+          labels,
+          datasets: [
+            {
+              label: $t('dashboard.datasets.totalFuelCost', { currency: getCurrencySymbol() }),
+              data: costData,
+              fill: true,
+              borderColor: 'rgb(75, 192, 192)',
+              tension: 0.3,
+              borderWidth: 2,
 							borderCapStyle: 'round',
 							pointStyle: 'circle',
 							pointRadius: 2
@@ -85,16 +86,16 @@
 					]
 				};
 
-				mileageData = {
-					labels,
-					datasets: [
-						{
-							label: `Mileage (${getMileageUnit()})`,
-							data: mileageDataPoints,
-							borderColor: 'rgb(255, 99, 132)',
-							fill: true,
-							tension: 0.3,
-							borderWidth: 2,
+        mileageData = {
+          labels,
+          datasets: [
+            {
+              label: $t('dashboard.datasets.mileage', { unit: getMileageUnit() }),
+              data: mileageDataPoints,
+              borderColor: 'rgb(255, 99, 132)',
+              fill: true,
+              tension: 0.3,
+              borderWidth: 2,
 							borderCapStyle: 'round',
 							pointStyle: 'circle',
 							pointRadius: 2
@@ -122,20 +123,20 @@
 		<Jumper size="100" color="#155dfc" unit="px" duration="2s" />
 	</p>
 {:else if error}
-	<p class="text-red-500">Error: {error}</p>
+  <p class="text-red-500">{$t('common.error')}: {error}</p>
 {:else if fuelCostData?.datasets?.length === 0 && mileageData?.datasets?.length === 0}
-	<p>No fuel or mileage data available for this vehicle.</p>
+	<p>{$t('dashboard.noDataAvailable')}</p>
 {:else}
 	<div class="overflow-x-auto">
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
 			<ChartCard
-				title="Fuel Cost Over Time"
+				title={$t('dashboard.fuelCostOverTime')}
 				chartData={fuelCostData}
 				ChartComponent={Line}
 				options={chartOptions}
 			/>
 			<ChartCard
-				title="Mileage Over Time"
+				title={$t('dashboard.mileageOverTime')}
 				chartData={mileageData}
 				ChartComponent={Line}
 				options={chartOptions}

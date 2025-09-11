@@ -6,7 +6,8 @@
 	import { handleApiError } from '$lib/models/Error';
 	import type { Status } from '$lib/models/status';
 	import { cleanup } from '$lib/utils/formatting';
-	import { Calendar1, IdCard, Notebook, TestTube2 } from '@lucide/svelte';
+	import { Calendar1, IdCard, Notebook, TestTube, TestTube2 } from '@lucide/svelte';
+	import { t } from '$lib/stores/i18n';
 
 	let {
 		vehicleId,
@@ -44,7 +45,7 @@
 			!certificate.testingCenter
 		) {
 			status = {
-				message: 'Certificate Number, Issue Date, Expiry Date, Testing Center are required.',
+				message: $t('forms.validation.pollutionRequired'),
 				type: 'ERROR'
 			};
 			return;
@@ -65,7 +66,7 @@
 
 			if (response.ok) {
 				status = {
-					message: `Pollution Certificate ${editMode ? 'updated' : 'added'} successfully!`,
+					message: editMode ? $t('forms.success.pollutionUpdated') : $t('forms.success.pollutionAdded'),
 					type: 'SUCCESS'
 				};
 				Object.assign(certificate, {
@@ -83,7 +84,7 @@
 		} catch (e) {
 			console.error(e);
 			status = {
-				message: 'Failed to connect to the server.',
+				message: $t('forms.errors.connectionFailed'),
 				type: 'ERROR'
 			};
 		}
@@ -105,55 +106,55 @@
 	<FormField
 		id="certificate-number"
 		type="text"
-		placeholder="Certificate Number"
+		placeholder={$t('forms.placeholders.certificateNumber')}
 		bind:value={certificate.certificateNumber}
 		icon={IdCard}
-		label="Certificate Number"
+		label={$t('forms.labels.certificateNumber')}
 		required={true}
-		ariaLabel="Certificate Number"
+		ariaLabel={$t('forms.labels.certificateNumber')}
 	/>
 	<div class="grid grid-flow-row grid-cols-2 gap-4">
 		<FormField
 			id="issue-date"
 			type="date"
-			placeholder="Issue Date"
+			placeholder={$t('forms.placeholders.issueDate')}
 			bind:value={certificate.issueDate}
 			icon={Calendar1}
-			label="Issue Date"
+			label={$t('forms.labels.issueDate')}
 			required={true}
-			ariaLabel="Issue Date"
+			ariaLabel={$t('forms.labels.issueDate')}
 		/>
 		<FormField
 			id="expiry-date"
 			type="date"
-			placeholder="Expiry Date"
+			placeholder={$t('forms.placeholders.expiryDate')}
 			bind:value={certificate.expiryDate}
 			icon={Calendar1}
-			label="Expiry date"
+			label={$t('forms.labels.expiryDate')}
 			required={true}
-			ariaLabel="Expiry Date"
+			ariaLabel={$t('forms.labels.expiryDate')}
 		/>
 	</div>
 	<FormField
 		id="testing-center"
 		type="text"
-		placeholder="Testing Center"
+		placeholder={$t('forms.placeholders.testingCenter')}
 		bind:value={certificate.testingCenter}
 		icon={TestTube2}
-		label="Testing Center"
+		label={$t('forms.labels.testingCenter')}
 		required={true}
-		ariaLabel="Testing Center"
+		ariaLabel={$t('forms.labels.testingCenter')}
 	/>
 	<FormField
 		id="notes"
 		type="text"
-		placeholder="Notes"
+		placeholder={$t('forms.placeholders.notes')}
 		bind:value={certificate.notes}
 		icon={Notebook}
-		label="Notes"
+		label={$t('forms.labels.notes')}
 		required={false}
-		ariaLabel="Notes"
+		ariaLabel={$t('forms.labels.notes')}
 	/>
-	<Button type="submit" variant="primary" text={editMode ? 'Update' : 'Add'} {loading} />
+		<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
 </form>
 <StatusBlock message={status.message} type={status.type} />

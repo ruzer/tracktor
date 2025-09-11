@@ -9,6 +9,7 @@
 	import { simulateNetworkDelay } from '$lib/utils/dev';
 	import StatusBlock from '$components/common/StatusBlock.svelte';
 	import type { Status } from '$lib/models/status';
+  import { t } from '$lib/stores/i18n';
 
 	let loading = $state(false);
 	let status = $state<Status>({
@@ -22,27 +23,29 @@
 		if (browser) {
 			async function checkPinStatus() {
 				try {
-					const response = await fetch(getApiUrl('/api/pin/status'));
+					const pinStatusUrl = getApiUrl('/api/pin/status');
+					console.debug('[login] GET /api/pin/status ->', pinStatusUrl);
+					const response = await fetch(pinStatusUrl);
 					if (response.ok) {
 						const data = await response.json();
 						pinExists = data.exists;
 						if (!pinExists) {
 							status = {
-								message:
-									'No PIN found. Please set `AUTH_PIN` environment variable before starting the app.',
+								message: $t('login.errors.missingPinEnv'),
 								type: 'ERROR'
 							};
 						}
 					} else {
+						console.error('[login] PIN status failed', response.status, response.statusText);
 						status = {
-							message: 'Failed to check PIN status.',
+							message: $t('login.errors.checkStatusFailed'),
 							type: 'ERROR'
 						};
 					}
 				} catch (e) {
-					console.error(e);
+					console.error('[login] PIN status error', e);
 					status = {
-						message: 'Unknown Server Error Occurred.',
+						message: $t('login.errors.unknownServerError'),
 						type: 'ERROR'
 					};
 				} finally {
@@ -67,7 +70,7 @@
 		} catch (e) {
 			console.error(e);
 			status = {
-				message: 'Failed to connect to the server. Please check your connection.',
+				message: $t('forms.errors.connectionFailed'),
 				type: 'ERROR'
 			};
 		} finally {
@@ -77,7 +80,9 @@
 
 	const endpointCall = async (pin: string, verify = true) => {
 		const endpoint = verify ? '/api/pin/verify' : '/api/pin';
-		const response = await fetch(getApiUrl(endpoint), {
+		const url = getApiUrl(endpoint);
+		console.debug('[login] POST', endpoint, '->', url);
+		const response = await fetch(url, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -92,16 +97,16 @@
 			}
 			loading = false;
 			status = {
-				message: 'PIN Verified Successfully',
+				message: $t('login.success.pinVerified'),
 				type: 'SUCCESS'
 			};
 			await simulateNetworkDelay(1000);
 			goto('/dashboard', { replaceState: true });
 		} else {
+			console.error('[login] PIN endpoint failed', response.status, response.statusText);
 			const data = await response.json();
 			status = {
-				message:
-					data.message || (pinExists ? 'Invalid PIN. Please try again.' : 'Failed to set PIN.'),
+				message: data.message || (pinExists ? $t('login.errors.invalidPin') : $t('login.errors.failedSetPin')),
 				type: 'ERROR'
 			};
 		}
@@ -121,18 +126,18 @@
 			<h1
 				class="flex items-center justify-center gap-5 text-center text-3xl font-bold text-gray-800 dark:text-gray-100"
 			>
-				<Tractor class="h-10 w-10"></Tractor> Welcome
+				<Tractor class="h-10 w-10"></Tractor> {$t('login.title')}
 			</h1>
 		</div>
 
 		{#if checkingPinStatus}
-			<p class="mb-6 text-center text-gray-600 dark:text-gray-300">Checking PIN status...</p>
+			<p class="mb-6 text-center text-gray-600 dark:text-gray-300">{$t('login.checkingPinStatus')}</p>
 		{:else if pinExists}
 			<p
 				class="mb-6 flex items-center justify-center gap-2 text-center text-gray-600 dark:text-gray-300"
 			>
 				<ShieldEllipsis class="h-8 w-8" />
-				Enter your 6-digit PIN to access Tracktor
+				{$t('login.enterPinPrompt')}
 			</p>
 		{/if}
 
