@@ -12,6 +12,7 @@
 		onInput = undefined
 	} = $props();
 	const Icon = icon;
+	let showHelp = $state(false);
 </script>
 
 <div class="flex flex-row items-center space-x-4 pl-2">
@@ -31,13 +32,25 @@
 			{/if}
 			{label}
 			{#if help}
-				<span
-					class="inline-flex items-center rounded-full px-1 text-sm text-gray-400 hover:text-gray-500 focus:outline-none dark:text-gray-500"
-					role="img"
-					title={help}
-					aria-label={helpAriaLabel}
-				>
-					?
+				<span class="relative inline-flex">
+					<span
+						class="inline-flex items-center rounded-full px-1 text-sm text-gray-400 hover:text-gray-500 focus:outline-none cursor-help dark:text-gray-500"
+						role="button"
+						title={help}
+						aria-label={helpAriaLabel}
+						tabindex="0"
+						onmouseenter={() => (showHelp = true)}
+						onmouseleave={() => (showHelp = false)}
+						onfocus={() => (showHelp = true)}
+						onblur={() => (showHelp = false)}
+					>
+						?
+					</span>
+					{#if showHelp}
+						<div class="absolute left-4 top-full z-20 mt-1 w-72 rounded bg-gray-900 px-3 py-2 text-xs text-white shadow-lg dark:bg-gray-700">
+							{help}
+						</div>
+					{/if}
 				</span>
 			{/if}
 		</label>
