@@ -21,4 +21,3 @@ export const vehicleTaxTable = table("vehicle_taxes", {
   notes: t.text(),
   ...timestamps,
 });
-

@@ -19,4 +19,3 @@ export const vehiclePlateTable = table("vehicle_plates", {
   isCurrent: t.integer({ mode: "boolean" }).notNull().default(false),
   ...timestamps,
 });
-

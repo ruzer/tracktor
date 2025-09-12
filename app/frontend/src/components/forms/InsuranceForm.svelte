@@ -14,9 +14,12 @@
 		entryToEdit = $bindable(),
 		modalVisibility = $bindable(),
 		editMode,
-		loading,
+		loading: _loading,
 		callback
 	} = $props();
+
+	// keep prop for typing; not used directly here
+	void _loading;
 
 	let insurance = $state({
 		provider: null,
@@ -68,7 +71,9 @@
 
 			if (response.ok) {
 				status = {
-					message: editMode ? $t('forms.success.insuranceUpdated') : $t('forms.success.insuranceAdded'),
+					message: editMode
+						? $t('forms.success.insuranceUpdated')
+						: $t('forms.success.insuranceAdded'),
 					type: 'SUCCESS'
 				};
 				Object.assign(insurance, {
@@ -90,7 +95,7 @@
 				type: 'ERROR'
 			};
 		}
-		loading = false;
+		_loading = false;
 		if (status.type === 'SUCCESS') {
 			entryToEdit = null;
 			callback(true);
@@ -168,6 +173,10 @@
 		required={false}
 		ariaLabel={$t('forms.labels.notes')}
 	/>
-	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
+	<Button
+		type="submit"
+		variant="primary"
+		text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')}
+	/>
 </form>
 <StatusBlock message={status.message} type={status.type} />

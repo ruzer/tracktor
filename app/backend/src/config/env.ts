@@ -11,9 +11,7 @@ config({
 const getOrigins = (): string[] => {
   const origins = process.env.CORS_ORIGINS;
   if (!origins) {
-    return [
-      "*"
-    ];
+    return ["*"];
   }
 
   return origins
@@ -22,7 +20,8 @@ const getOrigins = (): string[] => {
     .filter(Boolean);
 };
 
-const SERVER_HOST = process.env.SERVER_HOST || process.env.BACKEND_HOST || "0.0.0.0";
+const SERVER_HOST =
+  process.env.SERVER_HOST || process.env.BACKEND_HOST || "0.0.0.0";
 const SERVER_PORT_RAW = process.env.SERVER_PORT || process.env.BACKEND_PORT;
 const SERVER_PORT_NUM = Number(SERVER_PORT_RAW);
 
@@ -32,7 +31,8 @@ export const env = {
 
   // Server Configuration
   SERVER_HOST,
-  SERVER_PORT: !isNaN(SERVER_PORT_NUM) && SERVER_PORT_NUM > 0 ? SERVER_PORT_NUM : 3000,
+  SERVER_PORT:
+    !isNaN(SERVER_PORT_NUM) && SERVER_PORT_NUM > 0 ? SERVER_PORT_NUM : 3000,
 
   // Database Configuration
   DATABASE_PATH: process.env.DATABASE_PATH || "./tracktor.db",
@@ -67,7 +67,7 @@ export function validateEnvironment(): void {
   if (missing.length > 0) {
     console.error(
       "❌ Missing required environment variables:",
-      missing.join(", ")
+      missing.join(", "),
     );
     process.exit(1);
   }

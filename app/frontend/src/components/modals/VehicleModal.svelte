@@ -22,7 +22,11 @@
 </script>
 
 {#if showModal}
-	<ModalContainer onclose={closeModal} title={editMode ? $t('modals.editVehicle') : $t('modals.addVehicle')} {loading}>
+	<ModalContainer
+		onclose={closeModal}
+		title={editMode ? $t('modals.editVehicle') : $t('modals.addVehicle')}
+		{loading}
+	>
 		<VehicleForm {vehicleToEdit} {editMode} bind:modalVisibility={showModal} {loading} />
 	</ModalContainer>
 {/if}

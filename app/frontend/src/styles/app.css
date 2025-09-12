@@ -6,6 +6,5 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 * {
-  font-family: 'Finlandica', sans-serif;
+	font-family: 'Finlandica', sans-serif;
 }
- 

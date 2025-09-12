@@ -9,7 +9,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load env from the project root (../../.env)
-dotenvConfig({ path: path.resolve(process.cwd(), "../../.env"), override: true });
+dotenvConfig({
+  path: path.resolve(process.cwd(), "../../.env"),
+  override: true,
+});
 
 // Ensure we load env from the project root when running via tsx
 // This allows DATABASE_PATH and other variables to be read consistently

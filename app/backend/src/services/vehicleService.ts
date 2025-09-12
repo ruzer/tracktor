@@ -18,15 +18,22 @@ export const addVehicle = async (vehicleData: any) => {
         .update(schema.vehiclePlateTable)
         .set({ isCurrent: false })
         .where(eq(schema.vehiclePlateTable.vehicleId, inserted.id));
-      await db.insert(schema.vehiclePlateTable).values({
-        vehicleId: inserted.id,
-        plate: vehicleData.licensePlate,
-        issuedDate: new Date().toISOString().slice(0, 10),
-        isCurrent: true,
-      }).run();
+      await db
+        .insert(schema.vehiclePlateTable)
+        .values({
+          vehicleId: inserted.id,
+          plate: vehicleData.licensePlate,
+          issuedDate: new Date().toISOString().slice(0, 10),
+          isCurrent: true,
+        })
+        .run();
     }
   } catch (e) {
-    console.error('Failed to add initial plate history for vehicle', inserted?.id, e);
+    console.error(
+      "Failed to add initial plate history for vehicle",
+      inserted?.id,
+      e,
+    );
   }
   return { id: inserted?.id, message: "Vehicle added successfully." };
 };
@@ -41,10 +48,10 @@ export const getAllVehicles = async () => {
 
   return vehicles.map((vehicle) => {
     const insurances = allInsurances.filter(
-      (insurance) => insurance.vehicleId === vehicle.id
+      (insurance) => insurance.vehicleId === vehicle.id,
     );
     const pollutionCertificates = allPollutionCertificates.filter(
-      (pucc) => pucc.vehicleId === vehicle.id
+      (pucc) => pucc.vehicleId === vehicle.id,
     );
 
     let insuranceStatus = "Not Available";

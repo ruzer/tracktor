@@ -27,10 +27,13 @@
 		vehicleId,
 		logToEdit,
 		modalVisibility = $bindable(),
-		loading = false,
+		loading: _loading = false,
 		editMode = false,
 		callback
 	} = $props();
+
+	// keep prop for typing; not used directly here
+	void _loading;
 
 	let refill = $state({
 		date: null,
@@ -52,13 +55,13 @@
 	});
 
 	async function persistLog() {
-    if (!vehicleId) {
-      status = {
-        message: $t('forms.validation.noVehicleSelected'),
-        type: 'ERROR'
-      };
-      return;
-    }
+		if (!vehicleId) {
+			status = {
+				message: $t('forms.validation.noVehicleSelected'),
+				type: 'ERROR'
+			};
+			return;
+		}
 		if (!refill.date || !refill.odometer || !refill.fuelAmount || !refill.cost) {
 			status = {
 				message: $t('forms.validation.requiredFields'),
@@ -103,7 +106,7 @@
 				type: 'ERROR'
 			};
 		} finally {
-			loading = false;
+			_loading = false;
 			if (status.type === 'SUCCESS') {
 				modalVisibility = false;
 				callback(true);
@@ -121,8 +124,8 @@
 			bind:value={refill.date}
 			icon={Calendar1}
 			required={true}
-				label={$t('forms.labels.date')}
-				ariaLabel={$t('forms.labels.date')}
+			label={$t('forms.labels.date')}
+			ariaLabel={$t('forms.labels.date')}
 		/>
 		<FormField
 			id="odometer"
@@ -132,7 +135,7 @@
 			bind:value={refill.odometer}
 			icon={Gauge}
 			required={true}
-				ariaLabel={$t('forms.labels.odometer')}
+			ariaLabel={$t('forms.labels.odometer')}
 			inputClass="step-0.01"
 		/>
 	</div>
@@ -143,8 +146,8 @@
 			placeholder={`${$t('forms.placeholders.fuelAmountLitres')} ( ${getVolumeUnit()} )`}
 			bind:value={refill.fuelAmount}
 			icon={Fuel}
-				label={$t('forms.labels.fuelAmount')}
-				ariaLabel={$t('forms.labels.fuelAmount')}
+			label={$t('forms.labels.fuelAmount')}
+			ariaLabel={$t('forms.labels.fuelAmount')}
 			inputClass="step-0.01"
 		/>
 		<FormField
@@ -153,9 +156,9 @@
 			placeholder={`${$t('forms.placeholders.totalCost')} ( ${getCurrencySymbol()} )`}
 			bind:value={refill.cost}
 			icon={BadgeDollarSign}
-				label={$t('forms.labels.cost')}
-				required={true}
-				ariaLabel={$t('forms.labels.cost')}
+			label={$t('forms.labels.cost')}
+			required={true}
+			ariaLabel={$t('forms.labels.cost')}
 			inputClass="step-0.01"
 		/>
 	</div>
@@ -185,9 +188,13 @@
 		placeholder={$t('forms.placeholders.notes')}
 		bind:value={refill.notes}
 		icon={FileText}
-			label={$t('forms.labels.notes')}
-			ariaLabel={$t('forms.labels.notes')}
+		label={$t('forms.labels.notes')}
+		ariaLabel={$t('forms.labels.notes')}
 	/>
-	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
+	<Button
+		type="submit"
+		variant="primary"
+		text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')}
+	/>
 </form>
 <StatusBlock message={status.message} type={status.type} />

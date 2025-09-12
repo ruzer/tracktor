@@ -14,9 +14,12 @@
 		logToEdit = $bindable(),
 		modalVisibility = $bindable(),
 		editMode,
-		loading,
+		loading: _loading,
 		callback
 	} = $props();
+
+	// keep prop for typing; not used directly here
+	void _loading;
 
 	let log = $state({
 		date: null,
@@ -61,7 +64,9 @@
 
 			if (response.ok) {
 				status = {
-					message: editMode ? $t('forms.success.maintenanceUpdated') : $t('forms.success.maintenanceAdded'),
+					message: editMode
+						? $t('forms.success.maintenanceUpdated')
+						: $t('forms.success.maintenanceAdded'),
 					type: 'SUCCESS'
 				};
 				Object.assign(log, {
@@ -83,7 +88,7 @@
 				type: 'ERROR'
 			};
 		}
-		loading = false;
+		_loading = false;
 		if (status.type === 'SUCCESS') {
 			logToEdit = null;
 			callback(true);
@@ -152,6 +157,10 @@
 		required={false}
 		ariaLabel={$t('forms.labels.notes')}
 	/>
-	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
+	<Button
+		type="submit"
+		variant="primary"
+		text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')}
+	/>
 </form>
 <StatusBlock message={status.message} type={status.type} />

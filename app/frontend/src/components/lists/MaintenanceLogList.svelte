@@ -28,12 +28,12 @@
 	let deleteDialog = $state(false);
 
 	$effect(() => {
-    if (!vehicleId) {
-      error = $t('errors.requiredVehicleId');
-      loading = false;
-    } else {
-      fetchMaintenanceLogs();
-    }
+		if (!vehicleId) {
+			error = $t('errors.requiredVehicleId');
+			loading = false;
+		} else {
+			fetchMaintenanceLogs();
+		}
 	});
 
 	async function fetchMaintenanceLogs() {
@@ -52,16 +52,16 @@
 			if (response.ok) {
 				const data = await response.json();
 				maintenanceLogs = data;
-      } else {
-        error = $t('errors.fetchMaintenanceLogsFailed');
-      }
-    } catch (e) {
-      console.error(e);
-      error = $t('errors.networkError');
-    } finally {
-      loading = false;
-    }
-  }
+			} else {
+				error = $t('errors.fetchMaintenanceLogsFailed');
+			}
+		} catch (e) {
+			console.error(e);
+			error = $t('errors.networkError');
+		} finally {
+			loading = false;
+		}
+	}
 
 	async function deleteMaintenenceLog(logId: string | undefined) {
 		if (!logId) {
@@ -79,15 +79,15 @@
 			);
 			if (response.ok) {
 				await fetchMaintenanceLogs();
-      } else {
-        const data = await response.json();
-        error = data.message || $t('errors.deleteMaintenanceFailed');
-      }
-    } catch (e) {
-      console.error(e);
-      error = $t('errors.networkError');
-    }
-  }
+			} else {
+				const data = await response.json();
+				error = data.message || $t('errors.deleteMaintenanceFailed');
+			}
+		} catch (e) {
+			console.error(e);
+			error = $t('errors.networkError');
+		}
+	}
 
 	onMount(() => {
 		fetchMaintenanceLogs();
@@ -99,7 +99,7 @@
 		<Jumper size="100" color="#155dfc" unit="px" duration="2s" />
 	</p>
 {:else if error}
-  <p class="text-red-500">{$t('common.error')}: {error}</p>
+	<p class="text-red-500">{$t('common.error')}: {error}</p>
 {:else if maintenanceLogs.length === 0}
 	<div>{$t('modals.noMaintenanceLogs')}</div>
 {:else}
@@ -107,12 +107,24 @@
 		<table class="min-w-full overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">
 			<thead class="bg-gray-200 dark:bg-gray-700">
 				<tr>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('table.headers.date')}</th>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('table.headers.odometer')}</th>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('forms.labels.serviceCenter')}</th>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('table.headers.cost')}</th>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('table.headers.notes')}</th>
-        <th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">{$t('table.headers.actions')}</th>
+					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
+						>{$t('table.headers.date')}</th
+					>
+					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
+						>{$t('table.headers.odometer')}</th
+					>
+					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
+						>{$t('forms.labels.serviceCenter')}</th
+					>
+					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
+						>{$t('table.headers.cost')}</th
+					>
+					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
+						>{$t('table.headers.notes')}</th
+					>
+					<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200"
+						>{$t('table.headers.actions')}</th
+					>
 				</tr>
 			</thead>
 			<tbody>
@@ -134,8 +146,8 @@
 									selectedMaintenanceLog = log.id;
 									deleteDialog = true;
 								}}
-            ariaLabel={$t('common.delete')}
-          />
+								ariaLabel={$t('common.delete')}
+							/>
 						</td>
 					</tr>
 				{/each}

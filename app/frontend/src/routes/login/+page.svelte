@@ -4,12 +4,12 @@
 	import PinInput from '$components/auth/PinInput.svelte';
 	import ThemeToggle from '$components/common/ThemeToggle.svelte';
 	import { getApiUrl } from '$lib/utils/api';
-	import { ShieldEllipsis, ShieldPlus, Tractor } from '@lucide/svelte';
+	import { ShieldEllipsis, Tractor } from '@lucide/svelte';
 	import { Jumper } from 'svelte-loading-spinners';
 	import { simulateNetworkDelay } from '$lib/utils/dev';
 	import StatusBlock from '$components/common/StatusBlock.svelte';
 	import type { Status } from '$lib/models/status';
-  import { t } from '$lib/stores/i18n';
+	import { t } from '$lib/stores/i18n';
 
 	let loading = $state(false);
 	let status = $state<Status>({
@@ -106,7 +106,9 @@
 			console.error('[login] PIN endpoint failed', response.status, response.statusText);
 			const data = await response.json();
 			status = {
-				message: data.message || (pinExists ? $t('login.errors.invalidPin') : $t('login.errors.failedSetPin')),
+				message:
+					data.message ||
+					(pinExists ? $t('login.errors.invalidPin') : $t('login.errors.failedSetPin')),
 				type: 'ERROR'
 			};
 		}
@@ -126,12 +128,15 @@
 			<h1
 				class="flex items-center justify-center gap-5 text-center text-3xl font-bold text-gray-800 dark:text-gray-100"
 			>
-				<Tractor class="h-10 w-10"></Tractor> {$t('login.title')}
+				<Tractor class="h-10 w-10"></Tractor>
+				{$t('login.title')}
 			</h1>
 		</div>
 
 		{#if checkingPinStatus}
-			<p class="mb-6 text-center text-gray-600 dark:text-gray-300">{$t('login.checkingPinStatus')}</p>
+			<p class="mb-6 text-center text-gray-600 dark:text-gray-300">
+				{$t('login.checkingPinStatus')}
+			</p>
 		{:else if pinExists}
 			<p
 				class="mb-6 flex items-center justify-center gap-2 text-center text-gray-600 dark:text-gray-300"

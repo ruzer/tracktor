@@ -1,13 +1,5 @@
 <script lang="ts">
-	import {
-		Car,
-		Calendar1,
-		IdCard,
-		Fingerprint,
-		Paintbrush,
-		Gauge,
-		Building2
-	} from '@lucide/svelte';
+	import { Car, Calendar1, IdCard, Fingerprint, Gauge, Building2 } from '@lucide/svelte';
 	import FormField from '../common/FormField.svelte';
 	import type { NewVehicle } from '$lib/models/vehicle';
 	import { env } from '$env/dynamic/public';
@@ -154,9 +146,9 @@
 		<!-- Reemplazar el FormField de color con: -->
 		<ColorPicker
 			bind:value={vehicle.color}
-		label={$t('forms.labels.color')}
+			label={$t('forms.labels.color')}
 			required
-			on:change={(e) => vehicle.color = e.detail}
+			on:change={(e) => (vehicle.color = e.detail)}
 		/>
 	</div>
 
@@ -189,7 +181,11 @@
 		label={$t('forms.labels.odometer')}
 		ariaLabel={$t('forms.labels.odometer')}
 	/>
-	<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
+	<Button
+		type="submit"
+		variant="primary"
+		text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')}
+	/>
 
 	{#if editMode}
 		<input type="hidden" name="id" value={vehicleToEdit?.id || ''} />

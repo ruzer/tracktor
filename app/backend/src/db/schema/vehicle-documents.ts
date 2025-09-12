@@ -20,4 +20,3 @@ export const vehicleDocumentTable = table("vehicle_documents", {
   notes: t.text(),
   ...timestamps,
 });
-

@@ -8,7 +8,10 @@ import { pollutionCertificateTable } from "./pucc.js";
 import { ownershipTypeTable } from "./ownership-types.js";
 import { vehiclePlateTable } from "./vehicle-plates.js";
 import { vehicleAssignmentTable } from "./vehicle-assignments.js";
-import { insurancePolicyTable, insurancePolicyVehicleTable } from "./insurance-policies.js";
+import {
+  insurancePolicyTable,
+  insurancePolicyVehicleTable,
+} from "./insurance-policies.js";
 import { vehicleTaxTable } from "./vehicle-taxes.js";
 import { vehicleDocumentTable } from "./vehicle-documents.js";
 

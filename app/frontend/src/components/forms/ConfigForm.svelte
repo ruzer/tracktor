@@ -57,7 +57,7 @@
 			};
 			callback(true);
 			modalVisibility = false;
-		} catch (error) {
+		} catch {
 			status = {
 				message: $t('common.error'),
 				type: 'ERROR'
@@ -66,11 +66,10 @@
 	}
 </script>
 
-
 {#if $isLoading}
 	<div class="flex items-center justify-center p-8">
 		<div class="text-center">
-			<div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+			<div class="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500"></div>
 			<p class="text-gray-500">{$t('common.loading')}</p>
 		</div>
 	</div>
@@ -84,10 +83,12 @@
 		aria-labelledby="config-form-title"
 	>
 		<!-- Selector de idioma dinámico -->
-		<div class="rounded-xl border border-gray-200 bg-white p-6 shadow-lg transition-all duration-200 ease-in-out hover:shadow-xl dark:border-gray-700 dark:bg-gray-800">
+		<div
+			class="rounded-xl border border-gray-200 bg-white p-6 shadow-lg transition-all duration-200 ease-in-out hover:shadow-xl dark:border-gray-700 dark:bg-gray-800"
+		>
 			<label
 				for="language-selector"
-				class="mb-2 block text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2"
+				class="mb-2 block flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-gray-200"
 			>
 				🌐 {$t('config.language.title')}
 			</label>
@@ -102,7 +103,8 @@
 			>
 				{#each $languageOptions as option}
 					<option value={option.code}>
-						{option.flag} {option.nativeName} ({option.name})
+						{option.flag}
+						{option.nativeName} ({option.name})
 					</option>
 				{/each}
 			</select>
@@ -110,10 +112,12 @@
 
 		<!-- Configuraciones existentes -->
 		{#each localConfig as item}
-			<div class="rounded-xl border border-gray-200 bg-white p-6 shadow-lg transition-all duration-200 ease-in-out hover:shadow-xl dark:border-gray-700 dark:bg-gray-800">
+			<div
+				class="rounded-xl border border-gray-200 bg-white p-6 shadow-lg transition-all duration-200 ease-in-out hover:shadow-xl dark:border-gray-700 dark:bg-gray-800"
+			>
 				<label
 					for={item.key}
-					class="mb-2 block text-lg font-semibold text-gray-800 capitalize dark:text-gray-200 flex items-center gap-2"
+					class="mb-2 block flex items-center gap-2 text-lg font-semibold text-gray-800 capitalize dark:text-gray-200"
 				>
 					{#if item.key === 'dateFormat'}
 						📅 {$t('config.regional.dateFormat')}
@@ -152,7 +156,9 @@
 				{:else if item.key === 'unitOfMeasure'}
 					<div class="flex gap-4">
 						{#each uomOptions as option}
-							<label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border border-gray-200 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors">
+							<label
+								class="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 p-3 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
+							>
 								<input
 									type="radio"
 									bind:group={item.value}
@@ -182,19 +188,22 @@
 				text={$t('common.cancel')}
 				onclick={() => (modalVisibility = false)}
 			/>
-			<Button
-				type="submit"
-				variant="primary"
-				text={$t('common.save')}
-				{loading}
-			/>
+			<Button type="submit" variant="primary" text={$t('common.save')} {loading} />
 		</div>
 	</form>
 {/if}
 
 {#if status.message}
-	<div class="mt-4 p-4 rounded-lg {status.type === 'ERROR' ? 'bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800' : 'bg-green-50 border border-green-200 dark:bg-green-900/20 dark:border-green-800'}">
-		<p class="text-sm {status.type === 'ERROR' ? 'text-red-700 dark:text-red-400' : 'text-green-700 dark:text-green-400'}">
+	<div
+		class="mt-4 rounded-lg p-4 {status.type === 'ERROR'
+			? 'border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20'
+			: 'border border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'}"
+	>
+		<p
+			class="text-sm {status.type === 'ERROR'
+				? 'text-red-700 dark:text-red-400'
+				: 'text-green-700 dark:text-green-400'}"
+		>
 			{#if status.type === 'ERROR'}
 				<span class="font-semibold">⚠️ {$t('common.error')}:</span> {status.message}
 			{:else}

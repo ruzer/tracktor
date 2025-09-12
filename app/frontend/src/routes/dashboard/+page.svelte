@@ -12,9 +12,9 @@
 	import MaintenenceLogTab from '$components/tabs/MaintenenceLogTab.svelte';
 	import InsuranceTab from '$components/tabs/InsuranceTab.svelte';
 	import PollutionTab from '$components/tabs/PollutionTab.svelte';
-    import PlatesTab from '$components/tabs/PlatesTab.svelte';
-    import AssignmentsTab from '$components/tabs/AssignmentsTab.svelte';
-    import TaxesTab from '$components/tabs/TaxesTab.svelte';
+	import PlatesTab from '$components/tabs/PlatesTab.svelte';
+	import AssignmentsTab from '$components/tabs/AssignmentsTab.svelte';
+	import TaxesTab from '$components/tabs/TaxesTab.svelte';
 	import { vehicleModelStore, vehiclesStore } from '$lib/stores/vehicle';
 	import PollutionCertificateModal from '$components/modals/PollutionCertificateModal.svelte';
 	import InsuranceModal from '$components/modals/InsuranceModal.svelte';
@@ -61,7 +61,9 @@
 
 <div class="container mx-auto bg-gray-100 p-6 transition-colors dark:bg-gray-900">
 	<div class="mb-8 flex items-center justify-between">
-		<h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">{$t('dashboard.title')}</h1>
+		<h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">
+			{$t('dashboard.title')}
+		</h1>
 		<Button
 			type="button"
 			variant="hero"

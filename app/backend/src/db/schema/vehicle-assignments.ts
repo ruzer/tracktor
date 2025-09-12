@@ -22,4 +22,3 @@ export const vehicleAssignmentTable = table("vehicle_assignments", {
   notes: t.text(),
   ...timestamps,
 });
-

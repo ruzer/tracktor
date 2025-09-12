@@ -35,7 +35,7 @@ const createConfigStore = () => {
 		if (browser) {
 			try {
 				const headers: Record<string, string> = {
-					'Content-Type': 'application/json',
+					'Content-Type': 'application/json'
 				};
 				const pin = localStorage.getItem('userPin');
 				if (pin) headers['X-User-PIN'] = pin;

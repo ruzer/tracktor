@@ -2,13 +2,13 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
-  import { FileText, Calendar, MapPin, Trash2, BadgeCheck } from '@lucide/svelte';
-  import { formatDate } from '$lib/utils/formatting';
-  import { Jumper } from 'svelte-loading-spinners';
-  import IconButton from '$components/common/IconButton.svelte';
-  import DeleteConfirmation from '$components/common/DeleteConfirmation.svelte';
-  import { getApiUrl } from '$lib/utils/api';
-  import { t } from '$lib/stores/i18n';
+	import { FileText, Calendar, MapPin, Trash2, BadgeCheck } from '@lucide/svelte';
+	import { formatDate } from '$lib/utils/formatting';
+	import { Jumper } from 'svelte-loading-spinners';
+	import IconButton from '$components/common/IconButton.svelte';
+	import DeleteConfirmation from '$components/common/DeleteConfirmation.svelte';
+	import { getApiUrl } from '$lib/utils/api';
+	import { t } from '$lib/stores/i18n';
 
 	let { vehicleId } = $props();
 
@@ -28,12 +28,12 @@
 	let deleteDialog = $state(false);
 
 	$effect(() => {
-    if (!vehicleId) {
-      error = $t('errors.requiredVehicleId');
-      loading = false;
-    } else {
-      fetchPollutionCertificateDetails();
-    }
+		if (!vehicleId) {
+			error = $t('errors.requiredVehicleId');
+			loading = false;
+		} else {
+			fetchPollutionCertificateDetails();
+		}
 	});
 
 	async function fetchPollutionCertificateDetails() {
@@ -49,18 +49,18 @@
 					'X-User-PIN': browser ? localStorage.getItem('userPin') || '' : ''
 				}
 			});
-      if (response.ok) {
-        pollutionCertificates = await response.json();
-      } else {
-        error = $t('errors.fetchPollutionFailed');
-      }
-    } catch (e) {
-      console.error(e);
-      error = $t('errors.networkError');
-    } finally {
-      loading = false;
-    }
-  }
+			if (response.ok) {
+				pollutionCertificates = await response.json();
+			} else {
+				error = $t('errors.fetchPollutionFailed');
+			}
+		} catch (e) {
+			console.error(e);
+			error = $t('errors.networkError');
+		} finally {
+			loading = false;
+		}
+	}
 
 	async function deletePollutionCertificate(puccId: string | undefined) {
 		if (!puccId) {
@@ -76,17 +76,17 @@
 					}
 				}
 			);
-      if (response.ok) {
-        await fetchPollutionCertificateDetails();
-      } else {
-        const data = await response.json();
-        error = data.message || $t('errors.deletePollutionFailed');
-      }
-    } catch (e) {
-      console.error(e);
-      error = $t('errors.networkError');
-    }
-  }
+			if (response.ok) {
+				await fetchPollutionCertificateDetails();
+			} else {
+				const data = await response.json();
+				error = data.message || $t('errors.deletePollutionFailed');
+			}
+		} catch (e) {
+			console.error(e);
+			error = $t('errors.networkError');
+		}
+	}
 
 	onMount(() => {
 		fetchPollutionCertificateDetails();
@@ -98,9 +98,9 @@
 		<Jumper size="100" color="#155dfc" unit="px" duration="2s" />
 	</p>
 {:else if error}
-  <p class="text-red-500">{$t('common.error')}: {error}</p>
+	<p class="text-red-500">{$t('common.error')}: {error}</p>
 {:else if pollutionCertificates.length === 0}
-  <div>{$t('modals.noPollutionCertificates')}</div>
+	<div>{$t('modals.noPollutionCertificates')}</div>
 {:else}
 	{#each pollutionCertificates as pucc (pucc.id)}
 		<div
@@ -114,41 +114,41 @@
 					>
 				</div>
 				<div class="flex gap-2">
-        <IconButton
-          buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
-          iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
-          icon={Trash2}
-          onclick={() => {
-            selectedPucc = pucc.id;
-            deleteDialog = true;
-          }}
-          ariaLabel={$t('common.delete')}
-        />
+					<IconButton
+						buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
+						iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
+						icon={Trash2}
+						onclick={() => {
+							selectedPucc = pucc.id;
+							deleteDialog = true;
+						}}
+						ariaLabel={$t('common.delete')}
+					/>
 				</div>
 			</div>
 			<div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
 					<Calendar class="h-5 w-5" />
-        <span class="font-semibold">{$t('forms.labels.issueDate')}:</span>
+					<span class="font-semibold">{$t('forms.labels.issueDate')}:</span>
 					<span>{formatDate(pucc.issueDate)}</span>
 				</div>
 				<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
 					<Calendar class="h-5 w-5" />
-        <span class="font-semibold">{$t('forms.labels.expiryDate')}:</span>
+					<span class="font-semibold">{$t('forms.labels.expiryDate')}:</span>
 					<span>{formatDate(pucc.expiryDate)}</span>
 				</div>
 				<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
 					<MapPin class="h-5 w-5" />
-        <span class="font-semibold">{$t('forms.labels.testingCenter')}:</span>
+					<span class="font-semibold">{$t('forms.labels.testingCenter')}:</span>
 					<span>{pucc.testingCenter}</span>
 				</div>
-        {#if pucc.notes}
-          <div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <FileText class="h-5 w-5" />
-            <span class="font-semibold">{$t('forms.labels.notes')}:</span>
-            <span>{pucc.notes}</span>
-          </div>
-        {/if}
+				{#if pucc.notes}
+					<div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+						<FileText class="h-5 w-5" />
+						<span class="font-semibold">{$t('forms.labels.notes')}:</span>
+						<span>{pucc.notes}</span>
+					</div>
+				{/if}
 			</div>
 		</div>
 	{/each}

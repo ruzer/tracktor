@@ -23,7 +23,9 @@ export function getApiUrl(path: string): string {
 	// Debug: trace URL building in dev console
 	try {
 		console.debug('[api] getApiUrl', { baseUrl: cleanBaseUrl || '(empty)', path: cleanPath, url });
-	} catch {}
+	} catch {
+		/* no-op: some environments may not expose console */
+	}
 
 	return url;
 }

@@ -1,17 +1,17 @@
 <script lang="ts">
-    let {
-        id,
-        checked = $bindable(),
-        icon = null,
-        label = undefined,
-        ariaLabel = '',
-        help = undefined,
-        helpAriaLabel = 'Help',
-        disabled = false,
-        inputClass = '',
-        onInput = undefined
-    } = $props();
-    const Icon = icon;
+	let {
+		id,
+		checked = $bindable(),
+		icon = null,
+		label = undefined,
+		ariaLabel = '',
+		help = undefined,
+		helpAriaLabel = 'Help',
+		disabled = false,
+		inputClass = '',
+		onInput = undefined
+	} = $props();
+	const Icon = icon;
 </script>
 
 <div class="flex flex-row items-center space-x-4 pl-2">
@@ -30,16 +30,16 @@
 				<Icon class="inline-block h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
 			{/if}
 			{label}
-            {#if help}
-                <span
-                    class="inline-flex items-center rounded-full px-1 text-sm text-gray-400 hover:text-gray-500 focus:outline-none cursor-help dark:text-gray-500"
-                    role="img"
-                    title={help}
-                    aria-label={helpAriaLabel}
-                >
-                    ?
-                </span>
-            {/if}
-        </label>
-    {/if}
+			{#if help}
+				<span
+					class="inline-flex cursor-help items-center rounded-full px-1 text-sm text-gray-400 hover:text-gray-500 focus:outline-none dark:text-gray-500"
+					role="img"
+					title={help}
+					aria-label={helpAriaLabel}
+				>
+					?
+				</span>
+			{/if}
+		</label>
+	{/if}
 </div>

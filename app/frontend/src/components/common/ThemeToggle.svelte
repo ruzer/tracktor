@@ -1,34 +1,34 @@
 <script lang="ts">
-  import { t } from '$lib/stores/i18n';
-  import { browser } from '$app/environment';
-  import { darkModeStore } from '$lib/stores/dark-mode';
-  import { Moon, Sun } from '@lucide/svelte';
-  let darkMode = $state(false);
+	import { t } from '$lib/stores/i18n';
+	import { browser } from '$app/environment';
+	import { darkModeStore } from '$lib/stores/dark-mode';
+	import { Moon, Sun } from '@lucide/svelte';
+	let darkMode = $state(false);
 
-  if (browser) {
-    const storedDark = localStorage.getItem('darkMode');
-    darkMode = storedDark === 'true';
-    document.documentElement.classList.toggle('dark', storedDark === 'true');
-    darkModeStore.set(storedDark === 'true');
-  }
+	if (browser) {
+		const storedDark = localStorage.getItem('darkMode');
+		darkMode = storedDark === 'true';
+		document.documentElement.classList.toggle('dark', storedDark === 'true');
+		darkModeStore.set(storedDark === 'true');
+	}
 
-  function toggleDarkMode() {
-    darkMode = !darkMode;
-    document.documentElement.classList.toggle('dark', darkMode);
-    if (browser) {
-      localStorage.setItem('darkMode', darkMode ? 'true' : 'false');
-    }
-    darkModeStore.set(darkMode);
-  }
+	function toggleDarkMode() {
+		darkMode = !darkMode;
+		document.documentElement.classList.toggle('dark', darkMode);
+		if (browser) {
+			localStorage.setItem('darkMode', darkMode ? 'true' : 'false');
+		}
+		darkModeStore.set(darkMode);
+	}
 </script>
 
 <button
-  type="button"
-  class="ml-auto flex items-center gap-2 rounded-full bg-gray-200 p-0.5 shadow transition-colors focus:bg-blue-600 dark:bg-gray-700"
-  onclick={toggleDarkMode}
-  aria-label={$t('common.toggleDarkMode')}
+	type="button"
+	class="ml-auto flex items-center gap-2 rounded-full bg-gray-200 p-0.5 shadow transition-colors focus:bg-blue-600 dark:bg-gray-700"
+	onclick={toggleDarkMode}
+	aria-label={$t('common.toggleDarkMode')}
 >
-  <span class="sr-only">{$t('common.toggleDarkMode')}</span>
+	<span class="sr-only">{$t('common.toggleDarkMode')}</span>
 	<div class="relative flex items-center">
 		<!-- Switch background -->
 		<span

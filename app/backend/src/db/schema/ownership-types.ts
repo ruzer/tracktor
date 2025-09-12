@@ -11,4 +11,3 @@ export const ownershipTypeTable = table("ownership_types", {
   active: t.integer({ mode: "boolean" }).notNull().default(true),
   ...timestamps,
 });
-

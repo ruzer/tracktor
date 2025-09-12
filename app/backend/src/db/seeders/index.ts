@@ -42,7 +42,11 @@ const seedOwnershipTypes = async () => {
       { name: "Prestado", active: true },
       { name: "Comodato", active: true },
     ];
-    await db.insert(ownershipTypeTable).values(defaults).onConflictDoNothing().run();
+    await db
+      .insert(ownershipTypeTable)
+      .values(defaults)
+      .onConflictDoNothing()
+      .run();
     console.log("Ownership types seeded (idempotent)");
   } catch (e) {
     console.error("Failed to seed ownership types:", e);

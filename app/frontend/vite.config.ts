@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig, loadEnv } from 'vite';
 import { resolve } from 'path';
-import lucidePreprocess from "vite-plugin-lucide-preprocess";
+import lucidePreprocess from 'vite-plugin-lucide-preprocess';
 
 export default defineConfig(({ mode }) => {
 	// Load env file from root directory
@@ -20,8 +20,8 @@ export default defineConfig(({ mode }) => {
 				'/api': {
 					target: `http://localhost:${serverPort}`,
 					changeOrigin: true,
-					secure: false,
-				},
+					secure: false
+				}
 			}
 		},
 		envDir: resolve(process.cwd(), '../../'),

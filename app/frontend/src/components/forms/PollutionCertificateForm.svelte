@@ -6,7 +6,7 @@
 	import { handleApiError } from '$lib/models/Error';
 	import type { Status } from '$lib/models/status';
 	import { cleanup } from '$lib/utils/formatting';
-	import { Calendar1, IdCard, Notebook, TestTube, TestTube2 } from '@lucide/svelte';
+	import { Calendar1, IdCard, Notebook, TestTube2 } from '@lucide/svelte';
 	import { t } from '$lib/stores/i18n';
 
 	let {
@@ -14,9 +14,12 @@
 		entryToEdit = $bindable(),
 		modalVisibility = $bindable(),
 		editMode,
-		loading,
+		loading: _loading,
 		callback
 	} = $props();
+
+	// keep prop for typing; not used directly here
+	void _loading;
 
 	let certificate = $state({
 		certificateNumber: null,
@@ -66,7 +69,9 @@
 
 			if (response.ok) {
 				status = {
-					message: editMode ? $t('forms.success.pollutionUpdated') : $t('forms.success.pollutionAdded'),
+					message: editMode
+						? $t('forms.success.pollutionUpdated')
+						: $t('forms.success.pollutionAdded'),
 					type: 'SUCCESS'
 				};
 				Object.assign(certificate, {
@@ -88,7 +93,7 @@
 				type: 'ERROR'
 			};
 		}
-		loading = false;
+		_loading = false;
 		if (status.type === 'SUCCESS') {
 			entryToEdit = null;
 			callback(true);
@@ -155,6 +160,10 @@
 		required={false}
 		ariaLabel={$t('forms.labels.notes')}
 	/>
-		<Button type="submit" variant="primary" text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')} />
+	<Button
+		type="submit"
+		variant="primary"
+		text={editMode ? $t('forms.buttons.update') : $t('forms.buttons.add')}
+	/>
 </form>
 <StatusBlock message={status.message} type={status.type} />

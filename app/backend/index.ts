@@ -35,7 +35,7 @@ app.use("/api/config", configRoutes);
 app.use("/api/insurance-policies", insurancePolicyRoutes);
 
 if (env.isProduction()) {
-  // @ts-ignore
+  // @ts-expect-error dynamic import of SvelteKit handler in prod
   const { handler } = await import("../../frontend/build/handler.js");
   app.use(handler);
 } else {
@@ -52,7 +52,7 @@ initializeDatabase()
     app.listen(env.SERVER_PORT, env.SERVER_HOST, () => {
       console.log("─".repeat(75));
       console.log(
-        `🚀 Server running at http://${env.SERVER_HOST}:${env.SERVER_PORT}`
+        `🚀 Server running at http://${env.SERVER_HOST}:${env.SERVER_PORT}`,
       );
       console.log(`Environment: ${env.NODE_ENV}`);
       console.log(`Database: ${env.DATABASE_PATH}`);

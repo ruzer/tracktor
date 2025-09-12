@@ -108,8 +108,11 @@
 				<Shield class="h-5 w-5 text-gray-400 dark:text-gray-500" />
 				<span class="font-semibold">{$t('vehicle.insurance')}:</span>
 				<span class={vehicle.insuranceStatus === 'Active' ? 'text-green-600' : 'text-red-600'}>
-					{vehicle.insuranceStatus === 'Active' ? $t('vehicle.active') : 
-					 vehicle.insuranceStatus === 'Not Available' ? $t('common.notAvailable') : vehicle.insuranceStatus}
+					{vehicle.insuranceStatus === 'Active'
+						? $t('vehicle.active')
+						: vehicle.insuranceStatus === 'Not Available'
+							? $t('common.notAvailable')
+							: vehicle.insuranceStatus}
 				</span>
 			</p>
 		{/if}
@@ -118,8 +121,11 @@
 				<BadgeCheck class="h-5 w-5 text-gray-400 dark:text-gray-500" />
 				<span class="font-semibold">{$t('vehicle.pucc')}:</span>
 				<span class={vehicle.puccStatus === 'Active' ? 'text-green-600' : 'text-red-600'}>
-					{vehicle.puccStatus === 'Active' ? $t('vehicle.active') : 
-					 vehicle.puccStatus === 'Not Available' ? $t('common.notAvailable') : vehicle.puccStatus}
+					{vehicle.puccStatus === 'Active'
+						? $t('vehicle.active')
+						: vehicle.puccStatus === 'Not Available'
+							? $t('common.notAvailable')
+							: vehicle.puccStatus}
 				</span>
 			</p>
 		{/if}

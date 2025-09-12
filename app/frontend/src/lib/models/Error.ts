@@ -10,7 +10,7 @@ export type ApiError = {
 	}[];
 };
 
-export const handleApiError = (data: ApiError, editMode: boolean): Status => {
+export const handleApiError = (data: ApiError, _editMode: boolean): Status => {
 	console.log(JSON.stringify(data));
 	const translate = get(tStore);
 	let message = data.errors.map((e) => `${e.path ? e.path + ' : ' : ''}${e.message}`).join('\n');

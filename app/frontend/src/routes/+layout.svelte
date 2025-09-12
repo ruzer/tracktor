@@ -58,13 +58,13 @@
 
 <!-- Dark mode toggle, scrolls with screen -->
 {#if demoMode}
-  <div
-    class="w-full border-b border-yellow-300 bg-yellow-100 py-2 text-center text-base font-semibold text-yellow-900 shadow-sm dark:border-yellow-700 dark:bg-yellow-900 dark:text-yellow-100"
-  >
-    <span>{$t('app.demoBanner.message')}</span>
-    <br />
-    <strong>{$t('app.demoBanner.defaultPin')}</strong>
-  </div>
+	<div
+		class="w-full border-b border-yellow-300 bg-yellow-100 py-2 text-center text-base font-semibold text-yellow-900 shadow-sm dark:border-yellow-700 dark:bg-yellow-900 dark:text-yellow-100"
+	>
+		<span>{$t('app.demoBanner.message')}</span>
+		<br />
+		<strong>{$t('app.demoBanner.defaultPin')}</strong>
+	</div>
 {/if}
 {#if checkingAuth}
 	<div class="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">

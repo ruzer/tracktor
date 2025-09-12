@@ -19,17 +19,13 @@ export const insurancePolicyTable = table("insurance_policies", {
   ...timestamps,
 });
 
-export const insurancePolicyVehicleTable = table(
-  "insurance_policy_vehicles",
-  {
-    policyId: t
-      .text()
-      .notNull()
-      .references(() => insurancePolicyTable.id, { onDelete: "cascade" }),
-    vehicleId: t
-      .text()
-      .notNull()
-      .references(() => vehicleTable.id, { onDelete: "cascade" }),
-  }
-);
-
+export const insurancePolicyVehicleTable = table("insurance_policy_vehicles", {
+  policyId: t
+    .text()
+    .notNull()
+    .references(() => insurancePolicyTable.id, { onDelete: "cascade" }),
+  vehicleId: t
+    .text()
+    .notNull()
+    .references(() => vehicleTable.id, { onDelete: "cascade" }),
+});
