@@ -8,6 +8,6 @@ export const timestamps = {
     .notNull(),
   updated_at: t
     .text()
-    .$onUpdateFn(() => sql`CURRENT_TIMESTAMP`)
+    .$defaultFn(() => sql`CURRENT_TIMESTAMP`)
     .notNull(),
 };

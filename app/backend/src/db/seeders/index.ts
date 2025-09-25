@@ -93,7 +93,7 @@ const seedDemoData = async (enforce: boolean = false) => {
     ])
     .returning();
 
-  vehicles.forEach(async (vehicle) => {
+  vehicles.forEach(async (vehicle: any) => {
     await db
       .insert(insuranceTable)
       .values({
@@ -107,7 +107,7 @@ const seedDemoData = async (enforce: boolean = false) => {
       .run();
   });
 
-  vehicles.forEach(async (vehicle) => {
+  vehicles.forEach(async (vehicle: any) => {
     await db
       .insert(maintenanceLogTable)
       .values({
@@ -120,7 +120,7 @@ const seedDemoData = async (enforce: boolean = false) => {
       .run();
   });
 
-  vehicles.forEach(async (vehicle) => {
+  vehicles.forEach(async (vehicle: any) => {
     await db
       .insert(pollutionCertificateTable)
       .values({
@@ -136,7 +136,7 @@ const seedDemoData = async (enforce: boolean = false) => {
       .run();
   });
 
-  vehicles.forEach(async (vehicle) => {
+  vehicles.forEach(async (vehicle: any) => {
     const fuelLogs = [];
     for (let i = 0; i < 25; i++) {
       fuelLogs.push({

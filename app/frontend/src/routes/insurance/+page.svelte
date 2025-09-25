@@ -1,70 +1,90 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { t } from '$lib/stores/i18n';
-	import { ShieldCheck, Stethoscope, Users, FileCheck } from '@lucide/svelte';
+	import PolicyTable from '$components/insurance/PolicyTable.svelte';
+	import InsurancePolicyModal from '$components/insurance/InsurancePolicyModal.svelte';
+	import RenewPolicyModal from '$components/insurance/RenewPolicyModal.svelte';
+	import { insurancePoliciesStore } from '$lib/stores/insurance-policy';
+	import type { PolicySummary, PolicyDetail } from '$lib/stores/insurance-policy';
+	import Button from '$components/common/Button.svelte';
+
+	const policiesStore = insurancePoliciesStore;
+
+	let modalOpen = $state(false);
+	let modalMode: 'create' | 'edit' = $state('create');
+	let editingPolicy = $state<PolicyDetail | null>(null);
+	let renewModalOpen = $state(false);
+	let selectedRenewPolicy = $state<PolicySummary | null>(null);
+
+	onMount(() => {
+		policiesStore.fetchPolicies();
+	});
+
+	async function openCreate() {
+		editingPolicy = null;
+		modalMode = 'create';
+		modalOpen = true;
+	}
+
+	async function openPolicy(policy: PolicySummary, _mode: 'view' | 'edit') {
+		await policiesStore.fetchPolicy(policy.id);
+		editingPolicy = $policiesStore.selected ?? null;
+		modalMode = 'edit';
+		modalOpen = true;
+	}
+
+	function openRenew(policy: PolicySummary) {
+		selectedRenewPolicy = policy;
+		renewModalOpen = true;
+	}
+
+	async function handleSave(event: CustomEvent<{ payload: Record<string, unknown>; policyId?: string }>) {
+		const { payload, policyId } = event.detail;
+		if (policyId) {
+			await policiesStore.updatePolicy(policyId, payload);
+		} else {
+			await policiesStore.createPolicy(payload);
+		}
+		modalOpen = false;
+	}
+
+	async function handleRenewSubmit(event: CustomEvent<{ policyId: string; payload: Record<string, unknown> }>) {
+		await policiesStore.renewPolicy(event.detail.policyId, event.detail.payload);
+		renewModalOpen = false;
+	}
 </script>
 
-<section class="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-8 md:px-6">
-	<header class="space-y-3">
-		<h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
-			{$t('insurance.overview.title')}
-		</h1>
-		<p class="text-base text-gray-600 dark:text-gray-300">
-			{$t('insurance.overview.subtitle')}
-		</p>
+<section class="container mx-auto flex flex-col gap-6 px-4 py-8">
+	<header class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+		<div>
+			<h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
+				{$t('insurance.policies.title')}
+			</h1>
+			<p class="text-sm text-gray-600 dark:text-gray-300">
+				{$t('insurance.policies.subtitle')}
+			</p>
+		</div>
+		<Button type="button" variant="hero" text={$t('insurance.policies.new')} onclick={openCreate} />
 	</header>
 
-	<div class="grid gap-5 md:grid-cols-2">
-		<article
-			class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-800"
-		>
-			<div class="mb-3 flex items-center gap-3">
-				<ShieldCheck class="h-6 w-6 text-blue-500 dark:text-blue-300" />
-				<h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
-					{$t('insurance.overview.cards.policies.title')}
-				</h2>
-			</div>
-			<p class="text-sm text-gray-600 dark:text-gray-300">
-				{$t('insurance.overview.cards.policies.body')}
-			</p>
-		</article>
-		<article
-			class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-800"
-		>
-			<div class="mb-3 flex items-center gap-3">
-				<FileCheck class="h-6 w-6 text-emerald-500 dark:text-emerald-300" />
-				<h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
-					{$t('insurance.overview.cards.compliance.title')}
-				</h2>
-			</div>
-			<p class="text-sm text-gray-600 dark:text-gray-300">
-				{$t('insurance.overview.cards.compliance.body')}
-			</p>
-		</article>
-		<article
-			class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-800"
-		>
-			<div class="mb-3 flex items-center gap-3">
-				<Users class="h-6 w-6 text-purple-500 dark:text-purple-300" />
-				<h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
-					{$t('insurance.overview.cards.collective.title')}
-				</h2>
-			</div>
-			<p class="text-sm text-gray-600 dark:text-gray-300">
-				{$t('insurance.overview.cards.collective.body')}
-			</p>
-		</article>
-		<article
-			class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-800"
-		>
-			<div class="mb-3 flex items-center gap-3">
-				<Stethoscope class="h-6 w-6 text-rose-500 dark:text-rose-300" />
-				<h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
-					{$t('insurance.overview.cards.integrations.title')}
-				</h2>
-			</div>
-			<p class="text-sm text-gray-600 dark:text-gray-300">
-				{$t('insurance.overview.cards.integrations.body')}
-			</p>
-		</article>
-	</div>
+	<PolicyTable
+		policies={$policiesStore.policies}
+		loading={$policiesStore.loading}
+		on:view={({ detail }) => openPolicy(detail.policy, 'view')}
+		on:edit={({ detail }) => openPolicy(detail.policy, 'edit')}
+		on:renew={({ detail }) => openRenew(detail.policy)}
+	/>
+
+	<InsurancePolicyModal
+		bind:open={modalOpen}
+		policy={editingPolicy}
+		mode={modalMode}
+		on:save={handleSave}
+	/>
+
+	<RenewPolicyModal
+		bind:open={renewModalOpen}
+		policy={selectedRenewPolicy}
+		on:renew={handleRenewSubmit}
+	/>
 </section>

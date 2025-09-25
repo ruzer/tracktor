@@ -26,7 +26,7 @@ const createPuccModalStore = () => {
 			vehicleId,
 			editMode,
 			show: true,
-			callback
+			callback: callback || (() => {})
 		});
 	}
 	function hide() {

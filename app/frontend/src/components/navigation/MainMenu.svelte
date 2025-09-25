@@ -30,12 +30,9 @@
 			id: 'insurance',
 			label: 'menu.insurance.label',
 			items: [
-				{ id: 'insurance-overview', label: 'menu.insurance.overview', href: '/insurance' },
-				{
-					id: 'insurance-collective',
-					label: 'menu.insurance.collective',
-					href: '/insurance/collective'
-				}
+				{ id: 'insurance-policies', label: 'menu.insurance.policies', href: '/insurance' },
+				{ id: 'insurance-renewals', label: 'menu.insurance.renewals', href: '/insurance/renewals' },
+				{ id: 'insurance-reports', label: 'menu.insurance.reports', href: '/insurance/reports' }
 			]
 		}
 	];

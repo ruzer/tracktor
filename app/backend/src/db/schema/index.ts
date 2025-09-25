@@ -10,7 +10,9 @@ import { vehiclePlateTable } from "./vehicle-plates.js";
 import { vehicleAssignmentTable } from "./vehicle-assignments.js";
 import {
   insurancePolicyTable,
-  insurancePolicyVehicleTable,
+  insurancePolicyRenewalTable,
+  insuranceRepresentativeTable,
+  vehicleInsuranceTable,
 } from "./insurance-policies.js";
 import { vehicleTaxTable } from "./vehicle-taxes.js";
 import { vehicleDocumentTable } from "./vehicle-documents.js";
@@ -27,7 +29,9 @@ export {
   vehiclePlateTable,
   vehicleAssignmentTable,
   insurancePolicyTable,
-  insurancePolicyVehicleTable,
+  insurancePolicyRenewalTable,
+  insuranceRepresentativeTable,
+  vehicleInsuranceTable,
   vehicleTaxTable,
   vehicleDocumentTable,
 };

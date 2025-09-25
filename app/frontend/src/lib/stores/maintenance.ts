@@ -26,7 +26,7 @@ const createMaintenanceModalStore = () => {
 			logToEdit,
 			editMode,
 			show: true,
-			callback
+			callback: callback || (() => {})
 		});
 	}
 

@@ -37,6 +37,11 @@
 	let saturation = $state(100);
 	let lightness = $state(50);
 	let manualHex = $state(value || '#000000');
+	const baseId = `colorpicker-${Math.random().toString(36).slice(2, 9)}`;
+	const hueId = `${baseId}-hue`;
+	const saturationId = `${baseId}-saturation`;
+	const lightnessId = `${baseId}-lightness`;
+	const manualId = `${baseId}-manual`;
 
 	// Convertir hex a HSL
 	function hexToHsl(hex: string): [number, number, number] {
@@ -141,10 +146,10 @@
 
 <div class="color-picker">
 	{#if label}
-		<label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+		<p class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
 			{label}
 			{#if required}<span class="text-red-500">*</span>{/if}
-		</label>
+		</p>
 	{/if}
 
 	<!-- Vista previa del color seleccionado -->
@@ -177,7 +182,8 @@
 					class:border-gray-300={selectedColor !== color.hex}
 					style="background-color: {color.hex}"
 					title="{color.name} ({color.hex})"
-					on:click={() => selectCommonColor(color.hex)}
+					aria-label={`${color.name} (${color.hex})`}
+					onclick={() => selectCommonColor(color.hex)}
 				></button>
 			{/each}
 		</div>
@@ -187,7 +193,7 @@
 	<button
 		type="button"
 		class="mb-3 text-sm text-blue-600 hover:underline dark:text-blue-400"
-		on:click={() => (showAdvanced = !showAdvanced)}
+		onclick={() => (showAdvanced = !showAdvanced)}
 	>
 		{showAdvanced ? $t('colorPicker.hideAdvanced') : $t('colorPicker.showAdvanced')}
 	</button>
@@ -196,15 +202,16 @@
 		<div class="space-y-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
 			<!-- Slider de Matiz -->
 			<div>
-				<label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+				<label for={hueId} class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
 					{$t('colorPicker.hue')}: {hue}°
 				</label>
 				<input
+					id={hueId}
 					type="range"
 					min="0"
 					max="360"
 					bind:value={hue}
-					on:input={updateFromSliders}
+					oninput={updateFromSliders}
 					class="h-2 w-full cursor-pointer appearance-none rounded-lg"
 					style="background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)"
 				/>
@@ -212,15 +219,16 @@
 
 			<!-- Slider de Saturación -->
 			<div>
-				<label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+				<label for={saturationId} class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
 					{$t('colorPicker.saturation')}: {saturation}%
 				</label>
 				<input
+					id={saturationId}
 					type="range"
 					min="0"
 					max="100"
 					bind:value={saturation}
-					on:input={updateFromSliders}
+					oninput={updateFromSliders}
 					class="h-2 w-full cursor-pointer appearance-none rounded-lg"
 					style="background: linear-gradient(to right, hsl({hue}, 0%, {lightness}%), hsl({hue}, 100%, {lightness}%))"
 				/>
@@ -228,15 +236,16 @@
 
 			<!-- Slider de Luminosidad -->
 			<div>
-				<label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+				<label for={lightnessId} class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
 					{$t('colorPicker.lightness')}: {lightness}%
 				</label>
 				<input
+					id={lightnessId}
 					type="range"
 					min="0"
 					max="100"
 					bind:value={lightness}
-					on:input={updateFromSliders}
+					oninput={updateFromSliders}
 					class="h-2 w-full cursor-pointer appearance-none rounded-lg"
 					style="background: linear-gradient(to right, hsl({hue}, {saturation}%, 0%), hsl({hue}, {saturation}%, 50%), hsl({hue}, {saturation}%, 100%))"
 				/>
@@ -244,14 +253,15 @@
 
 			<!-- Entrada manual -->
 			<div>
-				<label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+				<label for={manualId} class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
 					{$t('colorPicker.hexCode')}
 				</label>
 				<input
+					id={manualId}
 					type="text"
 					bind:value={manualHex}
-					on:blur={updateFromManual}
-					on:keydown={(e) => e.key === 'Enter' && updateFromManual()}
+					onblur={updateFromManual}
+					onkeydown={(e) => e.key === 'Enter' && updateFromManual()}
 					placeholder="#000000"
 					class="w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
 				/>

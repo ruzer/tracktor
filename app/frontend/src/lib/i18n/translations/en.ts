@@ -13,7 +13,10 @@ export default {
 		delete: 'Delete',
 		edit: 'Edit',
 		add: 'Add',
+		select: 'Select',
+		search: 'Search',
 		loading: 'Loading...',
+		days: 'days',
 		error: 'Error',
 		success: 'Success',
 		confirm: 'Confirm',
@@ -33,8 +36,9 @@ export default {
 		},
 		insurance: {
 			label: 'Insurance',
-			overview: 'Policies & renewals',
-			collective: 'Collective insurance'
+			policies: 'Policies',
+			renewals: 'Renewals',
+			reports: 'Reports'
 		}
 	},
 	app: {
@@ -56,12 +60,24 @@ export default {
 		fetchFuelLogsFailed: 'Failed to fetch fuel logs.',
 		fetchMaintenanceLogsFailed: 'Failed to fetch maintenance logs.',
 		fetchInsuranceFailed: 'Failed to fetch insurance data.',
+		fetchInsurancePoliciesFailed: 'Failed to fetch insurance policies.',
+		fetchInsuranceRepresentativesFailed: 'Failed to fetch insurance representatives.',
+		fetchInsuranceRenewalsFailed: 'Failed to fetch insurance renewals.',
+		fetchVehicleInsuranceFailed: 'Failed to fetch vehicle insurance assignments.',
 		fetchPollutionFailed: 'Failed to fetch pollution certificates.',
 		deleteFailed: 'Failed to delete.',
 		deleteFuelLogFailed: 'Failed to delete fuel log.',
 		deleteMaintenanceFailed: 'Failed to delete maintenance log.',
 		deleteInsuranceFailed: 'Failed to delete insurance details.',
-		deletePollutionFailed: 'Failed to delete pollution certificate.'
+		deleteInsurancePolicyFailed: 'Failed to delete insurance policy.',
+		deleteRepresentativeFailed: 'Failed to delete insurance representative.',
+		deleteVehicleInsuranceFailed: 'Failed to remove vehicle insurance assignment.',
+		deletePollutionFailed: 'Failed to delete pollution certificate.',
+		saveInsurancePolicyFailed: 'Failed to save insurance policy.',
+		saveRepresentativeFailed: 'Failed to save insurance representative.',
+		renewPolicyFailed: 'Failed to renew insurance policy.',
+		assignVehicleInsuranceFailed: 'Failed to assign vehicle insurance.',
+		unassignVehicleInsuranceFailed: 'Failed to unassign vehicle insurance.'
 	},
 	login: {
 		title: 'Welcome',
@@ -157,49 +173,123 @@ export default {
 		}
 	},
 	insurance: {
-		overview: {
-			title: 'Insurance workspace',
-			subtitle: 'Centralize policy management and renewal tracking for your fleet.',
-			cards: {
-				policies: {
-					title: 'Individual policies',
-					body: 'Review coverage, premiums and expiry dates for every vehicle policy in one place.'
-				},
-				compliance: {
-					title: 'Compliance status',
-					body: 'Monitor mandatory documents, renewal windows and assignment of responsible teammates.'
-				},
-				collective: {
-					title: 'Collective programmes',
-					body: 'Outline coverage strategies for teams or regions and keep stakeholders informed.'
-				},
-				integrations: {
-					title: 'Integrations & workflows',
-					body: 'Connect Tracktor with insurers, ERPs and alerts to keep everyone aligned.'
-				}
+		policies: {
+			title: 'Policies workspace',
+			subtitle: 'Create, assign and track individual or collective insurance programmes.',
+			empty: 'No policies registered yet. Start by creating one to link vehicles and keep expirations under control.',
+			new: 'New policy',
+			edit: 'Edit policy',
+			filters: {
+				status: 'Status',
+				type: 'Type',
+				search: 'Search by insurer or policy number'
+			},
+			types: {
+				individual: 'Individual',
+				collective: 'Collective'
+			},
+			actions: {
+				view: 'View policy',
+				edit: 'Edit policy',
+				renew: 'Renew'
 			}
 		},
-		collective: {
-			title: 'Collective insurance programmes',
-			subtitle: 'Design coverage frameworks for driver groups, departments and recurring routes.',
-			cards: {
-				pooling: {
-					title: 'Group pooling',
-					body: 'Bundle vehicles and drivers to negotiate better premiums and balance deductibles.'
-				},
-				coverage: {
-					title: 'Configurable coverage',
-					body: 'Define insured assets, coverage limits and eligibility rules for each collective plan.'
-				},
-				process: {
-					title: 'Claims & onboarding',
-					body: 'Establish documentation checklists, responsible owners and approval workflows.'
-				},
-				next: {
-					title: 'What’s next',
-					body: 'Upcoming releases will include bulk actions, analytics and insurer integrations.'
-				}
+		renewals: {
+			title: 'Upcoming renewals',
+			subtitle: 'Keep expirations under control and renew policies in a single place.',
+			empty: 'No policies require renewal in the selected window.'
+		},
+		reports: {
+			title: 'Insurance reports',
+			subtitle: 'Detect coverage gaps, expired policies and vehicles without assignments.',
+			export: 'Export CSV',
+			sections: {
+				vehiclesWithout: 'Vehicles without policy',
+				vehiclesExpired: 'Vehicles with expired policy',
+				upcoming: 'Upcoming expirations',
+				expired: 'Expired policies'
 			}
+		},
+		forms: {
+			headers: {
+				details: 'Policy details',
+				vehicles: 'Covered vehicles',
+				renewals: 'Renewal history',
+				representatives: 'Insurance representatives'
+			},
+			fields: {
+				insurer: 'Insurer',
+				policyNumber: 'Policy number',
+				type: 'Policy type',
+				coverageType: 'Coverage type',
+				startDate: 'Start date',
+				endDate: 'End date',
+				notes: 'Notes',
+				representative: 'Representative',
+				representativeName: 'Representative name',
+				representativePhone: 'Phone',
+				representativeEmail: 'Email',
+				premiumAmount: 'Premium amount',
+				company: 'Company',
+				assignedAt: 'Assigned date',
+				unassignedAt: 'Unassigned date',
+				isCurrent: 'Current assignment',
+				previousEndDate: 'Previous end date',
+				newStartDate: 'New start date',
+				newEndDate: 'New end date',
+				premiumChange: 'Premium change'
+			},
+			validation: {
+				required: 'Please fill in all required fields.',
+				vehicleRequired: 'Select at least one vehicle to assign the policy.',
+				representativeRequired: 'Representative name is required.',
+				renewalDatesRequired: 'Start and end dates are required for renewal.',
+				dateOrderRequired: 'End date must be after start date.'
+			},
+			vehicles: {
+				add: 'Add vehicles',
+				manage: 'Manage vehicles',
+				assign: 'Assign to vehicle',
+				unassign: 'Unassign from vehicle',
+				currentAssignments: 'Current assignments',
+				assignmentHistory: 'Assignment history'
+			},
+			representatives: {
+				add: 'Add representative',
+				edit: 'Edit representative',
+				delete: 'Delete representative',
+				manage: 'Manage representatives',
+				empty: 'No representatives registered yet.',
+				contact: 'Contact information'
+			},
+			submit: {
+				save: 'Save policy',
+				update: 'Update policy',
+				saveRepresentative: 'Save representative',
+				updateRepresentative: 'Update representative'
+			},
+			renew: {
+				title: 'Renew policy',
+				startLabel: 'New start date',
+				endLabel: 'New end date',
+				notesLabel: 'Notes (optional)',
+				extendVehicles: 'Apply new dates to current vehicle assignments',
+				empty: 'No renewals recorded yet.',
+				history: 'Renewal history',
+				premiumChangeLabel: 'Premium change amount',
+				createRenewal: 'Create renewal record'
+			}
+		},
+		vehicleInsurance: {
+			title: 'Vehicle insurance assignments',
+			subtitle: 'Manage individual vehicle coverage and track assignment history.',
+			currentCoverage: 'Current coverage',
+			assignmentHistory: 'Assignment history',
+			noCoverage: 'This vehicle has no active insurance coverage.',
+			noHistory: 'No assignment history available.',
+			assign: 'Assign insurance',
+			unassign: 'Remove coverage',
+			reassign: 'Change coverage'
 		}
 	},
 	modals: {
@@ -324,6 +414,14 @@ export default {
 			maintenanceUpdated: 'Maintenance log updated successfully!',
 			insuranceAdded: 'Insurance added successfully!',
 			insuranceUpdated: 'Insurance updated successfully!',
+			insurancePolicyAdded: 'Insurance policy added successfully!',
+			insurancePolicyUpdated: 'Insurance policy updated successfully!',
+			insurancePolicyRenewed: 'Insurance policy renewed successfully!',
+			representativeAdded: 'Insurance representative added successfully!',
+			representativeUpdated: 'Insurance representative updated successfully!',
+			representativeDeleted: 'Insurance representative deleted successfully!',
+			vehicleInsuranceAssigned: 'Vehicle insurance assigned successfully!',
+			vehicleInsuranceUnassigned: 'Vehicle insurance unassigned successfully!',
 			pollutionAdded: 'Pollution certificate added successfully!',
 			pollutionUpdated: 'Pollution certificate updated successfully!',
 			vehicleAdded: 'Vehicle added successfully!',

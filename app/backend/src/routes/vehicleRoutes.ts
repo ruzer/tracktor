@@ -25,7 +25,10 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
 });
-const uploadSingle: RequestHandler = upload.single("file");
+const uploadSingle: RequestHandler = (req, res, next) => {
+  const single = upload.single("file") as unknown as RequestHandler;
+  single(req, res, next);
+};
 
 
 router.post("/", authenticatePin, asyncHandler(addVehicle));

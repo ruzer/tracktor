@@ -32,7 +32,7 @@ app.use(express.json());
 app.use("/api", pinRoutes);
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/config", configRoutes);
-app.use("/api/insurance-policies", insurancePolicyRoutes);
+app.use("/api/insurance", insurancePolicyRoutes);
 
 if (env.isProduction()) {
   // @ts-expect-error dynamic import of SvelteKit handler in prod

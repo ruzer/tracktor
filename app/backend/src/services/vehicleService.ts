@@ -46,10 +46,41 @@ export const addVehicle = async (vehicleData: any) => {
 export const getAllVehicles = async (search?: string) => {
   const vehicles = await db.query.vehicleTable.findMany();
 
-  const allInsurances = await db.query.insuranceTable.findMany();
+  const legacyInsurances = await db.query.insuranceTable.findMany();
+  const currentVehiclePolicies = await db
+    .select({
+      vehicleId: schema.vehicleInsuranceTable.vehicleId,
+      policyId: schema.vehicleInsuranceTable.policyId,
+      assignedAt: schema.vehicleInsuranceTable.assignedAt,
+      premiumAmount: schema.vehicleInsuranceTable.premiumAmount,
+      endDate: schema.insurancePolicyTable.endDate,
+      status: schema.insurancePolicyTable.status,
+      insurer: schema.insurancePolicyTable.insurer,
+      policyNumber: schema.insurancePolicyTable.policyNumber,
+      type: schema.insurancePolicyTable.type,
+    })
+    .from(schema.vehicleInsuranceTable)
+    .innerJoin(
+      schema.insurancePolicyTable,
+      eq(schema.vehicleInsuranceTable.policyId, schema.insurancePolicyTable.id),
+    )
+    .where(eq(schema.vehicleInsuranceTable.isCurrent, true));
+
   const allPollutionCertificates =
     await db.query.pollutionCertificateTable.findMany();
   const allAssignments = await db.query.vehicleAssignmentTable.findMany();
+
+  const policyByVehicle = new Map<string, (typeof currentVehiclePolicies)[number]>();
+  for (const record of currentVehiclePolicies) {
+    policyByVehicle.set(record.vehicleId, record);
+  }
+
+  const legacyInsuranceByVehicle = new Map<string, typeof legacyInsurances>();
+  for (const legacy of legacyInsurances) {
+    const collection = legacyInsuranceByVehicle.get(legacy.vehicleId) ?? [];
+    collection.push(legacy);
+    legacyInsuranceByVehicle.set(legacy.vehicleId, collection);
+  }
 
   const currentAssignments = new Map<string, (typeof allAssignments)[number]>();
   for (const assignment of allAssignments) {
@@ -59,20 +90,42 @@ export const getAllVehicles = async (search?: string) => {
   }
 
   const vehiclesWithMeta = vehicles.map((vehicle) => {
-    const insurances = allInsurances.filter(
-      (insurance) => insurance.vehicleId === vehicle.id,
-    );
+    const policy = policyByVehicle.get(vehicle.id);
+    const insurances = legacyInsuranceByVehicle.get(vehicle.id) ?? [];
     const pollutionCertificates = allPollutionCertificates.filter(
       (pucc) => pucc.vehicleId === vehicle.id,
     );
 
     let insuranceStatus = "Not Available";
-    if (insurances && insurances.length > 0) {
+    let currentPolicy: {
+      id: string;
+      insurer: string;
+      policyNumber: string;
+      endDate: string;
+      type: string;
+      assignedAt: string;
+      premiumAmount?: number | null;
+    } | null = null;
+
+    if (policy) {
+      const today = new Date();
+      const policyEnd = new Date(policy.endDate);
+      insuranceStatus =
+        policy.status === "active" && policyEnd >= today ? "Active" : "Expired";
+      currentPolicy = {
+        id: policy.policyId,
+        insurer: policy.insurer,
+        policyNumber: policy.policyNumber,
+        endDate: policy.endDate,
+        type: policy.type,
+        assignedAt: policy.assignedAt,
+        premiumAmount: policy.premiumAmount,
+      };
+    } else if (insurances.length > 0) {
       insuranceStatus = "Expired";
       insurances.forEach((insurance) => {
         const endDate = new Date(insurance.endDate);
-        const today = new Date();
-        if (endDate > today) {
+        if (endDate > new Date()) {
           insuranceStatus = "Active";
         }
       });
@@ -95,6 +148,7 @@ export const getAllVehicles = async (search?: string) => {
       insuranceStatus,
       puccStatus,
       currentAssignment: currentAssignments.get(vehicle.id) || null,
+      currentPolicy,
     };
   });
 
@@ -104,21 +158,24 @@ export const getAllVehicles = async (search?: string) => {
   }
 
   return vehiclesWithMeta.filter((vehicle) => {
+    const v = vehicle as any;
     const haystack = [
-      vehicle.make,
-      vehicle.model,
-      vehicle.licensePlate,
-      vehicle.vin,
-      vehicle.color,
-      vehicle.ownerName,
-      vehicle.year?.toString(),
-      vehicle.odometer ? vehicle.odometer.toString() : undefined,
-      vehicle.insuranceStatus,
-      vehicle.puccStatus,
-      vehicle.currentAssignment?.assigneeName,
-      vehicle.currentAssignment?.assigneeRole,
-      vehicle.currentAssignment?.area,
-      vehicle.currentAssignment?.unit,
+      v.make,
+      v.model,
+      v.licensePlate,
+      v.vin,
+      v.color,
+      v.ownerName,
+      v.year?.toString(),
+      v.odometer ? v.odometer.toString() : undefined,
+      v.insuranceStatus,
+      v.currentPolicy?.policyNumber,
+      v.currentPolicy?.insurer,
+      v.puccStatus,
+      v.currentAssignment?.assigneeName,
+      v.currentAssignment?.assigneeRole,
+      v.currentAssignment?.area,
+      v.currentAssignment?.unit,
     ];
 
     return haystack.some((value) => {

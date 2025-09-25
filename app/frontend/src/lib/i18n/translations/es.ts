@@ -13,7 +13,10 @@ export default {
 		delete: 'Eliminar',
 		edit: 'Editar',
 		add: 'Agregar',
+		select: 'Seleccionar',
+		search: 'Buscar',
 		loading: 'Cargando...',
+		days: 'días',
 		error: 'Error',
 		success: 'Éxito',
 		confirm: 'Confirmar',
@@ -33,8 +36,9 @@ export default {
 		},
 		insurance: {
 			label: 'Seguros',
-			overview: 'Pólizas y renovaciones',
-			collective: 'Seguros colectivos'
+			policies: 'Pólizas',
+			renewals: 'Renovaciones',
+			reports: 'Reportes'
 		}
 	},
 	app: {
@@ -158,49 +162,82 @@ export default {
 		}
 	},
 	insurance: {
-		overview: {
-			title: 'Centro de seguros',
-			subtitle: 'Gestiona pólizas, renovaciones y documentación de tu flota desde un solo lugar.',
-			cards: {
-				policies: {
-					title: 'Pólizas individuales',
-					body: 'Consulta coberturas, primas y fechas de vencimiento de cada vehículo sin salir de Tracktor.'
-				},
-				compliance: {
-					title: 'Cumplimiento normativo',
-					body: 'Supervisa certificados obligatorios, periodos de renovación y responsables asignados.'
-				},
-				collective: {
-					title: 'Programas colectivos',
-					body: 'Diseña estrategias de cobertura por equipos, zonas o contratos especiales.'
-				},
-				integrations: {
-					title: 'Integraciones y flujos',
-					body: 'Conecta Tracktor con aseguradoras y sistemas internos para automatizar avisos y reportes.'
-				}
+		policies: {
+			title: 'Centro de pólizas',
+			subtitle: 'Administra pólizas individuales o colectivas, asigna vehículos y controla las vigencias.',
+			empty: 'Aún no tienes pólizas registradas. Crea una para asignarla a los vehículos de tu flota.',
+			new: 'Nueva póliza',
+			edit: 'Editar póliza',
+			filters: {
+				status: 'Estado',
+				type: 'Tipo',
+				search: 'Buscar por aseguradora o número de póliza'
+			},
+			types: {
+				individual: 'Individual',
+				collective: 'Colectiva'
+			},
+			actions: {
+				view: 'Ver póliza',
+				edit: 'Editar',
+				renew: 'Renovar'
 			}
 		},
-		collective: {
-			title: 'Seguros colectivos',
-			subtitle:
-				'Planifica coberturas para grupos de conductores, departamentos o rutas frecuentes.',
-			cards: {
-				pooling: {
-					title: 'Agrupación estratégica',
-					body: 'Negocia mejores primas agrupando vehículos y equilibrando deducibles por colectivo.'
-				},
-				coverage: {
-					title: 'Cobertura configurable',
-					body: 'Define activos asegurados, límites y reglas de elegibilidad para cada programa colectivo.'
-				},
-				process: {
-					title: 'Procesos y reclamaciones',
-					body: 'Establece checklists de documentación, responsables y flujos de aprobación.'
-				},
-				next: {
-					title: 'Próximos pasos',
-					body: 'Muy pronto agregaremos acciones masivas, analítica y conexiones directas con aseguradoras.'
-				}
+		renewals: {
+			title: 'Renovaciones próximas',
+			subtitle: 'Mantén el control de tus pólizas antes de que expiren.',
+			empty: 'No hay pólizas por renovar en el periodo seleccionado.'
+		},
+		reports: {
+			title: 'Reportes de seguro',
+			subtitle: 'Identifica vehículos sin póliza, pólizas vencidas y próximas a vencer.',
+			export: 'Exportar CSV',
+			sections: {
+				vehiclesWithout: 'Vehículos sin póliza',
+				vehiclesExpired: 'Vehículos con póliza vencida',
+				upcoming: 'Próximas a vencer',
+				expired: 'Pólizas vencidas'
+			}
+		},
+		forms: {
+			headers: {
+				details: 'Detalles de la póliza',
+				vehicles: 'Vehículos asegurados',
+				renewals: 'Historial de renovaciones'
+			},
+			fields: {
+				insurer: 'Aseguradora',
+				policyNumber: 'Número de póliza',
+				type: 'Tipo de póliza',
+				coverageType: 'Tipo de cobertura',
+				startDate: 'Fecha de inicio',
+				endDate: 'Fecha de término',
+				notes: 'Notas',
+				representative: 'Representante',
+				representativeName: 'Nombre del representante',
+				representativePhone: 'Teléfono',
+				representativeEmail: 'Correo',
+				premiumAmount: 'Prima asignada'
+			},
+			validation: {
+				required: 'Completa los campos obligatorios.',
+				vehicleRequired: 'Selecciona al menos un vehículo para asignar la póliza.'
+			},
+			vehicles: {
+				add: 'Agregar vehículos',
+				manage: 'Gestionar vehículos'
+			},
+			submit: {
+				save: 'Guardar póliza',
+				update: 'Actualizar póliza'
+			},
+			renew: {
+				title: 'Renovar póliza',
+				startLabel: 'Nueva fecha de inicio',
+				endLabel: 'Nueva fecha de término',
+				notesLabel: 'Notas (opcional)',
+				extendVehicles: 'Aplicar nuevas fechas a los vehículos asignados',
+				empty: 'Aún no hay renovaciones registradas.'
 			}
 		}
 	},

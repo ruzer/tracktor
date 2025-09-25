@@ -36,6 +36,15 @@ export interface Vehicle {
 	insuranceStatus?: string | null;
 	puccStatus?: string | null;
 	currentAssignment?: VehicleAssignmentSnapshot | null;
+	currentPolicy?: {
+		id: string;
+		insurer: string;
+		policyNumber: string;
+		endDate: string;
+		type: string;
+		assignedAt: string;
+		premiumAmount?: number | null;
+	} | null;
 	createdAt?: string;
 	updatedAt?: string;
 }
