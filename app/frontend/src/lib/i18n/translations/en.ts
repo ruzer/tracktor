@@ -21,7 +21,21 @@ export default {
 		toggleDarkMode: 'Toggle dark mode',
 		notAvailable: 'Not Available',
 		yes: 'Yes',
-		no: 'No'
+		no: 'No',
+		clear: 'Clear'
+	},
+	menu: {
+		ariaLabel: 'Main navigation',
+		vehicles: {
+			label: 'Vehicles',
+			overview: 'Fleet overview',
+			import: 'Import vehicles'
+		},
+		insurance: {
+			label: 'Insurance',
+			overview: 'Policies & renewals',
+			collective: 'Collective insurance'
+		}
 	},
 	app: {
 		title: 'Tracktor',
@@ -69,6 +83,7 @@ export default {
 	dashboard: {
 		title: 'Your Vehicles',
 		addVehicle: 'Add Vehicle',
+		importVehicles: 'Import Vehicles',
 		loadingVehicles: 'Loading Vehicles...',
 		selectVehicle: 'Select a vehicle to view fuel and mileage data',
 		noDataAvailable: 'No data available for this vehicle.',
@@ -81,6 +96,7 @@ export default {
 		}
 	},
 	vehicle: {
+		vehicleLabel: 'Vehicle',
 		licensePlate: 'License Plate',
 		vin: 'VIN',
 		color: 'Color',
@@ -89,11 +105,102 @@ export default {
 		pucc: 'PUCC',
 		year: 'Year',
 		active: 'Active',
+		expired: 'Expired',
 		inactive: 'Inactive',
 		logFuel: 'Log fuel refill',
 		deleteSuccess: 'Vehicle deleted successfully.',
 		deleteError: 'Failed to delete vehicle.',
-		connectionError: 'Failed to connect to the server.'
+		connectionError: 'Failed to connect to the server.',
+		emptyState: 'No vehicles found. Add your first vehicle to begin.',
+		searchPlaceholder: 'Search by make, plate, area, or driver',
+		view: {
+			grid: 'Cards',
+			list: 'Table'
+		},
+		import: {
+			title: 'Import Vehicles',
+			description:
+				'Upload a CSV or Excel file with your fleet data. Make sure at least make, model, year, and license plate columns are present.',
+			supportedFormats: 'Supported file types',
+			formatCsv: 'CSV (.csv)',
+			formatExcel: 'Excel (.xlsx, .xls)',
+			selectFile: 'Select the file to import',
+			downloadTemplate: 'Download template',
+			results: 'Import summary',
+			total: 'Total rows',
+			successful: 'Imported',
+			skipped: 'Skipped',
+			warnings: 'Warnings',
+			failed: 'Failed rows',
+			failedRow: 'Row {{row}}: {{error}}',
+			error: 'We could not finish the import. Please check the file and try again.',
+			start: 'Start import',
+			backToVehicles: 'Back to vehicles',
+			pageTitle: 'Bulk import of vehicles',
+			pageDescription: 'Follow these steps to onboard complete fleets in minutes.',
+			instructionsTitle: 'Upload your fleet file',
+			instructionsDescription:
+				'Review the template, keep consistent headers and validate required fields before uploading your spreadsheet.'
+		},
+		assignment: {
+			currentTitle: 'Current assignment',
+			unknownDriver: 'Unassigned driver',
+			area: 'Area',
+			unit: 'Unit',
+			since: 'Since',
+			until: 'Until',
+			notes: 'Notes',
+			noCurrent: 'This vehicle does not have an active assignment.',
+			showHistory: 'Show history',
+			hideHistory: 'Hide history',
+			noRecords: 'No assignments recorded yet.'
+		}
+	},
+	insurance: {
+		overview: {
+			title: 'Insurance workspace',
+			subtitle: 'Centralize policy management and renewal tracking for your fleet.',
+			cards: {
+				policies: {
+					title: 'Individual policies',
+					body: 'Review coverage, premiums and expiry dates for every vehicle policy in one place.'
+				},
+				compliance: {
+					title: 'Compliance status',
+					body: 'Monitor mandatory documents, renewal windows and assignment of responsible teammates.'
+				},
+				collective: {
+					title: 'Collective programmes',
+					body: 'Outline coverage strategies for teams or regions and keep stakeholders informed.'
+				},
+				integrations: {
+					title: 'Integrations & workflows',
+					body: 'Connect Tracktor with insurers, ERPs and alerts to keep everyone aligned.'
+				}
+			}
+		},
+		collective: {
+			title: 'Collective insurance programmes',
+			subtitle: 'Design coverage frameworks for driver groups, departments and recurring routes.',
+			cards: {
+				pooling: {
+					title: 'Group pooling',
+					body: 'Bundle vehicles and drivers to negotiate better premiums and balance deductibles.'
+				},
+				coverage: {
+					title: 'Configurable coverage',
+					body: 'Define insured assets, coverage limits and eligibility rules for each collective plan.'
+				},
+				process: {
+					title: 'Claims & onboarding',
+					body: 'Establish documentation checklists, responsible owners and approval workflows.'
+				},
+				next: {
+					title: 'What’s next',
+					body: 'Upcoming releases will include bulk actions, analytics and insurer integrations.'
+				}
+			}
+		}
 	},
 	modals: {
 		configurations: 'Configurations',

@@ -6,7 +6,7 @@ import { Status } from "@exceptions/ServiceError.js";
 export const addVehicle = async (req: Request, res: Response) => {
   const { make, model, year, licensePlate } = req.body;
   if (!make || !model || !year || !licensePlate) {
-    new VehicleError(
+    throw new VehicleError(
       "Make, Model, Year, and License Plate are required.",
       Status.BAD_REQUEST,
     );
@@ -16,7 +16,8 @@ export const addVehicle = async (req: Request, res: Response) => {
 };
 
 export const getAllVehicles = async (req: Request, res: Response) => {
-  const vehicles = await vehicleService.getAllVehicles();
+  const search = typeof req.query.q === "string" ? req.query.q : undefined;
+  const vehicles = await vehicleService.getAllVehicles(search);
   res.status(200).json(vehicles);
 };
 
@@ -54,4 +55,13 @@ export const deleteVehicle = async (req: Request, res: Response) => {
 
   const result = await vehicleService.deleteVehicle(id);
   res.status(200).json(result);
+};
+
+export const importVehicles = async (req: Request, res: Response) => {
+  const file = req.file;
+  if (!file) {
+    throw new VehicleError("File is required.", Status.BAD_REQUEST);
+  }
+  const summary = await vehicleService.importVehicles(file);
+  res.status(201).json(summary);
 };

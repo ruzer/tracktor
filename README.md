@@ -28,6 +28,8 @@
 - 📄 **Document Tracking:** Track insurance, pollution certificates, and other important documents.
 - 📊 **Dashboard:** Visualize key metrics and upcoming renewals.
 - 🔒 **User Authentication:** Secure access to your data.
+- 🔍 **Flexible Views:** Switch between card and table views and find vehicles instantly with global search.
+- 📥 **Bulk Imports:** Load complete vehicle fleets from CSV/XLSX files, including insurance and resguardo assignments.
 
 ## 🖼️ Screenshots
 
@@ -90,6 +92,20 @@
 ## 🚀 Getting Started
 
 Please check the [installation guide](./docs/INSTALL.md) for detailed instructions on setting up the project.
+
+## 📥 Bulk Vehicle Import
+
+- Use the Vehicles ▸ Import vehicles option in the top navigation to upload a `.csv`, `.xlsx`, or `.xls` file.
+- Required columns: `make`, `model`, `year`, `licensePlate`.
+- Optional columns let you preload VIN, color, odometer, insurance (`insuranceProvider`, `insurancePolicyNumber`, `insuranceStartDate`, `insuranceEndDate`, `insuranceCost`, `insuranceNotes`) and the active resguardo (`assigneeName`, `assigneeRole`, `assignmentArea`, `assignmentUnit`, `assignmentStartDate`, `assignmentEndDate`, `assignmentNotes`).
+- A ready-to-edit template is available directly from the importer.
+
+## 🧭 Module navigation
+
+- **Vehicles:** jump to the fleet workspace with card/table views, filters and the dedicated *Import vehicles* sub-menu for bulk uploads.
+- **Insurance:** manage individual policies and access the new *Collective insurance* sub-module with guidance for group programmes.
+- Both modules live in the top navigation, keeping a consistent layout so users can switch contexts without losing their place.
+
 
 ## 🤝 Contributing
 

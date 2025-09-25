@@ -37,34 +37,45 @@ const createVehicleModalStore = () => {
 };
 
 const createVehiclesStore = () => {
-	const { subscribe, set, update } = writable<{
+	const { subscribe, update } = writable<{
 		loading: boolean;
 		error: string;
 		vehicles: Vehicle[];
 		selectedVehicleId?: string;
+		viewMode: 'grid' | 'list';
+		search: string;
 	}>({
 		loading: true,
 		error: '',
 		vehicles: [],
-		selectedVehicleId: undefined
+		selectedVehicleId: undefined,
+		viewMode: 'grid',
+		search: ''
 	});
 
-	async function fetchVehicles(pin: string) {
+	async function fetchVehicles(pin: string, search?: string) {
 		let tempSelection: string | undefined = undefined;
+		let searchTerm = search;
+		let viewMode: 'grid' | 'list' = 'grid';
 		update((current) => {
 			if (current.selectedVehicleId) {
 				tempSelection = current.selectedVehicleId;
 			}
+			viewMode = current.viewMode || 'grid';
+			searchTerm = searchTerm ?? current.search;
 			return {
+				...current,
 				loading: true,
 				error: current.error,
 				vehicles: [],
-				selectedVehicleId: undefined
+				selectedVehicleId: undefined,
+				search: searchTerm || ''
 			};
 		});
 		// await simulateNetworkDelay(2000); // Simulate network delay for development
 		try {
-			const response = await fetch(getApiUrl('/api/vehicles'), {
+			const query = searchTerm ? `?q=${encodeURIComponent(searchTerm)}` : '';
+			const response = await fetch(getApiUrl(`/api/vehicles${query}`), {
 				headers: {
 					'X-User-PIN': pin || ''
 				}
@@ -72,18 +83,21 @@ const createVehiclesStore = () => {
 			if (response.ok) {
 				const vehicles = await response.json();
 				if (Array.isArray(vehicles)) {
-					set({
+					update((current) => ({
+						...current,
 						loading: false,
 						error: '',
-						vehicles: vehicles
-					});
+						vehicles,
+						viewMode
+					}));
 				} else {
 					console.error('Invalid vehicles data format', vehicles);
-					set({
+					update((current) => ({
+						...current,
 						loading: false,
 						error: 'Invalid vehicles data format.',
 						vehicles: []
-					});
+					}));
 				}
 			} else {
 				if (response.status == 401) {
@@ -92,26 +106,27 @@ const createVehiclesStore = () => {
 				console.log('Failed to fetch vehicles', response);
 				const data = await response.json();
 				const error = data.message || 'Failed to fetch vehicles.';
-				set({
+				update((current) => ({
+					...current,
 					loading: false,
 					error,
 					vehicles: []
-				});
+				}));
 				return;
 			}
 		} catch (e) {
 			console.error('Failed to connect to the server.', e);
-			set({
+			update((current) => ({
+				...current,
 				loading: false,
 				error: 'Failed to connect to the server.',
 				vehicles: []
-			});
+			}));
 			return;
 		}
 		update((current) => ({
-			loading: current.loading,
+			...current,
 			error: '',
-			vehicles: current.vehicles,
 			selectedVehicleId: tempSelection
 		}));
 	}
@@ -123,10 +138,26 @@ const createVehiclesStore = () => {
 		}));
 	}
 
+	function setViewMode(view: 'grid' | 'list') {
+		update((current) => ({
+			...current,
+			viewMode: view
+		}));
+	}
+
+	function setSearch(searchValue: string) {
+		update((current) => ({
+			...current,
+			search: searchValue
+		}));
+	}
+
 	return {
 		subscribe,
 		fetchVehicles,
-		selectVehicle
+		selectVehicle,
+		setViewMode,
+		setSearch
 	};
 };
 

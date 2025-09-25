@@ -37,10 +37,7 @@ export const getPollutionCertificates = async (vehicleId: string) => {
       where: (certificates, { eq }) => eq(certificates.vehicleId, vehicleId),
     });
   if (!pollutionCertificates || pollutionCertificates.length === 0) {
-    throw new PollutionCertificateError(
-      `No PUCC found for vehicle id : ${vehicleId}`,
-      Status.NOT_FOUND,
-    );
+    return [];
   }
   return pollutionCertificates;
 };

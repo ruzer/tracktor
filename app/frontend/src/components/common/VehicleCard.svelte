@@ -1,60 +1,10 @@
 <script lang="ts">
-	import {
-		Car,
-		IdCard,
-		Fingerprint,
-		Paintbrush,
-		Gauge,
-		Pencil,
-		Trash2,
-		Fuel,
-		Wrench,
-		Shield,
-		BadgeCheck
-	} from '@lucide/svelte';
+	import { Car, IdCard, Fingerprint, Paintbrush, Gauge, Shield, BadgeCheck } from '@lucide/svelte';
 	import { formatDistance } from '$lib/utils/formatting';
-	import { vehicleModelStore, vehiclesStore } from '$lib/stores/vehicle';
-	import { maintenanceModelStore } from '$lib/stores/maintenance';
-	import { fuelLogModelStore } from '$lib/stores/fuel-log';
-	import { insuranceModelStore } from '$lib/stores/insurance';
-	import { puccModelStore } from '$lib/stores/pucc';
-	import { browser } from '$app/environment';
-	import { env } from '$env/dynamic/public';
 	import { t } from '$lib/stores/i18n';
-	import IconButton from './IconButton.svelte';
-	import DeleteConfirmation from './DeleteConfirmation.svelte';
+	import VehicleActions from './VehicleActions.svelte';
 
 	const { vehicle, updateCallback } = $props();
-	let deleteDialog = $state(false);
-
-	async function deleteVehicle(vehicleId: string) {
-		try {
-			const response = await fetch(`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${vehicleId}`, {
-				method: 'DELETE',
-				headers: {
-					'X-User-PIN': localStorage.getItem('userPin') || ''
-				}
-			});
-			if (response.ok) {
-				alert($t('vehicle.deleteSuccess'));
-				vehicleModelStore.hide();
-				fetchVehicles();
-			} else {
-				const data = await response.json();
-				alert(data.message || $t('vehicle.deleteError'));
-			}
-		} catch (e) {
-			console.log(e);
-			alert($t('vehicle.connectionError'));
-		}
-	}
-
-	const fetchVehicles = () => {
-		if (browser) {
-			const pin = localStorage.getItem('userPin') || undefined;
-			if (pin) vehiclesStore.fetchVehicles(pin);
-		}
-	};
 </script>
 
 <div
@@ -130,55 +80,5 @@
 			</p>
 		{/if}
 	</div>
-	<div class=" flex justify-between">
-		<div class="flex justify-start">
-			<IconButton
-				buttonStyles="hover:bg-green-100 dark:hover:bg-green-700"
-				iconStyles=" text-green-500 hover:text-green-600 dark:text-green-400 dark:hover:text-green-200"
-				icon={Fuel}
-				onclick={() => fuelLogModelStore.show(vehicle.id, null, false, updateCallback)}
-				ariaLabel={$t('vehicle.logFuel')}
-			/>
-			<IconButton
-				buttonStyles="hover:bg-amber-100 dark:hover:bg-amber-700"
-				iconStyles=" text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-200"
-				icon={Wrench}
-				onclick={() => maintenanceModelStore.show(vehicle.id, null, false, updateCallback)}
-				ariaLabel={$t('navigation.maintenance')}
-			/>
-			<IconButton
-				buttonStyles="hover:bg-sky-100 dark:hover:bg-sky-700"
-				iconStyles=" text-sky-500 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-200"
-				icon={Shield}
-				onclick={() => insuranceModelStore.show(vehicle.id, null, false, updateCallback)}
-				ariaLabel={$t('navigation.insurance')}
-			/>
-			<IconButton
-				buttonStyles="hover:bg-fuchsia-100 dark:hover:bg-fuchsia-700"
-				iconStyles=" text-fuchsia-500 hover:text-fuchsia-600 dark:text-fuchsia-400 dark:hover:text-fuchsia-200"
-				icon={BadgeCheck}
-				onclick={() => puccModelStore.show(vehicle.id, null, false, updateCallback)}
-				ariaLabel={$t('navigation.pollutionCertificate')}
-			/>
-		</div>
-		<div class="flex justify-end gap-2">
-			<IconButton
-				buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
-				iconStyles="text-gray-600 dark:text-gray-100 hover:text-sky-500"
-				icon={Pencil}
-				onclick={() => {
-					vehicleModelStore.show(vehicle, true);
-				}}
-				ariaLabel={$t('common.edit')}
-			/>
-			<IconButton
-				buttonStyles="hover:bg-gray-200 dark:hover:bg-gray-700"
-				iconStyles="text-gray-600 dark:text-gray-100 hover:text-red-500"
-				icon={Trash2}
-				onclick={() => (deleteDialog = true)}
-				ariaLabel={$t('common.delete')}
-			/>
-		</div>
-	</div>
+	<VehicleActions {vehicle} {updateCallback} />
 </div>
-<DeleteConfirmation onConfirm={() => deleteVehicle(vehicle.id)} bind:open={deleteDialog} />

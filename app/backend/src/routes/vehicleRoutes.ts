@@ -1,11 +1,14 @@
 import { Router } from "express";
+import type { RequestHandler } from "express";
 import {
   addVehicle,
   getAllVehicles,
   getVehicleById,
   updateVehicle,
   deleteVehicle,
+  importVehicles,
 } from "@controllers/VehicleController.js";
+import multer from "multer";
 import { authenticatePin } from "@middleware/auth.js";
 import { asyncHandler } from "@middleware/async-handler.js";
 import fuelLogRoutes from "./fuelLogRoutes.js";
@@ -18,12 +21,24 @@ import vehicleAssignmentRoutes from "./vehicleAssignmentRoutes.js";
 import vehicleTaxRoutes from "./vehicleTaxRoutes.js";
 
 const router = Router();
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
+});
+const uploadSingle: RequestHandler = upload.single("file");
+
 
 router.post("/", authenticatePin, asyncHandler(addVehicle));
 router.get("/", authenticatePin, asyncHandler(getAllVehicles));
 router.get("/:id", authenticatePin, asyncHandler(getVehicleById));
 router.put("/:id", authenticatePin, asyncHandler(updateVehicle));
 router.delete("/:id", authenticatePin, asyncHandler(deleteVehicle));
+router.post(
+  "/import",
+  authenticatePin,
+  uploadSingle,
+  asyncHandler(importVehicles),
+);
 
 router.use("/:vehicleId/fuel-logs", fuelLogRoutes);
 router.use("/lp/:licensePlate/fuel-logs", fuelLogLPRoutes);

@@ -24,6 +24,7 @@ export const addAssignment = async (
     unit?: string;
     startDate: string;
     isCurrent?: boolean;
+    endDate?: string;
     notes?: string;
   },
 ) => {
@@ -44,7 +45,12 @@ export const addAssignment = async (
   }
   const inserted = await db
     .insert(schema.vehicleAssignmentTable)
-    .values({ vehicleId, ...data, isCurrent: !!data.isCurrent })
+    .values({
+      vehicleId,
+      ...data,
+      endDate: data.endDate,
+      isCurrent: !!data.isCurrent,
+    })
     .returning();
   return { id: inserted[0]?.id, message: "Assignment created" };
 };

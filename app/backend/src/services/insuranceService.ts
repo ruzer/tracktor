@@ -33,10 +33,7 @@ export const getInsurances = async (vehicleId: string) => {
     where: (insurances, { eq }) => eq(insurances.vehicleId, vehicleId),
   });
   if (!insurance || insurance.length === 0) {
-    throw new InsuranceError(
-      `No Insurances found for vehicle id : ${vehicleId}`,
-      Status.NOT_FOUND,
-    );
+    return [];
   }
   return insurance;
 };

@@ -11,6 +11,7 @@
 	import { configModelStore } from '$lib/stores/config';
 	import { vehiclesStore } from '$lib/stores/vehicle';
 	import IconButton from '$components/common/IconButton.svelte';
+	import MainMenu from '$components/navigation/MainMenu.svelte';
 	import { initializeI18n, t } from '$lib/stores/i18n';
 
 	let { children } = $props();
@@ -74,14 +75,17 @@
 {:else if isAuthenticated}
 	<div class="min-h-screen bg-gray-100 transition-colors dark:bg-gray-900">
 		<header class="bg-white shadow-sm transition-colors dark:bg-gray-800">
-			<nav class="container mx-auto flex items-center justify-between p-4">
-				<a
-					href="/dashboard"
-					class="flex items-center gap-2 text-2xl font-bold text-blue-700 transition-colors hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-400"
-				>
-					<Tractor class="h-8 w-8" />
-					{$t('app.title')}
-				</a>
+			<nav class="container mx-auto flex items-center justify-between gap-6 p-4">
+				<div class="flex items-center gap-6">
+					<a
+						href="/dashboard"
+						class="flex items-center gap-2 text-2xl font-bold text-blue-700 transition-colors hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-400"
+					>
+						<Tractor class="h-8 w-8" />
+						{$t('app.title')}
+					</a>
+					<MainMenu />
+				</div>
 				<div class="flex items-center justify-center gap-2 align-middle">
 					<ThemeToggle />
 					<IconButton

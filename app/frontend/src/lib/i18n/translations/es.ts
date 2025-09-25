@@ -21,7 +21,21 @@ export default {
 		toggleDarkMode: 'Cambiar modo oscuro',
 		notAvailable: 'No Disponible',
 		yes: 'Sí',
-		no: 'No'
+		no: 'No',
+		clear: 'Limpiar'
+	},
+	menu: {
+		ariaLabel: 'Navegación principal',
+		vehicles: {
+			label: 'Vehículos',
+			overview: 'Resumen de la flota',
+			import: 'Importar vehículos'
+		},
+		insurance: {
+			label: 'Seguros',
+			overview: 'Pólizas y renovaciones',
+			collective: 'Seguros colectivos'
+		}
 	},
 	app: {
 		title: 'Tracktor',
@@ -69,6 +83,7 @@ export default {
 	dashboard: {
 		title: 'Tus Vehículos',
 		addVehicle: 'Agregar Vehículo',
+		importVehicles: 'Importar Vehículos',
 		loadingVehicles: 'Cargando Vehículos...',
 		selectVehicle: 'Selecciona un vehículo para ver datos de combustible y kilometraje',
 		noDataAvailable: 'No hay datos disponibles para este vehículo.',
@@ -81,6 +96,7 @@ export default {
 		}
 	},
 	vehicle: {
+		vehicleLabel: 'Vehículo',
 		licensePlate: 'Placa',
 		vin: 'VIN',
 		color: 'Color',
@@ -89,11 +105,104 @@ export default {
 		pucc: 'PUCC',
 		year: 'Año',
 		active: 'Activo',
+		expired: 'Vencido',
 		inactive: 'Inactivo',
 		logFuel: 'Registrar recarga de combustible',
 		deleteSuccess: 'Vehículo eliminado exitosamente.',
 		deleteError: 'Error al eliminar el vehículo.',
-		connectionError: 'Error al conectar con el servidor.'
+		connectionError: 'Error al conectar con el servidor.',
+		emptyState: 'No se encontraron vehículos. Agrega tu primer vehículo para comenzar.',
+		searchPlaceholder: 'Busca por marca, placa, área o conductor',
+		view: {
+			grid: 'Tarjetas',
+			list: 'Tabla'
+		},
+		import: {
+			title: 'Importar Vehículos',
+			description:
+				'Sube un archivo CSV o Excel con la información de tu flota. Asegúrate de incluir como mínimo marca, modelo, año y placa.',
+			supportedFormats: 'Formatos admitidos',
+			formatCsv: 'CSV (.csv)',
+			formatExcel: 'Excel (.xlsx, .xls)',
+			selectFile: 'Selecciona el archivo a importar',
+			downloadTemplate: 'Descargar plantilla',
+			results: 'Resumen de importación',
+			total: 'Filas totales',
+			successful: 'Importadas',
+			skipped: 'Omitidas',
+			warnings: 'Advertencias',
+			failed: 'Filas con error',
+			failedRow: 'Fila {{row}}: {{error}}',
+			error: 'No se pudo completar la importación. Revisa el archivo e inténtalo nuevamente.',
+			start: 'Iniciar importación',
+			backToVehicles: 'Volver a vehículos',
+			pageTitle: 'Importación masiva de vehículos',
+			pageDescription:
+				'Carga grandes volúmenes de unidades desde una hoja de cálculo en cuestión de minutos.',
+			instructionsTitle: 'Carga tu archivo de flota',
+			instructionsDescription:
+				'Descarga la plantilla, revisa los encabezados obligatorios y valida los datos antes de subirlos a Tracktor.'
+		},
+		assignment: {
+			currentTitle: 'Resguardo actual',
+			unknownDriver: 'Conductor sin asignar',
+			area: 'Área',
+			unit: 'Unidad',
+			since: 'Desde',
+			until: 'Hasta',
+			notes: 'Notas',
+			noCurrent: 'Actualmente este vehículo no tiene un resguardo activo.',
+			showHistory: 'Mostrar historial',
+			hideHistory: 'Ocultar historial',
+			noRecords: 'Todavía no hay registros de resguardo.'
+		}
+	},
+	insurance: {
+		overview: {
+			title: 'Centro de seguros',
+			subtitle: 'Gestiona pólizas, renovaciones y documentación de tu flota desde un solo lugar.',
+			cards: {
+				policies: {
+					title: 'Pólizas individuales',
+					body: 'Consulta coberturas, primas y fechas de vencimiento de cada vehículo sin salir de Tracktor.'
+				},
+				compliance: {
+					title: 'Cumplimiento normativo',
+					body: 'Supervisa certificados obligatorios, periodos de renovación y responsables asignados.'
+				},
+				collective: {
+					title: 'Programas colectivos',
+					body: 'Diseña estrategias de cobertura por equipos, zonas o contratos especiales.'
+				},
+				integrations: {
+					title: 'Integraciones y flujos',
+					body: 'Conecta Tracktor con aseguradoras y sistemas internos para automatizar avisos y reportes.'
+				}
+			}
+		},
+		collective: {
+			title: 'Seguros colectivos',
+			subtitle:
+				'Planifica coberturas para grupos de conductores, departamentos o rutas frecuentes.',
+			cards: {
+				pooling: {
+					title: 'Agrupación estratégica',
+					body: 'Negocia mejores primas agrupando vehículos y equilibrando deducibles por colectivo.'
+				},
+				coverage: {
+					title: 'Cobertura configurable',
+					body: 'Define activos asegurados, límites y reglas de elegibilidad para cada programa colectivo.'
+				},
+				process: {
+					title: 'Procesos y reclamaciones',
+					body: 'Establece checklists de documentación, responsables y flujos de aprobación.'
+				},
+				next: {
+					title: 'Próximos pasos',
+					body: 'Muy pronto agregaremos acciones masivas, analítica y conexiones directas con aseguradoras.'
+				}
+			}
+		}
 	},
 	modals: {
 		configurations: 'Configuraciones',
