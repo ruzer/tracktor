@@ -121,6 +121,7 @@ export default {
 			grid: 'Tarjetas',
 			list: 'Tabla'
 		},
+		viewDetails: 'Ver detalle',
 		import: {
 			title: 'Importar Vehículos',
 			description:
@@ -159,6 +160,130 @@ export default {
 			showHistory: 'Mostrar historial',
 			hideHistory: 'Ocultar historial',
 			noRecords: 'Todavía no hay registros de resguardo.'
+		},
+		detail: {
+			generalTab: 'General',
+			documentsTab: 'Documentos',
+			backToDashboard: 'Volver al tablero',
+			refresh: 'Actualizar información',
+			generalInfo: 'Información general',
+			assignment: 'Resumen de resguardo',
+			insuranceSummary: 'Resumen de seguros',
+			fuelSummary: 'Resumen de combustible',
+			maintenanceSummary: 'Resumen de mantenimiento',
+			createdAt: 'Creado el',
+			updatedAt: 'Última actualización',
+			statusLabel: 'Estado',
+			statusUnknown: 'Desconocido',
+			noPolicies: 'Aún no hay pólizas asignadas.',
+			policyAssignments: 'Asignaciones activas:',
+			legacyPolicies: 'Historial de pólizas:',
+			totalFuelLogs: '{{count}} cargas registradas',
+			noFuelLogs: 'Aún no se registran cargas de combustible.',
+			lastFuel: 'Última carga registrada',
+			maintenanceLogs: 'Historial de mantenimiento',
+			lastMaintenance: 'Últimos registros de mantenimiento',
+			noMaintenanceLogs: 'Aún no hay registros de mantenimiento.',
+			workOrders: 'Órdenes de servicio',
+			workOrderTitle: 'Título',
+			workOrderStatus: {
+				pending: 'Pendiente',
+				in_progress: 'En proceso',
+				completed: 'Completada'
+			},
+			noWorkOrders: 'Aún no hay órdenes de servicio.',
+			totalWorkOrders: 'Total de órdenes',
+			openOrders: 'Órdenes abiertas',
+			inProgress: 'En proceso',
+			completed: 'Completadas',
+			documents: 'Documentos',
+			documentType: 'Tipo de documento',
+			noDocuments: 'Todavía no se han cargado documentos.',
+			pollutionCertificates: 'Verificaciones y emisiones',
+			pollutionStatus: {
+				active: 'Vigente',
+				expired: 'Vencido'
+			},
+			noPollution: 'No hay verificaciones registradas.'
+		}
+	},
+	maintenance: {
+		titles: {
+			orders: 'Ordenes de servicio',
+			newOrder: 'Registrar orden de mantenimiento',
+			editOrder: 'Editar orden de mantenimiento',
+			updateOrder: 'Actualizar estado de la orden'
+		},
+		labels: {
+			reportedIssue: 'Falla reportada',
+			createdBy: 'Reportado por',
+			status: 'Estado',
+			workshopInfo: 'Información del taller',
+			workshopName: 'Nombre del taller',
+			workshopContact: 'Contacto',
+			workshopPhone: 'Teléfono',
+			workshopEmail: 'Correo',
+			workshopAddress: 'Dirección',
+			notes: 'Notas',
+			paymentStatus: 'Estado de pago',
+			authorizedBy: 'Autorizado por',
+			authorizedAt: 'Fecha de autorización',
+			totalEstimated: 'Total estimado',
+			totalFinal: 'Total final',
+			quoteFile: 'Cotización (URL)',
+			invoiceFile: 'Factura (URL)',
+			userId: 'Actualizado por',
+			history: 'Historial'
+		},
+		placeholders: {
+			reportedIssue: 'Describe la falla reportada por el operador o área',
+			createdBy: 'Nombre del operador o área',
+			workshopName: 'Nombre del taller',
+			workshopContact: 'Persona de contacto',
+			workshopPhone: 'Teléfono del taller',
+			workshopEmail: 'Correo del taller',
+			workshopAddress: 'Dirección completa',
+			notes: 'Añade notas o comentarios',
+			authorizedBy: 'Quién autorizó la reparación',
+			fileUrl: 'https://ejemplo.com/documento.pdf',
+			userId: 'Usuario responsable de la actualización'
+		},
+		buttons: {
+			newOrder: 'Registrar orden',
+			createOrder: 'Crear orden',
+			updateOrder: 'Actualizar orden',
+			editOrder: 'Editar datos',
+			updateStatus: 'Actualizar estado',
+			saveChanges: 'Guardar cambios'
+		},
+		messages: {
+			noOrders: 'Aún no hay órdenes de mantenimiento registradas.',
+			orderCreated: 'Orden de mantenimiento creada correctamente.',
+			orderUpdated: 'Orden de mantenimiento actualizada correctamente.'
+		},
+		errors: {
+			vehicleRequired: 'Se requiere el identificador del vehículo.',
+			requiredFields: 'La falla reportada y el responsable son obligatorios.',
+			saveFailed: 'No se pudo guardar la orden de mantenimiento.',
+			updateFailed: 'No se pudo actualizar la orden de mantenimiento.'
+		},
+		status: {
+			pendingReview: 'Pendiente de revisión',
+			quotation: 'Cotización en proceso',
+			authorized: 'Autorizada',
+			rejected: 'Rechazada',
+			inWorkshop: 'En taller',
+			inRepair: 'En reparación',
+			repairedPendingPayment: 'Reparado · pendiente de pago',
+			closed: 'Cerrada'
+		},
+		payment: {
+			pending: 'Pago pendiente',
+			partial: 'Pago parcial',
+			paid: 'Pagado'
+		},
+		links: {
+			view: 'Ver'
 		}
 	},
 	insurance: {
@@ -297,6 +422,9 @@ export default {
 			color: 'Color',
 			licensePlate: 'Placa',
 			vinNumber: 'Número VIN',
+			engineNumber: 'Número de motor',
+			tankSizeLiters: 'Capacidad del tanque',
+			vehicleStatus: 'Estado',
 			plate: 'Placa',
 			retireDate: 'Fecha de Baja',
 			reason: 'Motivo',
@@ -341,7 +469,16 @@ export default {
 			year: 'Año',
 			color: 'Color',
 			licensePlate: 'Placa',
-			vinNumber: 'Número VIN'
+			vinNumber: 'Número VIN',
+			engineNumber: 'Número de motor',
+			tankSizeLiters: 'Capacidad del tanque'
+		},
+		options: {
+			vehicleStatus: {
+				active: 'Activo',
+				inRepair: 'En reparación',
+				retired: 'Dado de baja'
+			}
 		},
 		buttons: {
 			add: 'Agregar',

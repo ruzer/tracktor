@@ -74,6 +74,7 @@ temp/
 
 # Project docs spreadsheets (not tracked)
 docs/PLANTILLA VEHICULAR DE 04 SETIEMBRE DE 2025.xlsx
+docs/templates/vehicle-import-template-2024-09-04.csv
 
 # Local-only storage (kept on your machine only)
 .local/

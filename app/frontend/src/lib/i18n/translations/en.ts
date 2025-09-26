@@ -133,6 +133,7 @@ export default {
 			grid: 'Cards',
 			list: 'Table'
 		},
+		viewDetails: 'View details',
 		import: {
 			title: 'Import Vehicles',
 			description:
@@ -169,7 +170,131 @@ export default {
 			noCurrent: 'This vehicle does not have an active assignment.',
 			showHistory: 'Show history',
 			hideHistory: 'Hide history',
-			noRecords: 'No assignments recorded yet.'
+		noRecords: 'No assignments recorded yet.'
+		},
+		detail: {
+			generalTab: 'General',
+			documentsTab: 'Documents',
+			backToDashboard: 'Back to dashboard',
+			refresh: 'Refresh data',
+			generalInfo: 'General information',
+			assignment: 'Assignment overview',
+			insuranceSummary: 'Insurance summary',
+			fuelSummary: 'Fuel summary',
+			maintenanceSummary: 'Maintenance summary',
+			createdAt: 'Created at',
+			updatedAt: 'Last update',
+			statusLabel: 'Status',
+			statusUnknown: 'Unknown',
+			noPolicies: 'No insurance policies assigned yet.',
+			policyAssignments: 'Policy assignments:',
+			legacyPolicies: 'Legacy policies:',
+			totalFuelLogs: '{{count}} fuel logs recorded',
+			noFuelLogs: 'No fuel logs recorded yet.',
+			lastFuel: 'Latest fuel entry',
+			maintenanceLogs: 'Maintenance logs',
+			lastMaintenance: 'Latest maintenance logs',
+			noMaintenanceLogs: 'No maintenance logs recorded yet.',
+			workOrders: 'Work orders',
+			workOrderTitle: 'Title',
+			workOrderStatus: {
+				pending: 'Pending',
+				in_progress: 'In progress',
+				completed: 'Completed'
+			},
+			noWorkOrders: 'No maintenance work orders yet.',
+			totalWorkOrders: 'Total orders',
+			openOrders: 'Open orders',
+			inProgress: 'In progress',
+			completed: 'Completed',
+			documents: 'Documents',
+			documentType: 'Document type',
+			noDocuments: 'No documents uploaded yet.',
+			pollutionCertificates: 'Pollution certificates',
+			pollutionStatus: {
+				active: 'Active',
+				expired: 'Expired'
+			},
+			noPollution: 'No pollution certificates recorded.'
+		}
+	},
+	maintenance: {
+		titles: {
+			orders: 'Maintenance orders',
+			newOrder: 'Register maintenance order',
+			editOrder: 'Edit maintenance order',
+			updateOrder: 'Update maintenance status'
+		},
+		labels: {
+			reportedIssue: 'Reported issue',
+			createdBy: 'Reported by',
+			status: 'Status',
+			workshopInfo: 'Workshop information',
+			workshopName: 'Workshop name',
+			workshopContact: 'Contact person',
+			workshopPhone: 'Contact phone',
+			workshopEmail: 'Contact email',
+			workshopAddress: 'Address',
+			notes: 'Notes',
+			paymentStatus: 'Payment status',
+			authorizedBy: 'Authorized by',
+			authorizedAt: 'Authorization date',
+			totalEstimated: 'Estimated total',
+			totalFinal: 'Final total',
+			quoteFile: 'Quotation (URL)',
+			invoiceFile: 'Invoice (URL)',
+			userId: 'Updated by',
+			history: 'History'
+		},
+		placeholders: {
+			reportedIssue: 'Describe what was reported by the driver or area',
+			createdBy: 'Operator or area reporting',
+			workshopName: 'Workshop name',
+			workshopContact: 'Contact person at the workshop',
+			workshopPhone: 'Phone number',
+			workshopEmail: 'Email address',
+			workshopAddress: 'Full address',
+			notes: 'Add notes for the order history',
+			authorizedBy: 'Person who authorized the repair',
+			fileUrl: 'https://example.com/document.pdf',
+			userId: 'User responsible for the update'
+		},
+		buttons: {
+			newOrder: 'Register order',
+			createOrder: 'Create order',
+			updateOrder: 'Update order',
+			editOrder: 'Edit details',
+			updateStatus: 'Update status',
+			saveChanges: 'Save changes'
+		},
+		messages: {
+			noOrders: 'No maintenance orders recorded yet.',
+			orderCreated: 'Maintenance order created successfully!',
+			orderUpdated: 'Maintenance order updated successfully!'
+		},
+		errors: {
+			vehicleRequired: 'Vehicle id is required to process this order.',
+			requiredFields: 'Reported issue and reporter are required fields.',
+			saveFailed: 'We could not save the maintenance order.',
+			updateFailed: 'We could not update the maintenance order.'
+		},
+		status: {
+			pendingReview: 'Pending review',
+			quotation: 'Quotation in progress',
+			authorized: 'Authorized',
+			rejected: 'Rejected',
+			inWorkshop: 'Vehicle at workshop',
+			inRepair: 'In repair',
+			repairedPendingPayment: 'Repaired · pending payment',
+			closed: 'Closed'
+		},
+		payment: {
+			pending: 'Payment pending',
+			partial: 'Partially paid',
+			paid: 'Paid'
+		},
+		links: {
+			view: 'View'
 		}
 	},
 	insurance: {
@@ -348,6 +473,9 @@ export default {
 			color: 'Color',
 			licensePlate: 'License Plate',
 			vinNumber: 'VIN Number',
+			engineNumber: 'Engine Number',
+			tankSizeLiters: 'Tank Capacity',
+			vehicleStatus: 'Status',
 			plate: 'Plate',
 			retireDate: 'Retired Date',
 			reason: 'Reason',
@@ -392,7 +520,16 @@ export default {
 			year: 'Year',
 			color: 'Color',
 			licensePlate: 'License Plate',
-			vinNumber: 'VIN Number'
+			vinNumber: 'VIN Number',
+			engineNumber: 'Engine Number',
+			tankSizeLiters: 'Tank size'
+		},
+		options: {
+			vehicleStatus: {
+				active: 'Active',
+				inRepair: 'In repair',
+				retired: 'Retired'
+			}
 		},
 		buttons: {
 			add: 'Add',

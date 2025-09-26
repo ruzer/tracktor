@@ -12,8 +12,12 @@ export const vehicleTable = table("vehicles", {
   year: t.integer().notNull(),
   licensePlate: t.text().notNull(),
   vin: t.text(),
+  vinNumber: t.text(),
+  engineNumber: t.text(),
   color: t.text(),
   odometer: t.integer(),
+  tankSizeLiters: t.integer(),
+  status: t.text().default('active'),
   // Ownership linkage (configurable type) and owner reference
   ownershipTypeId: t.text(),
   ownerName: t.text(),

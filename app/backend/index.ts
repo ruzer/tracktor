@@ -40,8 +40,8 @@ if (env.isProduction()) {
   app.use(handler);
 } else {
   app.get("/", (req, res) => {
-    // Línea 41 - Redirección en modo desarrollo (ajustada al puerto del frontend)
-    res.redirect("http://localhost:5175");
+    // Redirección en modo desarrollo al puerto del frontend
+    res.redirect("http://localhost:5178");
   });
 }
 
@@ -58,7 +58,7 @@ initializeDatabase()
       console.log(`Database: ${env.DATABASE_PATH}`);
       console.log(`Demo Mode: ${env.DEMO_MODE ? "Enabled" : "Disabled"}`);
       console.log(`CORS: Explicit origins only`);
-      console.log(`Allowed origins: [ ${env.CORS_ORIGINS.join(", ")} ]`);
+      console.log(`Allowed origins: [${env.CORS_ORIGINS.join(", ")}]`);
       console.log("─".repeat(75));
     });
   })

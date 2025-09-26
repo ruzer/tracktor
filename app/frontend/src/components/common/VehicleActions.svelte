@@ -1,7 +1,9 @@
 <script lang="ts">
 	import type { Vehicle } from '$lib/models/vehicle';
-	import { BadgeCheck, Fuel, Pencil, Shield, Trash2, Wrench } from '@lucide/svelte';
+	import { BadgeCheck, Eye, Fuel, Pencil, Shield, Trash2, Wrench } from '@lucide/svelte';
 	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import { env } from '$env/dynamic/public';
 	import IconButton from '$components/common/IconButton.svelte';
 	import DeleteConfirmation from '$components/common/DeleteConfirmation.svelte';
@@ -22,16 +24,22 @@
 		dense?: boolean;
 	} = $props();
 
-	let deleteDialog = $state(false);
+let deleteDialog = $state(false);
+let currentPath = $derived(page.url.pathname);
+const isDetailView = $derived(currentPath.startsWith('/vehicles/'));
 
-	const groupSpacing = dense ? 'gap-2' : 'gap-3';
-	const buttonSpacing = dense ? 'gap-1' : 'gap-2';
+const groupSpacing = dense ? 'gap-2' : 'gap-3';
+const buttonSpacing = dense ? 'gap-1' : 'gap-2';
 
 	const fetchVehicles = () => {
 		if (browser) {
 			const pin = localStorage.getItem('userPin') || undefined;
 			if (pin) vehiclesStore.fetchVehicles(pin);
 		}
+	};
+
+	const openDetail = () => {
+		goto(`/vehicles/${vehicle.id}`);
 	};
 
 	async function deleteVehicle(vehicleId: string) {
@@ -60,6 +68,15 @@
 
 <div class={`flex flex-col ${groupSpacing} sm:flex-row sm:items-center sm:justify-between`}>
 	<div class={`flex ${buttonSpacing}`}>
+	{#if !isDetailView}
+		<IconButton
+			buttonStyles="hover:bg-blue-100 dark:hover:bg-blue-700"
+			iconStyles=" text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-200"
+			icon={Eye}
+			onclick={openDetail}
+			ariaLabel={$t('vehicle.viewDetails')}
+		/>
+	{/if}
 		<IconButton
 			buttonStyles="hover:bg-green-100 dark:hover:bg-green-700"
 			iconStyles=" text-green-500 hover:text-green-600 dark:text-green-400 dark:hover:text-green-200"

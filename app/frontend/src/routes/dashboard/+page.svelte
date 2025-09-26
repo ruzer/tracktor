@@ -1,11 +1,8 @@
 <script lang="ts">
 	import { LayoutGrid, PlusCircle, Rows, Search } from '@lucide/svelte';
-	import FuelLogModal from '$components/modals/FuelLogModal.svelte';
-	import VehicleModal from '$components/modals/VehicleModal.svelte';
 	import VehicleList from '$components/lists/VehicleList.svelte';
 	import type { Vehicle } from '$lib/models/vehicle';
 	import { Jumper } from 'svelte-loading-spinners';
-	import MaintenanceLogModal from '$components/modals/MaintenanceLogModal.svelte';
 	import TabHeader from '$components/tabs/TabHeader.svelte';
 	import DashboardTab from '$components/tabs/DashboardTab.svelte';
 	import FuelLogTab from '$components/tabs/FuelLogTab.svelte';
@@ -16,10 +13,7 @@
 	import AssignmentsTab from '$components/tabs/AssignmentsTab.svelte';
 	import TaxesTab from '$components/tabs/TaxesTab.svelte';
 	import { vehicleModelStore, vehiclesStore } from '$lib/stores/vehicle';
-	import PollutionCertificateModal from '$components/modals/PollutionCertificateModal.svelte';
-	import InsuranceModal from '$components/modals/InsuranceModal.svelte';
 	import { browser } from '$app/environment';
-	import ConfigModal from '$components/modals/ConfigModal.svelte';
 	import Button from '$components/common/Button.svelte';
 	import { t } from '$lib/stores/i18n';
 	import { onDestroy } from 'svelte';
@@ -207,11 +201,4 @@
 			</p>
 		</div>
 	{/if}
-
-	<VehicleModal />
-	<FuelLogModal />
-	<MaintenanceLogModal />
-	<PollutionCertificateModal />
-	<InsuranceModal />
-	<ConfigModal />
 </div>

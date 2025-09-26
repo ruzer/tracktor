@@ -12,6 +12,14 @@
 	import { vehiclesStore } from '$lib/stores/vehicle';
 	import IconButton from '$components/common/IconButton.svelte';
 	import MainMenu from '$components/navigation/MainMenu.svelte';
+	import VehicleModal from '$components/modals/VehicleModal.svelte';
+	import FuelLogModal from '$components/modals/FuelLogModal.svelte';
+	import MaintenanceLogModal from '$components/modals/MaintenanceLogModal.svelte';
+	import PollutionCertificateModal from '$components/modals/PollutionCertificateModal.svelte';
+	import InsuranceModal from '$components/modals/InsuranceModal.svelte';
+	import ConfigModal from '$components/modals/ConfigModal.svelte';
+	import MaintenanceOrderModal from '$components/modals/MaintenanceOrderModal.svelte';
+	import MaintenanceOrderStatusModal from '$components/modals/MaintenanceOrderStatusModal.svelte';
 	import { initializeI18n, t } from '$lib/stores/i18n';
 
 	let { children } = $props();
@@ -112,6 +120,14 @@
 		<main class="text-gray-600 dark:text-gray-100">
 			{@render children()}
 		</main>
+		<VehicleModal />
+		<FuelLogModal />
+		<MaintenanceLogModal />
+		<PollutionCertificateModal />
+		<InsuranceModal />
+		<MaintenanceOrderModal />
+		<MaintenanceOrderStatusModal />
+		<ConfigModal />
 	</div>
 {:else}
 	<!-- Render login page or other public pages -->

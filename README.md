@@ -30,6 +30,7 @@
 - 🔒 **User Authentication:** Secure access to your data.
 - 🔍 **Flexible Views:** Switch between card and table views and find vehicles instantly with global search.
 - 📥 **Bulk Imports:** Load complete vehicle fleets from CSV/XLSX files, including insurance and resguardo assignments.
+- 📘 **Vehicle Detail Workspace:** Inspect complete vehicle dossiers with status, assignments, policies, maintenance KPIs, fuel snapshots and documents in one place.
 
 ## 🖼️ Screenshots
 
@@ -104,6 +105,7 @@ Please check the [installation guide](./docs/INSTALL.md) for detailed instructio
 
 - **Vehicles:** jump to the fleet workspace with card/table views, filters and the dedicated *Import vehicles* sub-menu for bulk uploads.
 - **Insurance:** manage individual policies and access the new *Collective insurance* sub-module with guidance for group programmes.
+- **Vehicle detail pages:** open the *View details* action from any vehicle to explore assignments, policies, maintenance work orders, fuel metrics and attachments without leaving the dashboard.
 - Both modules live in the top navigation, keeping a consistent layout so users can switch contexts without losing their place.
 
 

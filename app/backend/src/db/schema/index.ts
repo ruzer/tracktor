@@ -16,6 +16,16 @@ import {
 } from "./insurance-policies.js";
 import { vehicleTaxTable } from "./vehicle-taxes.js";
 import { vehicleDocumentTable } from "./vehicle-documents.js";
+import {
+  invoiceTable,
+  serviceOrderTable,
+  vehicleMaintenanceTable,
+} from "./vehicle-maintenance.js";
+import {
+  maintenanceOrderTable,
+  maintenanceOrderHistoryTable,
+  workshopTable,
+} from "./maintenance-orders.js";
 
 export {
   authTable,
@@ -23,6 +33,8 @@ export {
   fuelLogTable,
   insuranceTable,
   maintenanceLogTable,
+  maintenanceOrderTable,
+  maintenanceOrderHistoryTable,
   pollutionCertificateTable,
   vehicleTable,
   ownershipTypeTable,
@@ -34,4 +46,8 @@ export {
   vehicleInsuranceTable,
   vehicleTaxTable,
   vehicleDocumentTable,
+  invoiceTable,
+  serviceOrderTable,
+  vehicleMaintenanceTable,
+  workshopTable,
 };

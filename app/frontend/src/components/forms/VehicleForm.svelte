@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { Car, Calendar1, IdCard, Fingerprint, Gauge, Building2 } from '@lucide/svelte';
+	import { Car, Calendar1, IdCard, Fingerprint, Gauge, Building2, Cog, Fuel } from '@lucide/svelte';
 	import FormField from '../common/FormField.svelte';
-	import type { NewVehicle } from '$lib/models/vehicle';
+	import type { NewVehicle, VehicleStatus } from '$lib/models/vehicle';
 	import { env } from '$env/dynamic/public';
 	import { vehiclesStore } from '$lib/stores/vehicle';
 	import { browser } from '$app/environment';
@@ -9,10 +9,9 @@
 	import StatusBlock from '$components/common/StatusBlock.svelte';
 	import type { Status } from '$lib/models/status';
 	import { handleApiError, type ApiError } from '$lib/models/Error';
-	import { cleanup } from '$lib/utils/formatting';
+	import { cleanup, getDistanceUnit, getVolumeUnit } from '$lib/utils/formatting';
 	import { t } from '$lib/stores/i18n';
 	import ColorPicker from '../common/ColorPicker.svelte';
-	import { getDistanceUnit } from '$lib/utils/formatting';
 
 	let { vehicleToEdit = null, editMode = false, modalVisibility = $bindable(), loading } = $props();
 
@@ -22,14 +21,24 @@
 		year: null,
 		licensePlate: null,
 		vin: null,
+		vinNumber: null,
+		engineNumber: null,
 		color: null,
-		odometer: null
+		odometer: null,
+		tankSizeLiters: null,
+		status: 'active'
 	});
 
 	let status = $state<Status>({
 		message: undefined,
 		type: 'INFO'
 	});
+
+	const statusOptions: { value: VehicleStatus; key: string }[] = [
+		{ value: 'active', key: 'forms.options.vehicleStatus.active' },
+		{ value: 'in_repair', key: 'forms.options.vehicleStatus.inRepair' },
+		{ value: 'retired', key: 'forms.options.vehicleStatus.retired' }
+	];
 
 	$effect(() => {
 		if (vehicleToEdit) {
@@ -53,6 +62,14 @@
 				type: 'INFO'
 			};
 			// await simulateNetworkDelay(2000); // Simulate network delay for development
+			vehicle.vinNumber = vehicle.vinNumber || vehicle.vin || null;
+			vehicle.vin = vehicle.vin || vehicle.vinNumber || null;
+			if (vehicle.status === null || vehicle.status === undefined) {
+				vehicle.status = 'active';
+			}
+			if (vehicle.tankSizeLiters !== null && vehicle.tankSizeLiters !== undefined) {
+				vehicle.tankSizeLiters = Number(vehicle.tankSizeLiters);
+			}
 			const response = await fetch(
 				`${env.PUBLIC_API_BASE_URL || ''}/api/vehicles/${editMode ? vehicleToEdit.id : ''}`,
 				{
@@ -76,8 +93,12 @@
 					year: null,
 					licensePlate: '',
 					vin: '',
+					vinNumber: '',
+					engineNumber: '',
 					color: '',
-					odometer: null
+					odometer: null,
+					tankSizeLiters: null,
+					status: 'active'
 				});
 				modalVisibility = false;
 				fetchVehicles(); // Refresh the vehicle list after closing the modal
@@ -110,7 +131,7 @@
 	}}
 	class="space-y-6"
 >
-	<div class="grid grid-flow-row grid-cols-2 gap-4">
+	<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 		<FormField
 			id="make"
 			type="text"
@@ -163,14 +184,55 @@
 		ariaLabel={$t('forms.labels.licensePlate')}
 	/>
 	<FormField
-		id="vin"
+		id="vinNumber"
 		type="text"
 		placeholder={$t('forms.placeholders.vinNumber')}
-		bind:value={vehicle.vin}
+		bind:value={vehicle.vinNumber}
+		onInput={() => (vehicle.vin = vehicle.vinNumber)}
 		icon={Fingerprint}
 		label={$t('forms.labels.vinNumber')}
 		ariaLabel={$t('forms.labels.vinNumber')}
 	/>
+
+	<div class="grid grid-flow-row grid-cols-2 gap-4">
+		<FormField
+			id="engineNumber"
+			type="text"
+			placeholder={$t('forms.placeholders.engineNumber')}
+			bind:value={vehicle.engineNumber}
+			icon={Cog}
+			label={$t('forms.labels.engineNumber')}
+			ariaLabel={$t('forms.labels.engineNumber')}
+		/>
+		<FormField
+			id="tankSize"
+			type="number"
+			placeholder={`${$t('forms.placeholders.tankSizeLiters')} (${getVolumeUnit()})`}
+			bind:value={vehicle.tankSizeLiters}
+			icon={Fuel}
+			label={$t('forms.labels.tankSizeLiters')}
+			ariaLabel={$t('forms.labels.tankSizeLiters')}
+		/>
+	</div>
+
+	<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+		<div>
+			<label for="vehicle-status" class="pl-2 text-lg text-gray-400"
+				>{$t('forms.labels.vehicleStatus')}</label
+			>
+			<div class="relative">
+				<select
+					id="vehicle-status"
+					bind:value={vehicle.status}
+					class="w-full rounded-xl border border-gray-300 bg-white py-3 pr-10 pl-4 text-gray-900 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-400"
+				>
+					{#each statusOptions as option}
+						<option value={option.value}>{$t(option.key)}</option>
+					{/each}
+				</select>
+			</div>
+		</div>
+	</div>
 
 	<FormField
 		id="odometer"

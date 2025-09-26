@@ -53,9 +53,10 @@ export const requireInsuranceRole = (requiredRoles: InsuranceRole[]) => {
       next();
     } catch (error: unknown) {
       if (error instanceof InsuranceError) {
-        return res.status(error.status).json({
+        const err = error as InsuranceError;
+        return res.status(err.status).json({
           type: "AuthorizationError",
-          errors: [{ message: error.message }]
+          errors: [{ message: (error as Error).message }]
         });
       }
       

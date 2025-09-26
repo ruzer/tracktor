@@ -1,10 +1,48 @@
 <script lang="ts">
-	import { Car, IdCard, Fingerprint, Paintbrush, Gauge, Shield, BadgeCheck } from '@lucide/svelte';
+	import {
+		BadgeCheck,
+		Car,
+		Cog,
+		Fuel,
+		Gauge,
+		IdCard,
+		Fingerprint,
+		Paintbrush,
+		Shield
+	} from '@lucide/svelte';
 	import { formatDistance } from '$lib/utils/formatting';
 	import { t } from '$lib/stores/i18n';
 	import VehicleActions from './VehicleActions.svelte';
+	import { getVolumeUnit } from '$lib/utils/formatting';
+	import type { VehicleStatus } from '$lib/models/vehicle';
 
 	const { vehicle, updateCallback } = $props();
+
+	const statusBadgeClass = (status: VehicleStatus | undefined) => {
+		switch (status) {
+			case 'active':
+				return 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300';
+			case 'in_repair':
+				return 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300';
+			case 'retired':
+				return 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200';
+			default:
+				return 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200';
+		}
+	};
+
+	const statusBadgeLabel = (status: VehicleStatus | undefined) => {
+		switch (status) {
+			case 'active':
+				return $t('forms.options.vehicleStatus.active');
+			case 'in_repair':
+				return $t('forms.options.vehicleStatus.inRepair');
+			case 'retired':
+				return $t('forms.options.vehicleStatus.retired');
+			default:
+				return null;
+		}
+	};
 </script>
 
 <div
@@ -17,10 +55,16 @@
 				>{vehicle.make} {vehicle.model}</span
 			>
 		</div>
-		<span
-			class="rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold text-white dark:bg-blue-500 dark:text-gray-100"
-			>{vehicle.year}</span
-		>
+		<div class="flex flex-col items-end gap-2 text-xs font-semibold">
+			<span class="rounded-full bg-blue-600 px-3 py-1 text-white dark:bg-blue-500 dark:text-gray-100"
+				>{vehicle.year}</span
+			>
+			{#if vehicle.status}
+				<span class={`rounded-full px-3 py-1 ${statusBadgeClass(vehicle.status)}`}>
+					{statusBadgeLabel(vehicle.status)}
+				</span>
+			{/if}
+		</div>
 	</div>
 	<div class="flex-1 text-gray-600 dark:text-gray-300">
 		<p class="flex items-center gap-2">
@@ -33,7 +77,7 @@
 			<Fingerprint class="h-5 w-5 text-gray-400 dark:text-gray-500" /><span class="font-semibold"
 				>{$t('vehicle.vin')}:</span
 			>
-			{vehicle.vin ? vehicle.vin : '-'}
+			{vehicle.vinNumber ?? vehicle.vin ?? '-'}
 		</p>
 
 		<p class="flex items-center gap-2">
@@ -52,6 +96,16 @@
 			<Gauge class="h-5 w-5 text-gray-400 dark:text-gray-500" />
 			<span class="font-semibold">{$t('vehicle.odometer')}:</span>
 			{vehicle.odometer ? formatDistance(vehicle.odometer) : '-'}
+		</p>
+		<p class="flex items-center gap-2">
+			<Cog class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+			<span class="font-semibold">{$t('forms.labels.engineNumber')}:</span>
+			{vehicle.engineNumber ?? '-'}
+		</p>
+		<p class="flex items-center gap-2">
+			<Fuel class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+			<span class="font-semibold">{$t('forms.labels.tankSizeLiters')}:</span>
+			{vehicle.tankSizeLiters ? `${vehicle.tankSizeLiters} ${getVolumeUnit()}` : '-'}
 		</p>
 		{#if vehicle.insuranceStatus}
 			<p class="flex items-center gap-2">
