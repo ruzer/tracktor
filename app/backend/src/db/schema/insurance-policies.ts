@@ -3,7 +3,9 @@ import * as t from "drizzle-orm/sqlite-core";
 import { timestamps } from "./audit.helper.js";
 import { vehicleTable } from "./vehicle.js";
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 const POLICY_TYPES = ["individual", "collective"] as const;
+// eslint-disable-next-line unused-imports/no-unused-vars
 const POLICY_STATUSES = ["active", "expired", "cancelled"] as const;
 
 export const insuranceRepresentativeTable = table(

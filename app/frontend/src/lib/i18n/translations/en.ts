@@ -25,7 +25,8 @@ export default {
 		notAvailable: 'Not Available',
 		yes: 'Yes',
 		no: 'No',
-		clear: 'Clear'
+		clear: 'Clear',
+		viewAll: 'View all'
 	},
 	menu: {
 		ariaLabel: 'Main navigation',
@@ -223,7 +224,13 @@ export default {
 			orders: 'Maintenance orders',
 			newOrder: 'Register maintenance order',
 			editOrder: 'Edit maintenance order',
-			updateOrder: 'Update maintenance status'
+			updateOrder: 'Update maintenance status',
+			recentOrders: 'Recent orders'
+		},
+		views: {
+			summary: 'Summary',
+			orders: 'Orders',
+			logs: 'Logs'
 		},
 		labels: {
 			reportedIssue: 'Reported issue',
@@ -295,6 +302,36 @@ export default {
 		},
 		links: {
 			view: 'View'
+		},
+		integration: {
+			titles: {
+				integratedLog: 'Integrated maintenance log',
+				closeOrderIntegrated: 'Close order with integration'
+			},
+			labels: {
+				autoGenerateOrder: 'Auto-generate order',
+				autoGenerateLog: 'Auto-generate log',
+				finalOdometer: 'Final odometer',
+				completionNotes: 'Completion notes'
+			},
+			placeholders: {
+				finalOdometer: 'Final odometer reading',
+				completionNotes: 'Notes about work completion'
+			},
+			buttons: {
+				createIntegratedLog: 'Create integrated log',
+				closeIntegratedOrder: 'Close integrated order'
+			},
+			messages: {
+				integratedLogCreated: 'Maintenance log created successfully.',
+				orderGeneratedAutomatically: 'A maintenance order was automatically generated.',
+				orderClosedSuccessfully: 'Order closed successfully.',
+				logGeneratedAutomatically: 'A maintenance log was automatically generated.'
+			},
+			help: {
+				autoGenerateOrder: 'When enabled, this will automatically create a maintenance order based on this log.',
+				autoGenerateLog: 'When enabled, this will automatically create a maintenance log when closing the order.'
+			}
 		}
 	},
 	insurance: {

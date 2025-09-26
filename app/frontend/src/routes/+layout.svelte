@@ -19,7 +19,9 @@
 	import InsuranceModal from '$components/modals/InsuranceModal.svelte';
 	import ConfigModal from '$components/modals/ConfigModal.svelte';
 	import MaintenanceOrderModal from '$components/modals/MaintenanceOrderModal.svelte';
-	import MaintenanceOrderStatusModal from '$components/modals/MaintenanceOrderStatusModal.svelte';
+import MaintenanceOrderStatusModal from '$components/modals/MaintenanceOrderStatusModal.svelte';
+import IntegratedMaintenanceLogModal from '$components/modals/IntegratedMaintenanceLogModal.svelte';
+import CloseOrderIntegratedModal from '$components/modals/CloseOrderIntegratedModal.svelte';
 	import { initializeI18n, t } from '$lib/stores/i18n';
 
 	let { children } = $props();
@@ -127,6 +129,8 @@
 		<InsuranceModal />
 		<MaintenanceOrderModal />
 		<MaintenanceOrderStatusModal />
+		<IntegratedMaintenanceLogModal />
+		<CloseOrderIntegratedModal />
 		<ConfigModal />
 	</div>
 {:else}

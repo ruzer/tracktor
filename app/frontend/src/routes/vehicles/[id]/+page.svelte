@@ -17,7 +17,7 @@
 	import FuelLogTab from '$components/tabs/FuelLogTab.svelte';
 	import MaintenenceLogTab from '$components/tabs/MaintenenceLogTab.svelte';
 	import InsuranceTab from '$components/tabs/InsuranceTab.svelte';
-	import MaintenanceOrdersSection from '$components/maintenance/MaintenanceOrdersSection.svelte';
+	import MaintenanceModule from '$components/maintenance/MaintenanceModule.svelte';
 
 	let { params } = $props();
 	const vehicleId = params.id;
@@ -27,7 +27,7 @@
 	let error = $state<string | null>(null);
 	let activeTab = $state<'general' | 'insurance' | 'maintenance' | 'fuel' | 'documents'>('general');
 
-	const tabs = [
+	const tabs: Array<{ id: 'general' | 'insurance' | 'maintenance' | 'fuel' | 'documents'; key: string }> = [
 		{ id: 'general', key: 'vehicle.detail.generalTab' },
 		{ id: 'insurance', key: 'navigation.insurance' },
 		{ id: 'maintenance', key: 'navigation.maintenance' },
@@ -139,7 +139,6 @@
 			variant="primary"
 			text={$t('vehicle.detail.refresh')}
 			onclick={fetchDetail}
-			ariaLabel={$t('vehicle.detail.refresh')}
 		/>
 	</div>
 
@@ -346,101 +345,13 @@
 					</div>
 				</section>
 
-				<section class="rounded-2xl bg-white p-6 shadow dark:bg-gray-800">
-					<h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-gray-100">
-						{$t('vehicle.detail.maintenanceSummary')}
-					</h2>
-					<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-						<div class="rounded-xl border border-gray-200 p-4 text-center shadow-sm dark:border-gray-700">
-							<p class="text-sm text-gray-500 dark:text-gray-300">{$t('vehicle.detail.totalWorkOrders')}</p>
-							<p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{detail.maintenance.summary.total}</p>
-						</div>
-						<div class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-center shadow-sm dark:border-amber-900 dark:bg-amber-900/30">
-							<p class="text-sm text-amber-600 dark:text-amber-200">{$t('vehicle.detail.openOrders')}</p>
-							<p class="text-2xl font-bold text-amber-600 dark:text-amber-200">{detail.maintenance.summary.open}</p>
-						</div>
-						<div class="rounded-xl border border-blue-200 bg-blue-50 p-4 text-center shadow-sm dark:border-blue-900 dark:bg-blue-900/30">
-							<p class="text-sm text-blue-600 dark:text-blue-200">{$t('vehicle.detail.inProgress')}</p>
-							<p class="text-2xl font-bold text-blue-600 dark:text-blue-200">{detail.maintenance.summary.inProgress}</p>
-						</div>
-						<div class="rounded-xl border border-green-200 bg-green-50 p-4 text-center shadow-sm dark:border-green-900 dark:bg-green-900/30">
-							<p class="text-sm text-green-600 dark:text-green-200">{$t('vehicle.detail.completed')}</p>
-							<p class="text-2xl font-bold text-green-600 dark:text-green-200">{detail.maintenance.summary.completed}</p>
-						</div>
-					</div>
-
-					{#if detail.maintenance.recentLogs.length}
-						<h3 class="mt-6 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-300">
-							{$t('vehicle.detail.lastMaintenance')}
-						</h3>
-						<ul class="mt-2 space-y-2">
-							{#each detail.maintenance.recentLogs as log (log.id)}
-								<li class="rounded-xl border border-gray-200 p-4 dark:border-gray-700">
-									<div class="flex flex-col gap-1 text-sm text-gray-600 dark:text-gray-200 md:flex-row md:items-center md:justify-between">
-										<span class="font-semibold text-gray-900 dark:text-gray-100">{log.serviceCenter}</span>
-										<span>{formatDateSafe(log.date)}</span>
-									</div>
-									<div class="text-sm text-gray-500 dark:text-gray-300">
-										{$t('vehicle.odometer')}: {formatDistance(log.odometer)} · {$t('forms.labels.cost')}: {formatCurrencySafe(log.cost)}
-									</div>
-									{#if log.notes}
-										<p class="text-sm text-gray-500 dark:text-gray-300">{log.notes}</p>
-									{/if}
-								</li>
-							{/each}
-						</ul>
-					{:else}
-						<p class="mt-4 text-gray-500 dark:text-gray-300">{$t('vehicle.detail.noMaintenanceLogs')}</p>
-					{/if}
-
-					<MaintenanceOrdersSection
-						orders={detail.maintenance.orders ?? []}
-						vehicleId={detail.id}
-						onReload={(refresh) => refresh && fetchDetail()}
-					/>
-
-					<h3 class="mt-8 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-300">
-						{$t('vehicle.detail.workOrders')}
-					</h3>
-					{#if detail.maintenance.workOrders.length}
-						<div class="mt-3 overflow-x-auto">
-							<table class="min-w-full divide-y divide-gray-200 text-sm dark:divide-gray-700">
-								<thead class="bg-gray-50 dark:bg-gray-900/60">
-									<tr>
-										<th class="px-4 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">{$t('vehicle.detail.workOrderTitle')}</th>
-										<th class="px-4 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">{$t('vehicle.detail.statusLabel')}</th>
-									<th class="px-4 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">{$t('forms.labels.cost')}</th>
-										<th class="px-4 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">{$t('forms.labels.provider')}</th>
-										<th class="px-4 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">{$t('forms.labels.date')}</th>
-									</tr>
-								</thead>
-								<tbody class="divide-y divide-gray-100 dark:divide-gray-700">
-									{#each detail.maintenance.workOrders as workOrder (workOrder.id)}
-										<tr class="bg-white text-gray-700 transition-colors dark:bg-gray-900 dark:text-gray-200">
-											<td class="px-4 py-3 font-semibold text-gray-900 dark:text-gray-100">{workOrder.title}</td>
-											<td class="px-4 py-3">
-												<span class={`rounded-full px-2 py-1 text-xs font-semibold ${statusBadgeClass(workOrder.status)}`}>
-													{$t(`vehicle.detail.workOrderStatus.${workOrder.status}`)}
-												</span>
-											</td>
-											<td class="px-4 py-3">
-												{workOrder.invoice?.amount
-													? formatCurrencySafe(workOrder.invoice.amount)
-													: workOrder.serviceOrder?.estimatedCost
-														? formatCurrencySafe(workOrder.serviceOrder.estimatedCost)
-														: $t('common.notAvailable')}
-											</td>
-											<td class="px-4 py-3">{workOrder.serviceOrder?.provider ?? workOrder.invoice?.provider ?? $t('common.notAvailable')}</td>
-											<td class="px-4 py-3">{formatDateSafe(workOrder.createdAt)}</td>
-										</tr>
-									{/each}
-								</tbody>
-							</table>
-						</div>
-					{:else}
-						<p class="text-gray-500 dark:text-gray-300">{$t('vehicle.detail.noWorkOrders')}</p>
-					{/if}
-				</section>
+				<MaintenanceModule
+					vehicleId={detail.id}
+					orders={detail.maintenance.orders ?? []}
+					recentLogs={detail.maintenance.recentLogs}
+					summary={detail.maintenance.summary}
+					onReload={(refresh) => refresh && fetchDetail()}
+				/>
 			</div>
 		{:else if activeTab === 'insurance'}
 			<InsuranceTab {vehicleId} />

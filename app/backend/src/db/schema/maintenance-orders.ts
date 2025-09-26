@@ -3,7 +3,7 @@ import * as t from "drizzle-orm/sqlite-core";
 import { vehicleTable } from "./vehicle.js";
 import { timestamps } from "./audit.helper.js";
 
-const ORDER_STATUSES = [
+export const ORDER_STATUSES = [
   "pending_review",
   "quotation",
   "authorized",
@@ -14,7 +14,7 @@ const ORDER_STATUSES = [
   "closed",
 ] as const;
 
-const PAYMENT_STATUSES = ["pending", "partial", "paid"] as const;
+export const PAYMENT_STATUSES = ["pending", "partial", "paid"] as const;
 
 export const workshopTable = table("workshops", {
   id: t
@@ -62,6 +62,9 @@ export const maintenanceOrderTable = table(
       .default("pending")
       .$type<(typeof PAYMENT_STATUSES)[number]>(),
     createdBy: t.text().notNull(),
+    // Campos de integración con logs
+    sourceLogId: t.text(), // ID del log que generó esta orden
+    generatedLogId: t.text(), // ID del log generado al cerrar esta orden
     ...timestamps,
   },
   (table) => ({

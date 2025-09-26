@@ -81,17 +81,17 @@
 								/>
 								<Button
 									type="button"
-									variant="ghost"
+									variant="secondary"
 									icon={FolderEdit}
+									text=""
 									onclick={() => dispatch('edit', { policy })}
-									ariaLabel={$t('insurance.policies.actions.edit')}
 								/>
 								<Button
 									type="button"
-									variant="ghost"
+									variant="secondary"
 									icon={CalendarClock}
+									text=""
 									onclick={() => dispatch('renew', { policy })}
-									ariaLabel={$t('insurance.policies.actions.renew')}
 								/>
 							</div>
 						</td>

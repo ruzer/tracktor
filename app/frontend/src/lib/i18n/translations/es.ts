@@ -25,7 +25,8 @@ export default {
 		notAvailable: 'No Disponible',
 		yes: 'Sí',
 		no: 'No',
-		clear: 'Limpiar'
+		clear: 'Limpiar',
+		viewAll: 'Ver todo'
 	},
 	menu: {
 		ariaLabel: 'Navegación principal',
@@ -212,7 +213,13 @@ export default {
 			orders: 'Ordenes de servicio',
 			newOrder: 'Registrar orden de mantenimiento',
 			editOrder: 'Editar orden de mantenimiento',
-			updateOrder: 'Actualizar estado de la orden'
+			updateOrder: 'Actualizar estado de la orden',
+			recentOrders: 'Órdenes recientes'
+		},
+		views: {
+			summary: 'Resumen',
+			orders: 'Órdenes',
+			logs: 'Registros'
 		},
 		labels: {
 			reportedIssue: 'Falla reportada',
@@ -284,6 +291,36 @@ export default {
 		},
 		links: {
 			view: 'Ver'
+		},
+		integration: {
+			titles: {
+				integratedLog: 'Registro de mantenimiento integrado',
+				closeOrderIntegrated: 'Cerrar orden con integración'
+			},
+			labels: {
+				autoGenerateOrder: 'Generar orden automáticamente',
+				autoGenerateLog: 'Generar registro automáticamente',
+				finalOdometer: 'Odómetro final',
+				completionNotes: 'Notas de finalización'
+			},
+			placeholders: {
+				finalOdometer: 'Lectura final del odómetro',
+				completionNotes: 'Notas sobre la finalización del trabajo'
+			},
+			buttons: {
+				createIntegratedLog: 'Crear registro integrado',
+				closeIntegratedOrder: 'Cerrar orden integrada'
+			},
+			messages: {
+				integratedLogCreated: 'Registro de mantenimiento creado correctamente.',
+				orderGeneratedAutomatically: 'Se generó automáticamente una orden de mantenimiento.',
+				orderClosedSuccessfully: 'Orden cerrada correctamente.',
+				logGeneratedAutomatically: 'Se generó automáticamente un registro de mantenimiento.'
+			},
+			help: {
+				autoGenerateOrder: 'Al activar esta opción, se creará automáticamente una orden de mantenimiento basada en este registro.',
+				autoGenerateLog: 'Al activar esta opción, se creará automáticamente un registro de mantenimiento al cerrar la orden.'
+			}
 		}
 	},
 	insurance: {

@@ -6,6 +6,7 @@
 		maintenanceOrderModalStore,
 		maintenanceOrderStatusModalStore
 	} from '$lib/stores/maintenance-order';
+	import { closeOrderIntegratedModalStore } from '$lib/stores/maintenance-integration';
 import {
 	maintenanceOrderStatusOptions,
 	maintenancePaymentStatusOptions,
@@ -50,6 +51,10 @@ const paymentKeyMap: Record<string, string> = {
 
 	function updateStatus(order: MaintenanceOrder) {
 		maintenanceOrderStatusModalStore.show(vehicleId, order, (reloaded) => reloaded && onReload(true));
+	}
+
+	function closeOrderIntegrated(order: MaintenanceOrder) {
+		closeOrderIntegratedModalStore.show(vehicleId, order.id, () => onReload(true));
 	}
 </script>
 
@@ -120,9 +125,12 @@ const paymentKeyMap: Record<string, string> = {
 								{/if}
 							</div>
 						</div>
-						<div class="flex gap-2">
+						<div class="flex flex-wrap gap-2">
 							<Button type="button" variant="secondary" text={$t('maintenance.buttons.editOrder')} onclick={() => editOrder(order)} />
 							<Button type="button" variant="primary" text={$t('maintenance.buttons.updateStatus')} onclick={() => updateStatus(order)} />
+							{#if order.status === 'in_repair' || order.status === 'repaired_pending_payment'}
+								<Button type="button" variant="hero" text={$t('maintenance.integration.closeIntegrated')} onclick={() => closeOrderIntegrated(order)} />
+							{/if}
 						</div>
 					</div>
 

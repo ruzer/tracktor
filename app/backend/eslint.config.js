@@ -13,6 +13,8 @@ export default [
       parserOptions: {
         sourceType: "module",
         ecmaVersion: 2020,
+        project: "./tsconfig.json",
+        tsconfigRootDir: import.meta.dirname,
       },
       globals: {
         ...globals.node,
@@ -34,6 +36,6 @@ export default [
     },
   },
   {
-    ignores: ["node_modules/", "dist/", "*.config.js", "*.config.ts"],
+    ignores: ["node_modules/", "dist/", "coverage/", "*.config.js", "*.config.ts"],
   },
 ];

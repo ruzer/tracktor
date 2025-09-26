@@ -4,9 +4,13 @@ import pinRoutes from "@routes/pinRoutes.js";
 import vehicleRoutes from "@routes/vehicleRoutes.js";
 import configRoutes from "@routes/configRoutes.js";
 import insurancePolicyRoutes from "@routes/insurancePolicyRoutes.js";
+import modulesRoutes from "./src/routes/modules.js";
 import { initializeDatabase } from "@db/init.js";
 import { errorHandler } from "@middleware/error-handler.js";
 import env, { validateEnvironment } from "@config/env.js";
+import { initializeModules, getModulesRouter } from "./src/modules/index.js";
+
+// Force restart to clear port conflict
 
 // Validate environment before starting
 validateEnvironment();
@@ -33,6 +37,7 @@ app.use("/api", pinRoutes);
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/config", configRoutes);
 app.use("/api/insurance", insurancePolicyRoutes);
+app.use("/api/modules", modulesRoutes);
 
 if (env.isProduction()) {
   // @ts-expect-error dynamic import of SvelteKit handler in prod
@@ -48,7 +53,23 @@ if (env.isProduction()) {
 app.use(errorHandler);
 
 initializeDatabase()
-  .then(() => {
+  .then(async () => {
+    // Inicializar sistema de módulos
+    try {
+      await initializeModules();
+      
+      // Agregar rutas de módulos al router principal
+      const modulesRouter = getModulesRouter();
+      if (modulesRouter) {
+        app.use("/api/modules-routes", modulesRouter);
+      }
+      
+      console.log("✅ Módulos inicializados correctamente");
+    } catch (error) {
+      console.warn("⚠️ Error al inicializar módulos:", error);
+      // No detener el servidor si fallan los módulos
+    }
+
     app.listen(env.SERVER_PORT, env.SERVER_HOST, () => {
       console.log("─".repeat(75));
       console.log(
@@ -66,3 +87,5 @@ initializeDatabase()
     console.error("❌ Failed to initialize database:", err);
     process.exit(1);
   });
+
+// VehicleModule configured and ready
