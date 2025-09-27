@@ -27,6 +27,15 @@
 			]
 		},
 		{
+			id: 'maintenance',
+			label: 'menu.maintenance.label',
+			items: [
+				{ id: 'maintenance-overview', label: 'menu.maintenance.overview', href: '/maintenance' },
+				{ id: 'maintenance-orders', label: 'menu.maintenance.orders', href: '/maintenance/orders' },
+				{ id: 'maintenance-reports', label: 'menu.maintenance.reports', href: '/maintenance/reports' }
+			]
+		},
+		{
 			id: 'insurance',
 			label: 'menu.insurance.label',
 			items: [

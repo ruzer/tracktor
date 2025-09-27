@@ -154,6 +154,30 @@ export class MaintenanceService implements IModuleService<MaintenanceRecord, Cre
   }
 
   /**
+   * Obtener todas las órdenes de mantenimiento
+   */
+  async getAllOrders(_filters?: Record<string, any>): Promise<any[]> {
+    const { listMaintenanceOrders } = await import("../../services/maintenanceOrderService.js");
+    return await listMaintenanceOrders();
+  }
+
+  /**
+   * Actualizar una orden de mantenimiento
+   */
+  async updateOrder(orderId: string, payload: any): Promise<any> {
+    const { updateMaintenanceOrder } = await import("../../services/maintenanceOrderService.js");
+    return await updateMaintenanceOrder(orderId, payload);
+  }
+
+  /**
+   * Eliminar una orden de mantenimiento
+   */
+  async deleteOrder(orderId: string): Promise<any> {
+    const { deleteMaintenanceOrderById } = await import("../../services/maintenanceOrderService.js");
+    return await deleteMaintenanceOrderById(orderId);
+  }
+
+  /**
    * Crear un nuevo log de mantenimiento
    */
   async createLog(vehicleId: string, payload: any): Promise<any> {

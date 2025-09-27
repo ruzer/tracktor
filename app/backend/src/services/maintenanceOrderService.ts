@@ -2,6 +2,7 @@ import { db } from "@db/index.js";
 import {
   maintenanceOrderHistoryTable,
   maintenanceOrderTable,
+  vehicleTable,
   workshopTable,
 } from "@db/schema/index.js";
 import { MaintenanceOrderError } from "@exceptions/MaintenanceOrderError.js";
@@ -110,12 +111,14 @@ const getVehicleOrThrow = async (vehicleId: string) => {
 const mapOrderRow = (row: {
   order: typeof maintenanceOrderTable.$inferSelect;
   workshop: typeof workshopTable.$inferSelect | null;
+  vehicle?: typeof vehicleTable.$inferSelect | null;
   history?: Array<typeof maintenanceOrderHistoryTable.$inferSelect>;
 }) => {
-  const { order, workshop, history = [] } = row;
+  const { order, workshop, vehicle, history = [] } = row;
   return {
     ...order,
     workshop,
+    vehicle,
     history: history
       .map((entry) => ({
         ...entry,
@@ -128,6 +131,7 @@ const attachHistoryToOrders = async (
   orders: Array<{
     order: typeof maintenanceOrderTable.$inferSelect;
     workshop: typeof workshopTable.$inferSelect | null;
+    vehicle?: typeof vehicleTable.$inferSelect | null;
   }>,
 ) => {
   if (orders.length === 0) return [];
@@ -151,6 +155,24 @@ const attachHistoryToOrders = async (
       history: historyMap.get(row.order.id) ?? [],
     }),
   );
+};
+
+export const listMaintenanceOrders = async () => {
+  const orders = await db
+    .select({
+      order: maintenanceOrderTable,
+      workshop: workshopTable,
+      vehicle: vehicleTable,
+    })
+    .from(maintenanceOrderTable)
+    .leftJoin(
+      workshopTable,
+      eq(workshopTable.id, maintenanceOrderTable.workshopId),
+    )
+    .leftJoin(vehicleTable, eq(vehicleTable.id, maintenanceOrderTable.vehicleId))
+    .orderBy(desc(maintenanceOrderTable.created_at));
+
+  return attachHistoryToOrders(orders);
 };
 
 export const createMaintenanceOrder = async (
@@ -217,12 +239,14 @@ export const getMaintenanceOrdersByVehicle = async (vehicleId: string) => {
     .select({
       order: maintenanceOrderTable,
       workshop: workshopTable,
+      vehicle: vehicleTable,
     })
     .from(maintenanceOrderTable)
     .leftJoin(
       workshopTable,
       eq(workshopTable.id, maintenanceOrderTable.workshopId),
     )
+    .leftJoin(vehicleTable, eq(vehicleTable.id, maintenanceOrderTable.vehicleId))
     .where(eq(maintenanceOrderTable.vehicleId, vehicleId))
     .orderBy(desc(maintenanceOrderTable.created_at));
 
@@ -231,12 +255,17 @@ export const getMaintenanceOrdersByVehicle = async (vehicleId: string) => {
 
 export const getMaintenanceOrderById = async (orderId: string) => {
   const [row] = await db
-    .select({ order: maintenanceOrderTable, workshop: workshopTable })
+    .select({
+      order: maintenanceOrderTable,
+      workshop: workshopTable,
+      vehicle: vehicleTable,
+    })
     .from(maintenanceOrderTable)
     .leftJoin(
       workshopTable,
       eq(workshopTable.id, maintenanceOrderTable.workshopId),
     )
+    .leftJoin(vehicleTable, eq(vehicleTable.id, maintenanceOrderTable.vehicleId))
     .where(eq(maintenanceOrderTable.id, orderId));
 
   if (!row) {
@@ -375,4 +404,28 @@ export const deleteMaintenanceOrder = async (orderId: string, vehicleId: string)
   }
 
   return { id: orderId, message: "Maintenance order deleted successfully." };
+};
+
+export const deleteMaintenanceOrderById = async (orderId: string) => {
+  const existing = await db
+    .select({ vehicleId: maintenanceOrderTable.vehicleId })
+    .from(maintenanceOrderTable)
+    .where(eq(maintenanceOrderTable.id, orderId));
+
+  if (existing.length === 0) {
+    throw new MaintenanceOrderError(
+      `Maintenance order ${orderId} not found`,
+      Status.NOT_FOUND,
+    );
+  }
+
+  const vehicleId = existing[0]?.vehicleId;
+  if (!vehicleId) {
+    throw new MaintenanceOrderError(
+      `Maintenance order ${orderId} is missing vehicle reference`,
+      Status.INTERNAL_SERVER_ERROR,
+    );
+  }
+
+  return deleteMaintenanceOrder(orderId, vehicleId);
 };

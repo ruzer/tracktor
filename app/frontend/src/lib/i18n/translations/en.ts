@@ -22,11 +22,16 @@ export default {
 		confirm: 'Confirm',
 		close: 'Close',
 		toggleDarkMode: 'Toggle dark mode',
-		notAvailable: 'Not Available',
+		notAvailable: 'Not available',
 		yes: 'Yes',
 		no: 'No',
 		clear: 'Clear',
-		viewAll: 'View all'
+		view: 'View',
+		viewAll: 'View all',
+		export: 'Export',
+		filters: 'Filters',
+		all: 'All',
+		clearFilters: 'Clear filters'
 	},
 	menu: {
 		ariaLabel: 'Main navigation',
@@ -39,6 +44,12 @@ export default {
 			label: 'Insurance',
 			policies: 'Policies',
 			renewals: 'Renewals',
+			reports: 'Reports'
+		},
+		maintenance: {
+			label: 'Workshops',
+			overview: 'Overview',
+			orders: 'Orders',
 			reports: 'Reports'
 		}
 	},
@@ -220,6 +231,7 @@ export default {
 		}
 	},
 	maintenance: {
+		description: 'Manage maintenance orders, workshops and approvals from a single place.',
 		titles: {
 			orders: 'Maintenance orders',
 			newOrder: 'Register maintenance order',
@@ -233,9 +245,12 @@ export default {
 			logs: 'Logs'
 		},
 		labels: {
+			vehicle: 'Vehicle',
+			issue: 'Issue',
 			reportedIssue: 'Reported issue',
 			createdBy: 'Reported by',
 			status: 'Status',
+			workshop: 'Workshop',
 			workshopInfo: 'Workshop information',
 			workshopName: 'Workshop name',
 			workshopContact: 'Contact person',
@@ -244,6 +259,7 @@ export default {
 			workshopAddress: 'Address',
 			notes: 'Notes',
 			paymentStatus: 'Payment status',
+			payment: 'Payment',
 			authorizedBy: 'Authorized by',
 			authorizedAt: 'Authorization date',
 			totalEstimated: 'Estimated total',
@@ -251,9 +267,12 @@ export default {
 			quoteFile: 'Quotation (URL)',
 			invoiceFile: 'Invoice (URL)',
 			userId: 'Updated by',
-			history: 'History'
+			history: 'History',
+			cost: 'Cost',
+			date: 'Date'
 		},
 		placeholders: {
+			selectVehicle: 'Select a vehicle',
 			reportedIssue: 'Describe what was reported by the driver or area',
 			createdBy: 'Operator or area reporting',
 			workshopName: 'Workshop name',
@@ -266,6 +285,11 @@ export default {
 			fileUrl: 'https://example.com/document.pdf',
 			userId: 'User responsible for the update'
 		},
+		filters: {
+			status: 'Order status',
+			paymentStatus: 'Payment status',
+			workshop: 'Workshop'
+		},
 		buttons: {
 			newOrder: 'Register order',
 			createOrder: 'Create order',
@@ -277,13 +301,20 @@ export default {
 		messages: {
 			noOrders: 'No maintenance orders recorded yet.',
 			orderCreated: 'Maintenance order created successfully!',
-			orderUpdated: 'Maintenance order updated successfully!'
+			orderUpdated: 'Maintenance order updated successfully!',
+			orderDeleted: 'Maintenance order removed.'
 		},
 		errors: {
 			vehicleRequired: 'Vehicle id is required to process this order.',
 			requiredFields: 'Reported issue and reporter are required fields.',
 			saveFailed: 'We could not save the maintenance order.',
-			updateFailed: 'We could not update the maintenance order.'
+			updateFailed: 'We could not update the maintenance order.',
+			fetchOrdersFailed: 'We could not load maintenance orders.',
+			exportFailed: 'We could not export the maintenance orders.',
+			loadVehiclesFailed: 'We could not load the vehicle list. Refresh and try again.'
+		},
+		confirmations: {
+			deleteOrder: 'Do you want to delete this maintenance order?'
 		},
 		status: {
 			pendingReview: 'Pending review',

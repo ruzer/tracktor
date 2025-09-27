@@ -7,8 +7,9 @@ import insurancePolicyRoutes from "@routes/insurancePolicyRoutes.js";
 import modulesRoutes from "./src/routes/modules.js";
 import { initializeDatabase } from "@db/init.js";
 import { errorHandler } from "@middleware/error-handler.js";
+import { authenticatePin } from "@middleware/auth.js";
 import env, { validateEnvironment } from "@config/env.js";
-import { initializeModules, getModulesRouter } from "./src/modules/index.js";
+import { initializeModules, getModulesRouter, getModule } from "./src/modules/index.js";
 
 // Force restart to clear port conflict
 
@@ -57,13 +58,24 @@ initializeDatabase()
     // Inicializar sistema de módulos
     try {
       await initializeModules();
-      
+
       // Agregar rutas de módulos al router principal
       const modulesRouter = getModulesRouter();
       if (modulesRouter) {
         app.use("/api/modules-routes", modulesRouter);
       }
-      
+
+      const maintenanceModule = getModule("maintenance");
+      if (maintenanceModule?.isReady()) {
+        app.use(
+          "/api/maintenance",
+          authenticatePin,
+          maintenanceModule.controller.getRouter(),
+        );
+      } else {
+        console.warn("⚠️ Módulo de mantenimiento no está listo, rutas no montadas");
+      }
+
       console.log("✅ Módulos inicializados correctamente");
     } catch (error) {
       console.warn("⚠️ Error al inicializar módulos:", error);

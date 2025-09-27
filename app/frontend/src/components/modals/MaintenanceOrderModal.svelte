@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
+	import { get } from 'svelte/store';
 	import { maintenanceOrderModalStore } from '$lib/stores/maintenance-order';
 	import ModalContainer from '$components/common/ModalContainer.svelte';
 	import FormField from '$components/common/FormField.svelte';
@@ -7,6 +10,7 @@
 	import { maintenanceOrderStatusOptions } from '$lib/constants/maintenance-orders';
 	import { getApiUrl } from '$lib/utils/api';
 	import { t } from '$lib/stores/i18n';
+	import type { Vehicle } from '$lib/models/vehicle';
 
 	let vehicleId = $state<string | undefined>(undefined);
 	let order = $state<any>(undefined);
@@ -14,7 +18,12 @@
 	let callback: ((reloaded: boolean) => void) | undefined = undefined;
 	let loading = $state(false);
 
+	let availableVehicles = $state<Array<Pick<Vehicle, 'id' | 'licensePlate' | 'make' | 'model' | 'year'>>>([]);
+	let loadingVehicles = $state(false);
+	let vehiclesError = $state<string | null>(null);
+
 	let form = $state({
+		vehicleId: '',
 		reportedIssue: '',
 		createdBy: '',
 		status: 'pending_review',
@@ -34,14 +43,21 @@
 	});
 
 	maintenanceOrderModalStore.subscribe((state) => {
-		vehicleId = state.vehicleId;
+		vehicleId = state.vehicleId && state.vehicleId.trim().length > 0 ? state.vehicleId : undefined;
 		order = state.order;
 		showModal = state.show;
 		callback = state.callback;
 		loading = false;
+
 		if (state.show) {
+			const selectedVehicleId =
+				state.vehicleId && state.vehicleId.trim().length > 0
+					? state.vehicleId
+					: state.order?.vehicleId ?? '';
+
 			status = { message: undefined, type: 'INFO' };
 			form = {
+				vehicleId: selectedVehicleId,
 				reportedIssue: state.order?.reportedIssue ?? '',
 				createdBy: state.order?.createdBy ?? '',
 				status: state.order?.status ?? 'pending_review',
@@ -54,22 +70,81 @@
 				},
 				notes: ''
 			};
+
+			if (!selectedVehicleId) {
+				loadVehicles();
+			} else {
+				vehiclesError = null;
+			}
 		}
 	});
 
-	const closeModal = () => maintenanceOrderModalStore.hide(false);
+const closeModal = () => maintenanceOrderModalStore.hide(false);
 
-	async function persistOrder() {
-		if (!vehicleId) {
+async function loadVehicles() {
+	if (!browser) return;
+	const translate = get(t);
+	const pin = localStorage.getItem('userPin');
+	if (!pin) {
+		vehiclesError = translate('maintenance.errors.loadVehiclesFailed');
+		return;
+	}
+
+	loadingVehicles = true;
+	vehiclesError = null;
+
+	try {
+		const response = await fetch(getApiUrl('/api/vehicles'), {
+			headers: {
+				'X-User-PIN': pin
+			}
+		});
+
+		const payload = await response.json().catch(() => null);
+
+		if (!response.ok) {
+			vehiclesError =
+				payload?.message ?? translate('maintenance.errors.loadVehiclesFailed');
+			availableVehicles = [];
+			return;
+		}
+
+		if (Array.isArray(payload)) {
+			availableVehicles = payload.map((vehicle: Vehicle) => ({
+				id: vehicle.id,
+				licensePlate: vehicle.licensePlate,
+				make: vehicle.make,
+				model: vehicle.model,
+				year: vehicle.year
+			}));
+		} else {
+			vehiclesError = translate('maintenance.errors.loadVehiclesFailed');
+			availableVehicles = [];
+		}
+	} catch (error) {
+		console.error('Failed to load vehicles', error);
+		vehiclesError = translate('errors.networkError');
+		availableVehicles = [];
+	} finally {
+		loadingVehicles = false;
+	}
+}
+
+async function persistOrder() {
+		const translate = get(t);
+		const effectiveVehicleId =
+			vehicleId && vehicleId.trim().length > 0 ? vehicleId : form.vehicleId?.trim();
+
+		if (!effectiveVehicleId) {
 			status = {
-				message: $t('maintenance.errors.vehicleRequired'),
+				message: translate('maintenance.errors.vehicleRequired'),
 				type: 'ERROR'
 			};
 			return;
 		}
 		if (!form.reportedIssue || !form.createdBy) {
 			status = {
-				message: $t('maintenance.errors.requiredFields'),
+				message: translate('maintenance.errors.requiredFields'),
 				type: 'ERROR'
 			};
 			return;
@@ -79,6 +154,17 @@
 		status = { message: undefined, type: 'INFO' };
 
 		try {
+			const pin = localStorage.getItem('userPin');
+			if (!pin) {
+				goto('/login', { replaceState: true });
+				return;
+			}
+
+			const isVehicleScoped = vehicleId && vehicleId.trim().length > 0;
+			const endpoint = isVehicleScoped
+				? `/api/vehicles/${vehicleId}/maintenance-orders${order ? `/${order.id}` : ''}`
+				: `/api/maintenance/orders${order ? `/${order.id}` : ''}`;
+
 			const body: Record<string, unknown> = {
 				reportedIssue: form.reportedIssue,
 				createdBy: form.createdBy,
@@ -95,13 +181,17 @@
 				notes: form.notes || undefined
 			};
 
+			if (!isVehicleScoped) {
+				body.vehicleId = effectiveVehicleId;
+			}
+
 			const response = await fetch(
-				getApiUrl(`/api/vehicles/${vehicleId}/maintenance-orders${order ? `/${order.id}` : ''}`),
+				getApiUrl(endpoint),
 				{
 					method: order ? 'PATCH' : 'POST',
 					headers: {
 						'Content-Type': 'application/json',
-						'X-User-PIN': localStorage.getItem('userPin') || ''
+						'X-User-PIN': pin
 					},
 					body: JSON.stringify(body)
 				}
@@ -109,24 +199,29 @@
 
 			if (!response.ok) {
 				const data = await response.json().catch(() => ({}));
-				throw new Error(data?.message || $t('maintenance.errors.saveFailed'));
+				throw new Error(data?.message || translate('maintenance.errors.saveFailed'));
 			}
 
 			status = {
-				message: order ? $t('maintenance.messages.orderUpdated') : $t('maintenance.messages.orderCreated'),
+				message: order
+					? translate('maintenance.messages.orderUpdated')
+					: translate('maintenance.messages.orderCreated'),
 				type: 'SUCCESS'
 			};
 			maintenanceOrderModalStore.hide(true);
 		} catch (error) {
 			console.error('Failed to persist maintenance order', error);
 			status = {
-				message: error instanceof Error ? error.message : $t('maintenance.errors.saveFailed'),
+				message:
+					error instanceof Error
+						? error.message
+						: translate('maintenance.errors.saveFailed'),
 				type: 'ERROR'
 			};
 		} finally {
 			loading = false;
 		}
-	}
+}
 </script>
 
 {#if showModal}
@@ -136,6 +231,33 @@
 		{loading}
 	>
 		<div class="space-y-5">
+			{#if !vehicleId}
+				<div class="space-y-2">
+					<label class="pl-2 text-lg text-gray-400" for="vehicle-selector">
+						{$t('maintenance.labels.vehicle')}
+					</label>
+					{#if loadingVehicles}
+						<p class="text-sm text-gray-500 dark:text-gray-300">{$t('common.loading')}</p>
+					{:else}
+						<select
+							id="vehicle-selector"
+							class="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+							bind:value={form.vehicleId}
+						>
+							<option value="">{$t('maintenance.placeholders.selectVehicle')}</option>
+							{#each availableVehicles as vehicleOption}
+								<option value={vehicleOption.id}>
+									{vehicleOption.licensePlate} · {vehicleOption.make} {vehicleOption.model} ({vehicleOption.year})
+								</option>
+							{/each}
+						</select>
+					{/if}
+					{#if vehiclesError}
+						<p class="text-sm text-red-600 dark:text-red-300">{vehiclesError}</p>
+					{/if}
+				</div>
+			{/if}
+
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<FormField
 					id="reportedIssue"

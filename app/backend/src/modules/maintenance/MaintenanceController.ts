@@ -174,6 +174,28 @@ export class MaintenanceController implements IModuleController {
   }
 
   /**
+   * Listar órdenes de mantenimiento
+   * GET /api/maintenance/orders
+   */
+  async listOrders(req: Request, res: Response): Promise<void> {
+    try {
+      const filters = req.query;
+      const results = await this.service.getAllOrders(filters);
+
+      res.json({
+        success: true,
+        data: results,
+        count: results.length
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : "Error interno del servidor"
+      });
+    }
+  }
+
+  /**
    * Obtener órdenes de mantenimiento por vehículo
    * GET /api/maintenance/orders/vehicle/:vehicleId
    */
@@ -186,6 +208,50 @@ export class MaintenanceController implements IModuleController {
         success: true,
         data: results,
         count: results.length
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : "Error interno del servidor"
+      });
+    }
+  }
+
+  /**
+   * Actualizar una orden de mantenimiento
+   * PATCH /api/maintenance/orders/:orderId
+   */
+  async updateOrder(req: Request, res: Response): Promise<void> {
+    try {
+      const { orderId } = req.params;
+      const result = await this.service.updateOrder(orderId, req.body);
+
+      res.json({
+        success: true,
+        data: result,
+        message: "Orden de mantenimiento actualizada exitosamente"
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : "Error interno del servidor"
+      });
+    }
+  }
+
+  /**
+   * Eliminar una orden de mantenimiento
+   * DELETE /api/maintenance/orders/:orderId
+   */
+  async deleteOrder(req: Request, res: Response): Promise<void> {
+    try {
+      const { orderId } = req.params;
+      const result = await this.service.deleteOrder(orderId);
+
+      res.json({
+        success: true,
+        data: result,
+        message: "Orden de mantenimiento eliminada exitosamente"
       });
     } catch (error) {
       res.status(500).json({
@@ -391,7 +457,10 @@ export class MaintenanceController implements IModuleController {
     router.delete("/:id", this.delete.bind(this));
 
     // Rutas para órdenes de mantenimiento
+    router.get("/orders", this.listOrders.bind(this));
     router.post("/orders", this.createOrder.bind(this));
+    router.patch("/orders/:orderId", this.updateOrder.bind(this));
+    router.delete("/orders/:orderId", this.deleteOrder.bind(this));
     router.get("/orders/vehicle/:vehicleId", this.getOrdersByVehicle.bind(this));
 
     // Rutas para logs de mantenimiento

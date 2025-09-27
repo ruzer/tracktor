@@ -178,6 +178,7 @@ export interface MaintenanceOrderWorkshop {
 export interface MaintenanceOrder {
 	id: string;
 	vehicleId: string;
+	vehicle?: Pick<Vehicle, 'id' | 'licensePlate' | 'make' | 'model' | 'year'> | null;
 	reportedIssue: string;
 	status: MaintenanceOrderStatus;
 	workshopId?: string | null;

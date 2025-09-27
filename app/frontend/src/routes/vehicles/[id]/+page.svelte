@@ -17,7 +17,7 @@
 	import FuelLogTab from '$components/tabs/FuelLogTab.svelte';
 	import MaintenenceLogTab from '$components/tabs/MaintenenceLogTab.svelte';
 	import InsuranceTab from '$components/tabs/InsuranceTab.svelte';
-	import MaintenanceModule from '$components/maintenance/MaintenanceModule.svelte';
+	import MaintenanceSummaryView from '$components/maintenance/MaintenanceSummaryView.svelte';
 
 	let { params } = $props();
 	const vehicleId = params.id;
@@ -345,12 +345,9 @@
 					</div>
 				</section>
 
-				<MaintenanceModule
-					vehicleId={detail.id}
-					orders={detail.maintenance.orders ?? []}
-					recentLogs={detail.maintenance.recentLogs}
-					summary={detail.maintenance.summary}
-					onReload={(refresh) => refresh && fetchDetail()}
+				<MaintenanceSummaryView
+					summary={detail.maintenance.summary || { total: 0, open: 0, inProgress: 0, completed: 0 }}
+					recentLogs={detail.maintenance.recentLogs || []}
 				/>
 			</div>
 		{:else if activeTab === 'insurance'}

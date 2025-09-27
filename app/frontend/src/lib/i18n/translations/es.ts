@@ -22,11 +22,16 @@ export default {
 		confirm: 'Confirmar',
 		close: 'Cerrar',
 		toggleDarkMode: 'Cambiar modo oscuro',
-		notAvailable: 'No Disponible',
+		notAvailable: 'No disponible',
 		yes: 'Sí',
 		no: 'No',
 		clear: 'Limpiar',
-		viewAll: 'Ver todo'
+		view: 'Ver',
+		viewAll: 'Ver todo',
+		export: 'Exportar',
+		filters: 'Filtros',
+		all: 'Todas',
+		clearFilters: 'Limpiar filtros'
 	},
 	menu: {
 		ariaLabel: 'Navegación principal',
@@ -39,6 +44,12 @@ export default {
 			label: 'Seguros',
 			policies: 'Pólizas',
 			renewals: 'Renovaciones',
+			reports: 'Reportes'
+		},
+		maintenance: {
+			label: 'Talleres',
+			overview: 'Resumen',
+			orders: 'Órdenes',
 			reports: 'Reportes'
 		}
 	},
@@ -209,6 +220,7 @@ export default {
 		}
 	},
 	maintenance: {
+		description: 'Gestiona órdenes de mantenimiento, talleres y autorizaciones desde un solo lugar.',
 		titles: {
 			orders: 'Ordenes de servicio',
 			newOrder: 'Registrar orden de mantenimiento',
@@ -222,9 +234,12 @@ export default {
 			logs: 'Registros'
 		},
 		labels: {
+			vehicle: 'Vehículo',
+			issue: 'Incidencia',
 			reportedIssue: 'Falla reportada',
 			createdBy: 'Reportado por',
 			status: 'Estado',
+			workshop: 'Taller',
 			workshopInfo: 'Información del taller',
 			workshopName: 'Nombre del taller',
 			workshopContact: 'Contacto',
@@ -233,6 +248,7 @@ export default {
 			workshopAddress: 'Dirección',
 			notes: 'Notas',
 			paymentStatus: 'Estado de pago',
+			payment: 'Pago',
 			authorizedBy: 'Autorizado por',
 			authorizedAt: 'Fecha de autorización',
 			totalEstimated: 'Total estimado',
@@ -240,9 +256,12 @@ export default {
 			quoteFile: 'Cotización (URL)',
 			invoiceFile: 'Factura (URL)',
 			userId: 'Actualizado por',
-			history: 'Historial'
+			history: 'Historial',
+			cost: 'Costo',
+			date: 'Fecha'
 		},
 		placeholders: {
+			selectVehicle: 'Selecciona un vehículo',
 			reportedIssue: 'Describe la falla reportada por el operador o área',
 			createdBy: 'Nombre del operador o área',
 			workshopName: 'Nombre del taller',
@@ -255,6 +274,11 @@ export default {
 			fileUrl: 'https://ejemplo.com/documento.pdf',
 			userId: 'Usuario responsable de la actualización'
 		},
+		filters: {
+			status: 'Estado de la orden',
+			paymentStatus: 'Estado de pago',
+			workshop: 'Taller'
+		},
 		buttons: {
 			newOrder: 'Registrar orden',
 			createOrder: 'Crear orden',
@@ -266,13 +290,20 @@ export default {
 		messages: {
 			noOrders: 'Aún no hay órdenes de mantenimiento registradas.',
 			orderCreated: 'Orden de mantenimiento creada correctamente.',
-			orderUpdated: 'Orden de mantenimiento actualizada correctamente.'
+			orderUpdated: 'Orden de mantenimiento actualizada correctamente.',
+			orderDeleted: 'Orden de mantenimiento eliminada.'
 		},
 		errors: {
 			vehicleRequired: 'Se requiere el identificador del vehículo.',
 			requiredFields: 'La falla reportada y el responsable son obligatorios.',
 			saveFailed: 'No se pudo guardar la orden de mantenimiento.',
-			updateFailed: 'No se pudo actualizar la orden de mantenimiento.'
+			updateFailed: 'No se pudo actualizar la orden de mantenimiento.',
+			fetchOrdersFailed: 'No se pudieron cargar las órdenes de mantenimiento.',
+			exportFailed: 'No se pudo exportar la lista de órdenes.',
+			loadVehiclesFailed: 'No se pudo cargar el catálogo de vehículos. Actualiza la página e inténtalo de nuevo.'
+		},
+		confirmations: {
+			deleteOrder: '¿Deseas eliminar esta orden de mantenimiento?'
 		},
 		status: {
 			pendingReview: 'Pendiente de revisión',
